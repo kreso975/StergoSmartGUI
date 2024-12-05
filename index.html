@@ -9,13 +9,7 @@
 	<meta http-equiv=“Expires” content=”-1″>
 	<meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
 
-    
-    <!-- @if NODE_ENV='production' -->
-    <title>Stergo Smart | Dashboard Prod</title>
-    <!-- @endif -->
-    <!-- @if NODE_ENV='development' -->
-    <title>Stergo Smart | Dashboard Dev</title>
-    <!-- @endif -->
+    <title>Stergo Smart | Dashboard</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="title" content="Stergo Smart | Dashboard ">
@@ -164,10 +158,12 @@
                                 $(document).ready(function() {
 
                                     let url;
-                                    if ( onNasOrDevice )
-                                        url = fwdJsonRequest( 'WS011v02-898235', 1 );
-                                    else
-                                        url = 'measures.json';
+                                    // @if development
+                                    url = fwdJsonRequest( 'WS011v02-898235', 1 );
+                                    // @endif
+                                    // @if production
+                                    url = 'measures.json';
+                                    // @endif
 
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
@@ -218,10 +214,12 @@
                                         $(document).ready(function() { 
                                             
                                             let url;
-                                            if ( onNasOrDevice )
-                                                url = fwdJsonRequest( 'WS011v02-898235', 2 );
-                                            else
-                                                url = 'history.json';
+                                            // @if development
+                                            url = fwdJsonRequest( 'WS011v02-898235', 2 );
+                                            // @endif
+                                            // @if production
+                                            url = 'history.json';
+                                            // @endif
 
                                             $.getJSON(url, function(jsonData) {
                                                 // Extract data for the chart
@@ -263,6 +261,7 @@
                                         }); 
                                         
                                     </script> <!--end::Script-->
+                                    <!-- @if display -->
                                     <!-- Start Display Card -->
                                     <div class="col-md-6 mb-2" id="DisplaySetupModule">
                                         <div mobile-colapsed='true' class="card card-success">
@@ -377,6 +376,7 @@
                                         </div>
                                     </div>
                                     <!-- End Display Card -->
+                                    <!-- @endif -->
                                 </div>  
                             </div>  
                         </div>
@@ -1169,8 +1169,7 @@
     <script>
         var siteName = 'WeatherAttic-898235'; // Replace with a unique identifier for each site - for themes
         var adminAddress = 'http://192.168.1.101/StergoWeather';
-        // on device = false, 1 on nas true
-        var onNasOrDevice = false;
+        
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
         //
         // WiFi Data
@@ -1181,23 +1180,20 @@
         // hostname 192.168.1.101
         var hostname = window.location.hostname;
 
-        if ( onNasOrDevice )
-            var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
-        else
-            var serverAddress = protocol + "//" + hostname + "/";
+        
+        // @if development
+        var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        // @endif
+        // @if production
+        var serverAddress = protocol + "//" + hostname + "/";
+        // @endif
 
-        // Tables
-        var tableDeviceLog; // in deviceMoreDetailsCard - LOG of device
-
-        // fullset from /deviceinfo.json
+        var tableDeviceLog;
         var deviceInfo;
-        // extracted from Firmware /deviceinfo.json
         var deviceFirmware;
         var chidID;
         var deviceName;
         var deviceIP;
-
-        // To have it Global
         var parsedConfigOrigJSON = [];
         var deviceSwitchData;
 
@@ -1427,25 +1423,10 @@
             const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
-            // @exclude
-            /*
-            let data;
-            if ( onNasOrDevice )
-            {
-                //data = await loadJSON('http://192.168.1.74/config.json');
-                let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
-                data = await loadJSON(configOnDeviceJSON);
-            }
-            else
-            {
-                data = await loadJSON('/config.json');
-            }
-            */
-            // @endexclude
-            // @if NODE_ENV='development'
+            /* @if production */
             data = await loadJSON('/config.json');
-            // @endif
-            // @if NODE_ENV='production'
+            /* @endif */
+            // @if development
             let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
             data = await loadJSON(configOnDeviceJSON);
             // @endif
@@ -1477,16 +1458,12 @@
             // Load Device Info Card	
             
             let jsonInfoData;
-            if ( onNasOrDevice )
-            {
-                jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
-                //let jsonInfoDataFile = fwdJsonRequest( 'WS011v02', 4 );
-                //jsonInfoData = await loadJSON(jsonInfoDataFile);
-            }
-            else
-            {
-                jsonInfoData = await loadJSON('/deviceinfo.json');
-            }
+            // @if development
+            jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
+            // @endif
+            // @if production
+            jsonInfoData = await loadJSON('/deviceinfo.json');
+            // @endif
             
             // Make Global
             deviceInfo = jsonInfoData.result;
@@ -1533,16 +1510,13 @@
             }
 
             let jsonLogData;
-            if ( onNasOrDevice )
-            {
-                const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
-                jsonLogData = await loadJSON(jsonLogDataFile);
-            }
-            else
-            {
-                jsonLogData = await loadJSON('/log.json');
-            }
-
+            // @if development
+            const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
+            jsonLogData = await loadJSON(jsonLogDataFile);
+            // @endif
+            // @if production
+            jsonLogData = await loadJSON('/log.json');
+            // @endif
             var tableBody = $('#deviceLogCard tbody');
 
             const reversedData = jsonLogData.log.reverse();
@@ -1605,10 +1579,12 @@
             const linkTargetValue = $('#updateDevice').attr('link-target');
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
             let url;
-            if ( onNasOrDevice )
-                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-            else 
-                url = '/gpio?id=updateDevice';
+            // @if development
+            url = serverAddress+'/include/fwdJsonRequest.php';
+            // @endif
+            // @if production
+            url = '/gpio?id=updateDevice';
+            // @endif
 
             // IF we have changes
             if ( Object.keys(comparedDiff).length > 0 )
@@ -1677,10 +1653,12 @@
         function checkServerStatus()
         {
             let url;
-            if ( onNasOrDevice )
-                urltmp = fwdJsonRequest( 'WS011v02', 4 );
-            else
-                urltmp = '/deviceinfo.json';
+            // @if development
+            urltmp = fwdJsonRequest( 'WS011v02', 4 );
+            // @endif
+            // @if production
+            urltmp = '/deviceinfo.json';
+            // @endif
 
             $.ajax(
                 { url: urltmp, // Replace with your remote server URL
@@ -1711,11 +1689,13 @@
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
 
             let url;
-            if ( onNasOrDevice )
-                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-            else 
-                url = '/gpio?id='+what;
-            
+            // @if development
+            url = serverAddress+'/include/fwdJsonRequest.php';
+            // @endif
+            // @if production
+            url = '/gpio?id='+what;
+            // @endif
+
             try {
                 const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
                 if ( result ) {
@@ -1988,10 +1968,12 @@
                     form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
                     
                 let url;
-                if ( onNasOrDevice )
-                    url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-                else 
-                    url = '/upload';
+                // @if development
+                url = serverAddress+'/include/fwdJsonRequest.php';
+                // @endif
+                // @if production 
+                url = '/upload';
+                // @endif
 
                 $.ajax({
                     url: url, // Upload Script
@@ -2057,10 +2039,12 @@
 
         async function scanWifi() { 
             let jsonData6;
-            if ( onNasOrDevice )
-                jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
-            else
-                jsonData6 = '/wifiscan.json';
+            // @if development
+            jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
+            // @endif
+            // @if production
+            jsonData6 = '/wifiscan.json';
+            // @endif
             
             // For Reloading WiFi files
             // Destroy previous DataTable

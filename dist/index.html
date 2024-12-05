@@ -9,8 +9,7 @@
 	<meta http-equiv=“Expires” content=”-1″>
 	<meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
 
-    
-    <title>Stergo Smart | Dashboard Dev</title>
+    <title>Stergo Smart | Dashboard</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="title" content="Stergo Smart | Dashboard ">
@@ -159,10 +158,7 @@
                                 $(document).ready(function() {
 
                                     let url;
-                                    if ( onNasOrDevice )
-                                        url = fwdJsonRequest( 'WS011v02-898235', 1 );
-                                    else
-                                        url = 'measures.json';
+                                    url = fwdJsonRequest( 'WS011v02-898235', 1 );
 
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
@@ -213,10 +209,7 @@
                                         $(document).ready(function() { 
                                             
                                             let url;
-                                            if ( onNasOrDevice )
-                                                url = fwdJsonRequest( 'WS011v02-898235', 2 );
-                                            else
-                                                url = 'history.json';
+                                            url = fwdJsonRequest( 'WS011v02-898235', 2 );
 
                                             $.getJSON(url, function(jsonData) {
                                                 // Extract data for the chart
@@ -258,120 +251,6 @@
                                         }); 
                                         
                                     </script> <!--end::Script-->
-                                    <!-- Start Display Card -->
-                                    <div class="col-md-6 mb-2" id="DisplaySetupModule">
-                                        <div mobile-colapsed='true' class="card card-success">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title"><i class="bi bi-tv"></i> Display</h3>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <!-- Brightness Slider -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-7">Brightness:</span>
-                                                    <div class="col-5 d-flex justify-content-end">
-                                                        <input type="range" class="form-range" id="brightness" name="brightness" min="0" max="255" value="128">
-                                                        <span id="brightnessValue" class="ms-2">128</span>
-                                                    </div>
-                                                </div>
-                                                <!-- Refresh Interval Slider -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-7">Refresh Interval (ms):</span>
-                                                    <div class="col-5 d-flex justify-content-end">
-                                                        <input type="range" class="form-range" id="refreshInterval" name="refreshInterval" min="10" max="1000" value="500">
-                                                        <span id="refreshIntervalValue" class="ms-2">500</span>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#brightness').on('input', function() {
-                                                        $('#brightnessValue').text($(this).val());
-                                                    });
-
-                                                    $('#brightness').on('mouseup touchend', function() {
-                                                        //alert('Done 1');
-                                                        // here i need to send new value to Device
-                                                        updateDeviceDisplay('brightness',$(this).val());
-                                                    });
-
-                                                    $('#refreshInterval').on('input', function() {
-                                                        $('#refreshIntervalValue').text($(this).val());
-                                                    });
-
-                                                    $('#refreshInterval').on('mouseup touchend', function() {
-                                                        //alert('Done 1');
-                                                        // here i need to send new value to Device
-                                                        updateDeviceDisplay('refreshInterval',$(this).val());
-                                                    });
-                                                </script>
-                                                <!-- Time Setup -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Time Format:</span>
-                                                    <div class="col-3 d-flex justify-content-end">
-                                                        <select class="form-select" id="time_format" name="time_format">
-                                                            <option value="24h">24h</option>
-                                                            <option value="12h">12h</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <!-- Date Setup -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-7">Date:</span>
-                                                    <div class="col-5 d-flex justify-content-end">
-                                                        <input type="date" class="form-control" id="date" name="date">
-                                                    </div>
-                                                </div>
-                                                <!-- Timezone Setup -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Timezone:</span>
-                                                    <div class="col-3 d-flex justify-content-end">
-                                                        <select class="form-select" id="timezone" name="timezone">
-                                                            <!-- Add timezone options here -->
-                                                            <option value="UTC">UTC</option>
-                                                            <option value="CET">CET</option>
-                                                            <option value="EST">EST</option>
-                                                            <!-- Add more timezones as needed -->
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <!-- Color Picker -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Color Picker:</span>
-                                                    <div class="col-3 d-flex justify-content-end">
-                                                        <input type="color" class="form-control form-control-color" id="color_picker" name="color_picker" value="#ff0000">
-                                                    </div>
-                                                </div>
-                                                <!-- Simple Text Input -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
-                                                    <div class="col-8 d-flex justify-content-end">
-                                                        <input type="text" class="form-control" id="messageDisplay" name="messageDisplay" placeholder="Enter text">
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#color_picker').on('input', function() {	
-                                                        updateDeviceDisplay('color', $(this).val());
-                                                    });
-                                                    
-                                                    // Detect Enter/Return key press
-                                                    $('#messageDisplay').on('keypress', function(event) {
-                                                        if (event.which === 13)
-                                                            updateDeviceDisplay('messageDisplay', $(this).val());
-                                                    });
-                                                    // Detect focus change (blur event)
-                                                    $('#messageDisplay').on('blur', function() {
-                                                        updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
-                                                    });
-                                                    
-                                                </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Display Card -->
                                 </div>  
                             </div>  
                         </div>
@@ -1164,8 +1043,7 @@
     <script>
         var siteName = 'WeatherAttic-898235'; // Replace with a unique identifier for each site - for themes
         var adminAddress = 'http://192.168.1.101/StergoWeather';
-        // on device = false, 1 on nas true
-        var onNasOrDevice = false;
+        
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
         //
         // WiFi Data
@@ -1176,23 +1054,15 @@
         // hostname 192.168.1.101
         var hostname = window.location.hostname;
 
-        if ( onNasOrDevice )
-            var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
-        else
-            var serverAddress = protocol + "//" + hostname + "/";
+        
+        var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
 
-        // Tables
-        var tableDeviceLog; // in deviceMoreDetailsCard - LOG of device
-
-        // fullset from /deviceinfo.json
+        var tableDeviceLog;
         var deviceInfo;
-        // extracted from Firmware /deviceinfo.json
         var deviceFirmware;
         var chidID;
         var deviceName;
         var deviceIP;
-
-        // To have it Global
         var parsedConfigOrigJSON = [];
         var deviceSwitchData;
 
@@ -1422,7 +1292,8 @@
             const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
-            data = await loadJSON('/config.json');
+            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
+            data = await loadJSON(configOnDeviceJSON);
 
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global
@@ -1451,16 +1322,7 @@
             // Load Device Info Card	
             
             let jsonInfoData;
-            if ( onNasOrDevice )
-            {
-                jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
-                //let jsonInfoDataFile = fwdJsonRequest( 'WS011v02', 4 );
-                //jsonInfoData = await loadJSON(jsonInfoDataFile);
-            }
-            else
-            {
-                jsonInfoData = await loadJSON('/deviceinfo.json');
-            }
+            jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
             
             // Make Global
             deviceInfo = jsonInfoData.result;
@@ -1507,16 +1369,8 @@
             }
 
             let jsonLogData;
-            if ( onNasOrDevice )
-            {
-                const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
-                jsonLogData = await loadJSON(jsonLogDataFile);
-            }
-            else
-            {
-                jsonLogData = await loadJSON('/log.json');
-            }
-
+            const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
+            jsonLogData = await loadJSON(jsonLogDataFile);
             var tableBody = $('#deviceLogCard tbody');
 
             const reversedData = jsonLogData.log.reverse();
@@ -1579,10 +1433,7 @@
             const linkTargetValue = $('#updateDevice').attr('link-target');
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
             let url;
-            if ( onNasOrDevice )
-                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-            else 
-                url = '/gpio?id=updateDevice';
+            url = serverAddress+'/include/fwdJsonRequest.php';
 
             // IF we have changes
             if ( Object.keys(comparedDiff).length > 0 )
@@ -1651,10 +1502,7 @@
         function checkServerStatus()
         {
             let url;
-            if ( onNasOrDevice )
-                urltmp = fwdJsonRequest( 'WS011v02', 4 );
-            else
-                urltmp = '/deviceinfo.json';
+            urltmp = fwdJsonRequest( 'WS011v02', 4 );
 
             $.ajax(
                 { url: urltmp, // Replace with your remote server URL
@@ -1685,11 +1533,8 @@
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
 
             let url;
-            if ( onNasOrDevice )
-                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-            else 
-                url = '/gpio?id='+what;
-            
+            url = serverAddress+'/include/fwdJsonRequest.php';
+
             try {
                 const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
                 if ( result ) {
@@ -1962,10 +1807,7 @@
                     form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
                     
                 let url;
-                if ( onNasOrDevice )
-                    url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-                else 
-                    url = '/upload';
+                url = serverAddress+'/include/fwdJsonRequest.php';
 
                 $.ajax({
                     url: url, // Upload Script
@@ -2031,10 +1873,7 @@
 
         async function scanWifi() { 
             let jsonData6;
-            if ( onNasOrDevice )
-                jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
-            else
-                jsonData6 = '/wifiscan.json';
+            jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
             
             // For Reloading WiFi files
             // Destroy previous DataTable
