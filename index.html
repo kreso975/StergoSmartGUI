@@ -1427,7 +1427,7 @@
             const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
-            
+            // @exclude
             /*
             let data;
             if ( onNasOrDevice )
@@ -1441,7 +1441,7 @@
                 data = await loadJSON('/config.json');
             }
             */
-           
+            // @endexclude
             // @if NODE_ENV='development'
             data = await loadJSON('/config.json');
             // @endif

@@ -1422,28 +1422,7 @@
             const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
-            
-            /*
-            let data;
-            if ( onNasOrDevice )
-            {
-                //data = await loadJSON('http://192.168.1.74/config.json');
-                let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
-                data = await loadJSON(configOnDeviceJSON);
-            }
-            else
-            {
-                data = await loadJSON('/config.json');
-            }
-            */
-           
-            // @if NODE_ENV='development'
             data = await loadJSON('/config.json');
-            // @endif
-            // @if NODE_ENV='production'
-            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
-            data = await loadJSON(configOnDeviceJSON);
-            // @endif
 
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global

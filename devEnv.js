@@ -20,13 +20,25 @@ const processedOutput = htmlOutput.replace(scriptRegex, (match, p1) => {
 
 fs.writeFileSync('dist/index.html', processedOutput);
 
-// Compress the HTML file to .gz using 7z
-exec('7z a -tgzip dist/index.html.gz dist/index.html', { cwd: 'W:\\' }, (err, stdout, stderr) => {
+// Check if the .gz file exists and remove it
+const gzFilePath = 'dist/index.html.gz';
+if (fs.existsSync(gzFilePath)) {
+    fs.unlinkSync(gzFilePath);
+    console.log('Existing .gz file removed');
+}
+
+// Compress the HTML file to .gz using 7z with ultra compression
+const sevenZipPath = '"C:\\Program Files\\7-Zip\\7z.exe"'; // Adjust this path if necessary
+const command = `${sevenZipPath} a -tgzip -mx=9 dist/index.html.gz dist/index.html`;
+
+exec(command, (err, stdout, stderr) => {
     if (err) {
         console.error(`Error compressing file: ${err.message}`);
+        console.error(stderr);
         return;
     }
-    console.log('File compressed successfully');
+    console.log('File compressed successfully with ultra compression');
+    console.log(stdout);
 });
 
 console.log('Build complete!');
