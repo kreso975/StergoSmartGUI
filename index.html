@@ -1,0 +1,2227 @@
+
+<!DOCTYPE html>
+<html lang="en" charset="UTF-8">
+
+<!--begin::Head-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv=“Pragma” content=”no-cache”>
+	<meta http-equiv=“Expires” content=”-1″>
+	<meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
+
+    <title>Stergo Smart | Dashboard </title>
+
+    <!--begin::Primary Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="title" content="Stergo Smart | Dashboard ">
+    <meta name="description" content="Stergo Smart Web GUI for interacting with Stergo Smart Devices">
+    <meta name="keywords" content="Stergo, Smart, Weather, IoT, ESP8266, Weather, Station">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	<meta name="apple-mobile-web-app-title" content="Stergo Weather" />
+	
+    <link rel="apple-touch-icon" href="./img/apple-touch-icon.png" /> 
+	<link rel="apple-touch-icon" href="./img/touch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="180x180" href="./img/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-startup-image" href="./img/launch.png" />
+	<link rel="icon" href="./img/favicon.png" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.jqueryui.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/4.0.0-beta2/css/adminlte.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        // disable cache in all future ajax
+        $(document).ready(function() {
+            $.ajaxSetup({ cache: false });
+        });
+    </script>
+</head>
+
+<body class="layout-fixed sidebar-expand-xxl bg-body-tertiary"> <!--begin::App Wrapper-->
+    <div class="app-wrapper">        <!--begin::Header-->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <!--begin::Container-->
+            <div class="container-fluid">
+                <!--begin::Start Navbar Links-->
+                <ul class="navbar-nav">
+                    <li class="nav-item"> <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"> <i class="bi bi-list"></i> </a> </li>
+                </ul>
+                <!--end::Start Navbar Links-->
+                <!--begin::End Navbar Links-->
+                <ul class="navbar-nav ms-auto">
+                    <!--begin::Theme toggle-->
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-link nav-link py-2 px-2 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
+                            <span class="theme-icon-active"><i class="my-1"></i></span>
+                            <span class="d-none d-md-inline" id="bd-theme-text">Toggle theme</span></button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text" style="--bs-dropdown-min-width: 8rem;">
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="bi bi-sun-fill me-2"></i>Light<i class="bi bi-check-lg ms-auto d-none"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="bi bi-moon-fill me-2"></i>Dark<i class="bi bi-check-lg ms-auto d-none"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="bi bi-circle-half me-2"></i>Auto<i class="bi bi-check-lg ms-auto d-none"></i></button>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--end::Theme toggle-->
+                </ul>
+                <!--end::End Navbar Links-->
+            </div> <!--end::Container-->
+        </nav>
+        <!--end::Header-->        <!--begin::Sidebar-->
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+            <!--begin::Sidebar Brand-->
+            <div class="sidebar-brand">
+                <!--begin::Brand Link-->
+                <a href="" class="brand-link">
+                <!--begin::Brand Image-->
+                <img src="./img/StergoLogo.svg" alt="StergoSmart" class="brand-image ">
+                <!--end::Brand Image-->
+                <!--begin::Brand Text-->
+                <span class="brand-text fw-light">Stergo Smart</span>
+                <!--end::Brand Text--> </a> <!--end::Brand Link-->
+            </div>
+            <!--end::Sidebar Brand-->
+            <!--begin::Sidebar Wrapper-->
+            <div class="sidebar-wrapper">
+                <nav class="mt-2"> <!--begin::Sidebar Menu-->
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item menu-open"> <a class="nav-link" href="#home"><i class="bi bi-house"></i><p>Dashboard</p></a></li>
+                        <li class="nav-item"> <a class="nav-link" href="#overview"><i class="bi bi-bar-chart"></i><p>Overview</p></a></li>
+                        <li class="nav-item"> <a class="nav-link" href="#publish"><i class="bi bi-upload"></i><p>Publish</p></a></li>
+                        <li class="nav-item"> <a class="nav-link" href="#wifi"><i class="bi bi-wifi"></i><p>WiFi</p></a></li>
+                        <li class="nav-item"> <a class="nav-link" href="#devices"><i class="bi bi-device-hdd"></i><p>Device</p></a> </li>
+                    </ul> <!--end::Sidebar Menu-->
+                </nav>
+            </div> <!--end::Sidebar Wrapper-->
+        </aside>
+        <!--end::Sidebar-->        <!--begin::App Main-->
+        <main class="app-main">
+            <!--begin::App Content Header-->
+            <div class="app-content-header"></div>
+            <div class="app-content" id="moreDetailsRow">
+                <!--begin::Container-->
+                <div class="container-fluid">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <!--begin::Row main-->
+                            <h5 class="mb-2"><strong>Weather Attic</strong></h5> 
+                            <div class="row">
+                                <!--begin::Row for module-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <div class="info-box"> <span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-thermometer-half"></i> </span>
+                                            <div class="info-box-content"> <span class="info-box-text">Current Temperature</span> <span class="info-box-number">
+                                                <label id='currentTemperature'>-</label></span>
+                                            </div> <!-- /.info-box-content -->
+                                        </div> <!-- /.info-box -->
+                                    </div> <!-- /.col -->
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <div class="info-box"> <span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-moisture"></i> </span>
+                                            <div class="info-box-content"> <span class="info-box-text">Current Humidity</span> <span class="info-box-number">
+                                                <label id='currentHumidity'>-</label></span>
+                                            </div> <!-- /.info-box-content -->
+                                        </div> <!-- /.info-box -->
+                                    </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
+                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
+                                                <label id='currentPressure'>-</label></span>
+                                            </div> <!-- /.info-box-content -->
+                                        </div> <!-- /.info-box -->
+                                    </div> <!-- /.col -->
+                                </div> <!-- /.row -->
+                                <script>
+                                var tUnit = " &#8451;";
+                                var pUnit = " hPa";
+                                $(document).ready(function() {
+
+                                    let url;
+                                    if ( onNasOrDevice )
+                                        url = fwdJsonRequest( 'WS011v02-898235', 1 );
+                                    else
+                                        url = 'measures.json';
+
+                                    $.getJSON(url, function(jsonCurrentData) {
+                                        $('#currentTemperature').html(jsonCurrentData.t + tUnit);
+                                        $('#currentHumidity').html(jsonCurrentData.h + ' %');
+                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
+                                    });
+                                });
+                                </script>            
+                                <!--begin::Row-->
+                                <div class="row g-1 mb-3">     
+                                    <div class="col-md-6">
+                                        <div mobile-colapsed="true" id="mobileCollapsable" class="card mb-6">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h5 class="card-title">24h Temperature & Humidity</h5>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i></button>
+                                                </div>
+                                            </div> <!-- /.card-header -->
+                                            <div class="card-body"> <!--begin::Row-->
+                                                <div class="row">
+                                                    <div id="weatherChart"></div>
+                                                </div> <!--end::Row-->
+                                            </div> <!-- ./card-body -->
+                                            <div class="overlay"><i class="fas fa-2x fa-sync-alt"></i></div>
+                                        </div> <!-- /.card -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div mobile-colapsed="true" class="card mb-6">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h5 class="card-title">24h Air Pressure</h5>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
+                                                </div>
+                                            </div> <!-- /.card-header -->
+                                            <div class="card-body"> <!--begin::Row-->
+                                                <div class="row">
+                                                    <div id="weatherPressureChart"></div>
+                                                </div> <!--end::Row-->
+                                            </div> <!-- ./card-body -->
+                                        </div> <!-- /.card -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <!-- apexcharts -->
+                                    <script>
+                                        var chart;
+                                        var chartPressure;
+                                        $(document).ready(function() { 
+                                            
+                                            let url;
+                                            if ( onNasOrDevice )
+                                                url = fwdJsonRequest( 'WS011v02-898235', 2 );
+                                            else
+                                                url = 'history.json';
+
+                                            $.getJSON(url, function(jsonData) {
+                                                // Extract data for the chart
+                                                let timestamps = jsonData.sensor.map(item => {
+                                                    var date = new Date(item[0] * 1000); // Convert Unix timestamp to milliseconds
+                                                    return date.toLocaleString('en-US'); // Convert to readable date string
+                                                });
+                                                let temperatures = jsonData.sensor.map(item => item[1]);
+                                                let humidities = jsonData.sensor.map(item => item[2]);
+                                                let pressures = jsonData.sensor.map(item => item[3]);
+
+                                                chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities,pressures,timestamps, 1 ));
+                                                chart.render();
+                                                
+                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
+                                                chartPressure.render();
+                                            });  
+
+
+                                            // Listen on Theme change and apply new theme to Charts 'light' or 'dark'
+                                            window.addEventListener('localStorageChange', function(event) {
+                                                if (event.detail.key === `${siteName}_theme`) {
+                                                        
+                                                    var newThemeFromEvent = event.detail.value;
+                                                    if ( newThemeFromEvent === 'auto' ){
+                                                        newThemeFromEvent = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                                                    }
+
+                                                    // functions are in headStergoMainJS
+                                                    chart.updateOptions(chartsThemeChange(newThemeFromEvent));
+                                                    chartPressure.updateOptions(chartsThemeChange(newThemeFromEvent));
+                                                    //console.log('The value of yourKey has changed to', event.detail.value);
+                                                    // Add your custom logic here
+                                                }
+                                            });
+
+                                            
+                                            
+                                        }); 
+                                        
+                                    </script> <!--end::Script-->
+                                    <!-- Start Display Card -->
+                                    <div class="col-md-6 mb-2" id="DisplaySetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-tv"></i> Display</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- Brightness Slider -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Brightness:</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="range" class="form-range" id="brightness" name="brightness" min="0" max="255" value="128">
+                                                        <span id="brightnessValue" class="ms-2">128</span>
+                                                    </div>
+                                                </div>
+                                                <!-- Refresh Interval Slider -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Refresh Interval (ms):</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="range" class="form-range" id="refreshInterval" name="refreshInterval" min="10" max="1000" value="500">
+                                                        <span id="refreshIntervalValue" class="ms-2">500</span>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#brightness').on('input', function() {
+                                                        $('#brightnessValue').text($(this).val());
+                                                    });
+
+                                                    $('#brightness').on('mouseup touchend', function() {
+                                                        //alert('Done 1');
+                                                        // here i need to send new value to Device
+                                                        updateDeviceDisplay('brightness',$(this).val());
+                                                    });
+
+                                                    $('#refreshInterval').on('input', function() {
+                                                        $('#refreshIntervalValue').text($(this).val());
+                                                    });
+
+                                                    $('#refreshInterval').on('mouseup touchend', function() {
+                                                        //alert('Done 1');
+                                                        // here i need to send new value to Device
+                                                        updateDeviceDisplay('refreshInterval',$(this).val());
+                                                    });
+                                                </script>
+                                                <!-- Time Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Time Format:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <select class="form-select" id="time_format" name="time_format">
+                                                            <option value="24h">24h</option>
+                                                            <option value="12h">12h</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Date Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Date:</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="date" class="form-control" id="date" name="date">
+                                                    </div>
+                                                </div>
+                                                <!-- Timezone Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Timezone:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <select class="form-select" id="timezone" name="timezone">
+                                                            <!-- Add timezone options here -->
+                                                            <option value="UTC">UTC</option>
+                                                            <option value="CET">CET</option>
+                                                            <option value="EST">EST</option>
+                                                            <!-- Add more timezones as needed -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Color Picker -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Color Picker:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <input type="color" class="form-control form-control-color" id="color_picker" name="color_picker" value="#ff0000">
+                                                    </div>
+                                                </div>
+                                                <!-- Simple Text Input -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
+                                                    <div class="col-8 d-flex justify-content-end">
+                                                        <input type="text" class="form-control" id="messageDisplay" name="messageDisplay" placeholder="Enter text">
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#color_picker').on('input', function() {	
+                                                        updateDeviceDisplay('color', $(this).val());
+                                                    });
+                                                    
+                                                    // Detect Enter/Return key press
+                                                    $('#messageDisplay').on('keypress', function(event) {
+                                                        if (event.which === 13)
+                                                            updateDeviceDisplay('messageDisplay', $(this).val());
+                                                    });
+                                                    // Detect focus change (blur event)
+                                                    $('#messageDisplay').on('blur', function() {
+                                                        updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
+                                                    });
+                                                    
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Display Card -->
+                                </div>  
+                            </div>  
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="overview" aria-labelledby="overview-tab">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <!-- Start : Device Details -->
+                                    <div class="card card-outline card-success mb-4">                            
+                                        <div class="card-header">
+                                            <h3 id="deviceCardNameTitle" class="card-title">Info</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="deviceInfoCard" class="table table-bordered">
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <!-- Start : Device Log -->
+                                    <div mobile-colapsed="true" class="card card-outline card-success mb-4">                            
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                            <h3 id="deviceCardNameTitle2" class="card-title">Log</h3>
+                                            <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body table-responsive p-0">
+                                            <table id="deviceLogCard" class="table hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align: center">Date</th>
+                                                        <th style="text-align: center">Message</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="publish" aria-labelledby="publish-tab">
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-2 px-1">
+                                    <!-- Start : MQTT -->
+                                    <div mobile-colapsed="false" class="card card-warning">
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                            <h3 class="card-title"><i class="bi bi-activity"></i> MQTT</h3>
+                                            <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body" style="box-sizing: border-box; display: block;">
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-8">Measure Interval (sec)</span>
+                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_interval" name="mqtt_interval" maxlength="5" value="">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Client ID</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientName" name="mqtt_clientName" maxlength="32" value="" placeholder="Client Name">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Username</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientUsername" name="mqtt_clientUsername" maxlength="64" value="" placeholder="Username">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Password</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="password" class="form-control form-control-sm" id="mqtt_clientPassword" name="mqtt_clientPassword" maxlength="64" value="" placeholder="Password">	
+                                                    <i class="bi bi-eye" id="toggleMQTTPassword" style="cursor: pointer; margin-left: -30px; z-index: 10;"></i>
+                                                </div>
+                                                <script>
+                                                    const passwordMQTTField = document.getElementById('mqtt_clientPassword');
+                                                    const toggleMQTTButton = document.getElementById('toggleMQTTPassword');
+
+                                                    toggleMQTTButton.addEventListener('click', function () {
+                                                        if ( passwordMQTTField.getAttribute('type') === 'password' )
+                                                        {
+                                                            passwordMQTTField.setAttribute('type', 'text');
+                                                            $('#toggleMQTTPassword').removeClass('bi-eye').addClass('bi-eye-slash');
+                                                        } else {
+                                                            passwordMQTTField.setAttribute('type', 'password');
+                                                            $('#toggleMQTTPassword').removeClass('bi-eye-slash').addClass('bi-eye');
+                                                        }
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Server</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="ip" class="form-control form-control-sm" id="mqtt_server" name="mqtt_server" maxlength="32" value="" placeholder="Server address">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-1">
+                                                <span class="input-group-text-sm col-8">Port</span>
+                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_port" name="mqtt_port" maxlength="6" value="" placeholder="MQTT Port">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">My Topic</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_myTopic" name="mqtt_myTopic" maxlength="120" value="" placeholder="My Topic">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Temperature">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Temperature</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Temperature" name="mqtt_Temperature" maxlength="64" value="" placeholder="Temperature">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Humidity">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Humidity</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Pressure">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Pressure</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Pressure" name="mqtt_Pressure" maxlength="120" value="" placeholder="Pressure">
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-end d-none" id="MQTTswitch">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch" name="mqtt_switch" maxlength="120" value="" placeholder="Switch Topic">
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-end d-none" id="MQTTswitch2">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 2</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch2" name="mqtt_switch2" maxlength="120" value="" placeholder="Switch 2 Topic">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-1">
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Webhook -->
+                                        <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi bi-activity"></i> Webhook</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-1">
+                                                    <span class="input-group-text-sm col-8">Measure Interval (sec)</span>
+                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm text-end" id="webLoc_interval" name="webLoc_interval" maxlength="5" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Server</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control form-control-sm" id="webLoc_server" name="webLoc_server" value="" placeholder="Server address">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Discord Webhook -->
+                                        <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-activity"></i> Discord Webhook</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Webhook URL</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control  form-control-sm" id="discord_url" name="discord_url" value="" placeholder="Discord URL">
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label ">Discord avatar</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control  form-control-sm" id="discord_avatar" name="discord_avatar" value="" placeholder="Discord Avatar URL">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Publishing -->
+                                            <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-activity"></i> Publishing</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Enable MQTT</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="mqtt_start" value="1">
+                                                    </div>
+                                                    <script>
+                                                        $('#mqtt_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#mqtt_start').val(1);
+                                                            else
+                                                                $('#mqtt_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                                <div class="row d-flex align-items-center">
+                                                    <label class="input-group-text-sm col-9" for="webLoc_start">Enable Webhook</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="webLoc_start" name="webLoc_start" value="0">
+                                                    </div>
+
+                                                    <script>
+                                                        $('#webLoc_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#webLoc_start').val(1);
+                                                            else
+                                                                $('#webLoc_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Setup first row -->
+                            <!-- Start second row : Device setup -->
+                            <div class="row">
+                                    <div class="col-md-6 px-1">
+                                        <input type="hidden" name="deviceID" id="deviceID" value="1">
+                                    <input type="hidden" name="deviceType" id="deviceType" value="1">
+                                    <input id="moduleName" name="moduleName" value="" hidden="">
+                                    <!-- Start Weather module setup -->
+                                        <div class="col-md-12 mb-2" id="WeatherSetupModule">
+                                        <div mobile-colapsed="true" class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                    <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun "></i>&nbsp;Weather module</h3>
+                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Temperature</span>
+                                                    <input type="hidden" id="t_measure" value="0">
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
+                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
+                                                            <label class="btn btn-sm btn-secondary" onclick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    function set_t_measure(a){
+
+                                                        if ( a == 0 )
+                                                        {
+                                                            $('#t_measure').val(0);
+                                                            $('#t_measure1').removeClass('btn-success disabled active');
+                                                            $('#t_measure1').addClass('btn-secondary');
+                                                            
+                                                            $('#t_measure0').removeClass('btn-secondary');
+                                                            $('#t_measure0').addClass('btn-success disabled  active');
+                                                        }
+                                                        if ( a == 1 )
+                                                        {
+                                                            $('#t_measure').val(1);
+                                                            $('#t_measure1').removeClass('btn-secondary');
+                                                            $('#t_measure1').addClass('btn-success disabled active');
+                                                            
+                                                            $('#t_measure0').removeClass('btn-success disabled active');
+                                                            $('#t_measure0').addClass('btn-secondary');
+                                                        }
+
+                                                    }
+                                                </script>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Pressure</span>
+                                                    <input type="hidden" id="p_measure" value="0">
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
+                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
+                                                            <label class="btn btn-sm btn-secondary" onclick="set_p_measure(1);" id="p_measure1" value="1">in</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    function set_p_measure(a){
+
+                                                        if ( a == 0 )
+                                                        {
+                                                            $('#p_measure').val(0);
+                                                            $('#p_measure1').removeClass('btn-success disabled active');
+                                                            $('#p_measure1').addClass('btn-secondary');
+                                                            
+                                                            $('#p_measure0').removeClass('btn-secondary');
+                                                            $('#p_measure0').addClass('btn-success disabled  active');
+                                                        }
+                                                        if ( a == 1 )
+                                                        {
+                                                            $('#p_measure').val(1);
+                                                            $('#p_measure1').removeClass('btn-secondary');
+                                                            $('#p_measure1').addClass('btn-success disabled active');
+                                                            
+                                                            $('#p_measure0').removeClass('btn-success disabled active');
+                                                            $('#p_measure0').addClass('btn-secondary');
+                                                        }
+                                                        
+                                                    }
+                                                </script>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-5">Device Name</span>
+                                                    <div class="form-check form-switch col-7 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="0">
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#p_adjust').on('change', function() {
+                                                        if ( $(this).is(':checked') )
+                                                            $('#p_adjust').val(1);
+                                                        else
+                                                            $('#p_adjust').val(0);
+                                                    });
+                                                </script>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Elevation unit</span>
+                                                    <input type="hidden" id="pa_unit" value="0">
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <div class="btn-group" role="group" data-toggle="buttons">
+                                                            <label class="btn btn-sm btn-secondary" onclick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
+                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    function set_pa_unit(a){
+
+                                                        if ( a == 0 )
+                                                        {
+                                                            $('#pa_unit').val(0);
+                                                            
+                                                            $('#pa_unit1').removeClass('btn-success disabled active');
+                                                            $('#pa_unit1').addClass('btn-secondary');
+                                                            
+                                                            $('#pa_unit0').removeClass('btn-secondary');
+                                                            $('#pa_unit0').addClass('btn-success disabled  active');
+                                                        }
+                                                        if ( a == 1 )
+                                                        {
+                                                            $('#pa_unit').val(1);
+                                                            
+                                                            $('#pa_unit1').removeClass('btn-secondary');
+                                                            $('#pa_unit1').addClass('btn-success disabled active');
+                                                            
+                                                            $('#pa_unit0').removeClass('btn-success disabled active');
+                                                            $('#pa_unit0').addClass('btn-secondary');
+                                                        }
+                                                        
+                                                    }
+                                                </script>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-8">Elevation</span>
+                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm text-end" id="pl_adj" name="pl_adj" maxlength="12" value="" placeholder="Local elevation">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Weather module setup -->
+                                    <!-- Start Switch & TicTac module setup -->
+                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule" style="display: none;">
+                                        <div mobile-colapsed="true" class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                    <h3 class="card-title" id="SwitchTicTacModuleTitle"><i class="bi bi-hash"></i> Module</h3>
+                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-5">Device Name</span>
+                                                    <div class="form-check form-switch col-7 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm" id="SwitchTicTacName" name="SwitchTicTacName" maxlength="32" value="" placeholder="Device Name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Switch & TicTac module setup -->
+                                </div>
+                                
+                                    <div class="col-md-6 px-1">
+                                    <!-- Start Tic Tac Toe -->
+                                    <div class="col-md-12 mb-2">
+                                        <div mobile-colapsed="true" class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                    <h3 class="card-title"><i class="bi bi-hash"></i> Tic Tac Toe</h3>
+                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Invite to Play Interval (min):</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm text-end" id="tictac_interval" name="tictac_interval" maxlength="3" value="" placeholder="60">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Publish to Webhook:</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_webhook" value="0">
+                                                    </div>
+                                                    <script>
+                                                        $('#tictac_webhook').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_webhook').val(1);
+                                                            else
+                                                                $('#tictac_webhook').val(0);
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Publish to Discord:</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_discord" value="1">
+                                                    </div>
+                                                    <script>
+                                                        
+                                                        $('#tictac_discord').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_discord').val(1);
+                                                            else
+                                                                $('#tictac_discord').val(0);
+                                                        });
+                                                            
+                                                    </script>
+                                                        
+                                                </div>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Enable Tic Tac Toe</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_start" value="1">
+                                                    </div>
+                                                    <script>
+                                                        $('#tictac_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_start').val(1);
+                                                            else
+                                                                $('#tictac_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Tic Tac Toe -->
+                                    <!-- Start save Config -->
+                                    <div class="">
+                                        <div id="saveConfigChanges" class="small-box text-bg-danger hover-hand">
+                                            <div class="inner d-flex justify-content-center" id="updateDevice" link-target="192.168.1.74">
+                                                <h5>Save Config.json changes</h5>
+                                                <p>&nbsp;</p>
+                                            </div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="small-box-icon" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path d="M11 2H9v3h2z"></path>
+                                                    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"></path>
+                                            </svg>
+                                                <h6 id="saveConfigChanges" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"> Save <i class="bi bi-link-45deg"></i> </h6>
+                                        </div>
+                                    </div>
+                                    <!-- End save Config -->
+                                </div>
+                            </div>
+                            <!-- End second row : Device setup -->
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="wifi" aria-labelledby="wifi-tab">
+                            <!-- Start Wifi -->
+                            <div class="col-md-6 mb-2">
+                                <form id="formWiFi" novalidate="novalidate">
+                                <input type="hidden" id="wifi_runAS" name="wifi_runAS" value="1">
+                                <input type="hidden" id="wifi_hideAP" name="wifi_hideAP" value="0">
+                                <input type="hidden" id="softAP_ssid" name="softAP_ssid" value="StergoSmart">
+                                <input type="hidden" id="softAP_pass" name="softAP_pass" value="123456789">
+                                <div mobile-colapsed="false" class="card card-info mb-2">
+                                    <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                        <h3 class="card-title"><i class="bi bi-wifi"></i> WiFi</h3>
+                                        <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">Network name</span>
+                                            <div class="d-flex align-items-center justify-content-ends col-8">
+                                                <input type="text" class="form-control form-control-sm text-center" id="wifi_SSID" name="wifi_SSID" maxlength="32" value="" placeholder="Network name">
+                                                <button class="btn btn-default" type="button" id="btn_scan" data-bs-toggle="modal" onClick="scanWifi()" data-bs-target="#tab_scan">&nbsp;<i class="bi bi-wifi"></i></button>										
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">Password</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="password" class="form-control form-control-sm" id="wifi_password" name="wifi_password" maxlength="64" value="" placeholder="Password">
+                                                <i class="bi bi-eye" id="togglePassword" style="cursor: pointer; margin-left: -30px; z-index: 10;"></i>
+                                            </div>
+                                            <script>
+                                                
+                                                const passwordField = document.getElementById('wifi_password');
+                                                const toggleButton = document.getElementById('togglePassword');
+
+                                                toggleButton.addEventListener('click', function () {
+                                                    if ( passwordField.getAttribute('type') === 'password' )
+                                                    {
+                                                        passwordField.setAttribute('type', 'text');
+                                                        $('#togglePassword').removeClass('bi-eye').addClass('bi-eye-slash');
+                                                    } else {
+                                                        passwordField.setAttribute('type', 'password');
+                                                        $('#togglePassword').removeClass('bi-eye-slash').addClass('bi-eye');
+                                                    }
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">Hostname</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="text" class="form-control form-control-sm" id="wifi_hostname" name="wifi_hostname" maxlength="32" value="" placeholder="Default Gateway">
+                                            </div>
+                                        </div>
+                                        <fieldset class="row mb-3">
+                                            <div class="col-sm-12">
+                                                <input type="hidden" id="wifi_static" value="0">
+                                                <div class="form-check mb-2">
+                                                    <label class="form-check-label"><input class="form-check-input" type="radio" name="wifi_static0" value="0" onclick="set_wifi_static(0);" id="wifi_static0">Obtain an IP address automatically</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label"><input class="form-check-input" type="radio" name="wifi_static1" value="1" onclick="set_wifi_static(1);" id="wifi_static1">Use the following IP address</label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <script>
+                                            function set_wifi_static(a){
+                                                if ( a == 0 )
+                                                {
+                                                    $('#wifi_static').val(0);
+                                                    $('#wifi_static0').prop('checked', true);
+                                                    $('#wifi_static1').prop('checked', false);
+                                                }
+
+                                                if ( a == 1 )
+                                                {
+                                                    $('#wifi_static').val(1);
+                                                    $('#wifi_static0').prop('checked', false);
+                                                    $('#wifi_static1').prop('checked', true);
+                                                }
+                                            }
+
+                                        </script>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">IP address</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="text" class="form-control form-control-sm" id="wifi_StaticIP" name="wifi_StaticIP" data-ipv4-error="Please enter a valid IP address" data-ipv4="ipv4" maxlength="15" value="" placeholder="IP Address">
+                                                <div class="error-message"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">Subnet mask</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="text" class="form-control form-control-sm" id="wifi_subnet" name="wifi_subnet" data-ipv4-error="Please enter a valid Subnet" data-ipv4="ipv4" maxlength="15" value="" placeholder="Subnet mask">
+                                                <span class="invalid-feedback"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">Gateway</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="text" class="form-control form-control-sm" id="wifi_gateway" name="wifi_gateway" data-ipv4-error="Please enter a valid IP address" data-ipv4="ipv4" maxlength="15" value="" placeholder="Default Gateway">
+                                                <span class="invalid-feedback"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex align-items-center mb-2">
+                                            <span class="input-group-text-sm col-4">DNS server</span>
+                                            <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                <input type="text" class="form-control form-control-sm" id="wifi_DNS" name="wifi_DNS" data-ipv4-error="Please enter a valid IP address" data-ipv4="ipv4" maxlength="15" value="" placeholder="DNS Server">
+                                                <span class="invalid-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal Wifi Scan -->
+                                <div class="modal fade" id="tab_scan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-info text-white">
+                                                <h5 class="modal-title">Available WiFi networks</h5>
+                                                <button type="button" id="modalWiFiReload" onclick="tabScanWifiData.ajax.reload()" class="btn btn-custom"><i class="bi bi-arrow-repeat"></i></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table id="tab_scan_data" class="table hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-sm-5" id="ssid">SSID</th>
+                                                            <th class="col-sm-4" id="signal">Signal</th>
+                                                            <th class="col-sm-1" id="encType">enc</th>
+                                                            <th class="col-sm-1" id="chann">Ch</th>
+                                                            <th class="col-sm-3" id="rssi">RSSI</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end Modal Wifi Scan -->
+                                </form>
+                            </div>
+                            <!-- Start save WiFi Config -->
+                            <div class="col-md-6">
+                                <div id="saveWiFiChanges" class="small-box text-bg-info hover-hand">
+                                    <div class="inner d-flex justify-content-center" id="updateDevice" link-target="192.168.1.74">
+                                        <h5>Save WiFi changes</h5>
+                                        <p>&nbsp;</p>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="small-box-icon" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path d="M11 2H9v3h2z"></path>
+                                            <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"></path>
+                                    </svg>
+                                        <h6 id="saveWiFiChanges" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"> Save <i class="bi bi-link-45deg"></i> </h6>
+                                </div>
+                            </div>
+                            <!-- End save WiFi Config -->
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="devices" aria-labelledby="devices-tab">
+                            <div class="row">
+                                <!-- Start Data -->
+                                <div class="col-md-6 mb-2">
+                                    <div mobile-colapsed="false" class="card card-warning">
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                               <h3 class="card-title"><i class="bi bi-hdd"></i> Data</h3>
+                                               <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-9">Erase History:</span>
+                                                <div class="btn btn-sm btn-danger col-3" id="eraseHistory" link-target="192.168.1.74" type="button" onclick="genericDeleteFileContent('eraseHistory')"> <i class="bi bi-trash"></i>&nbsp;&nbsp; Erase</div>
+                                            </div>
+                                            <div class="row d-flex align-items-center">
+                                                <span class="input-group-text-sm col-9">Erase log:</span>
+                                                <div class="btn btn-sm btn-danger col-3" id="eraseLog" link-target="192.168.1.74" type="button" onclick="genericDeleteFileContent('eraseLog')"> <i class="bi bi-trash"></i>&nbsp;&nbsp; Erase</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Data -->
+                                <!-- Start Devices -->
+                                <div class="col-md-6 mb-2">
+                                    <div mobile-colapsed="false" class="card card-warning">
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                               <h3 class="card-title"><i class="bi bi-phone"></i> Devices</h3>
+                                               <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-9">Reboot device :</span>
+                                                <div class="btn btn-sm btn-danger col-3" id="restart" link-target="192.168.1.74" type="button" onclick="genericDeleteFileContent('restart')"> <i class="bi bi-arrow-repeat"></i>&nbsp;&nbsp; Restart</div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-9">Update firmware : <i class="btn bi bi-info-circle text-info" onclick="checkDeviceFirmwareUpdate()" id="checkFirmware" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Check for Firmware Update" data-bs-original-title="Check for Firmware Update"></i></span>
+                                                <div class="btn btn-sm btn-danger col-3" id="updateFirmware" link-target="192.168.1.74" type="button" onclick="genericDeleteFileContent('updateFirmware')"> <i class="bi bi-arrow-repeat"></i>&nbsp;&nbsp; Update</div>
+                                                
+                                            </div>
+                                            <div class="row d-flex align-items-center">
+                                                <span class="input-group-text-sm col-9">Update SPIFFS :</span>
+                                                <div class="btn btn-sm btn-danger col-3" id="updateSpiffs" link-target="192.168.1.74" type="button" onclick="genericDeleteFileContent('updateSpiffs')"> <i class="bi bi-arrow-repeat"></i>&nbsp;&nbsp; Update</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Devices -->
+                                <!-- Start FileSystem -->
+                                <div class="col-md-6">
+                                    <div mobile-colapsed="false" class="card card-warning">
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                               <h3 class="card-title"><i class="bi bi-folder-symlink-fill"></i> FileSystem</h3>
+                                               <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <fieldset class="row mb-3">
+                                                <legend class="col-form-label col-sm-3 col-md-3 pt-0">File Prefix</legend>
+                                                <div class="col-sm-9 col-md-9">
+                                                    <div class="form-check"> <input class="form-check-input" type="radio" name="uploadFilePrefix" id="uploadFilePrefix1" value="0" checked="">
+                                                        <label class="form-check-label" for="uploadFilePrefix1">
+                                                            none
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check"> <input class="form-check-input" type="radio" name="uploadFilePrefix" id="uploadFilePrefix2" value="/img/">
+                                                        <label class="form-check-label" for="uploadFilePrefix2">
+                                                            /img/
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check"> <input class="form-check-input" type="radio" name="uploadFilePrefix" id="uploadFilePrefix3" value="/js/">
+                                                        <label class="form-check-label" for="uploadFilePrefix3">
+                                                            /js/
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check"> <input class="form-check-input" type="radio" name="uploadFilePrefix" id="uploadFilePrefi4" value="/css/">
+                                                        <label class="form-check-label" for="uploadFilePrefi4">
+                                                            /css/
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <div class="input-group d-flex align-items-center">
+                                                <input type="file" class="form-control" id="my-file-selector">
+                                                <div class="btn btn-danger" id="uploadFile" data-bs-target="uploadFile" link-target="192.168.1.74" type="button"> <i class="bi bi-arrow-repeat"></i>&nbsp;&nbsp; Upload</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End FileSystem -->
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                <!--end::Container-->
+            </div>
+            <!--end::App Content-->
+        </main>
+        <!--end::App Main-->
+        <nav class="navbar fixed-bottom bottom-menu d-block d-md-none">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-around w-100">
+                    <a class="nav-link" href="#home"><i class="bi bi-house"></i></a>
+                    <a class="nav-link" href="#overview"><i class="bi bi-bar-chart"></i></a>
+                    <a class="nav-link" href="#publish"><i class="bi bi-upload"></i></a>
+                    <a class="nav-link" href="#wifi"><i class="bi bi-wifi"></i></a>
+                    <a class="nav-link" href="#devices"><i class="bi bi-device-hdd"></i></a>
+                </div>
+            </div>
+        </nav>
+        <!-- End Bottom Navigation -->
+         
+        <footer class="app-footer"> <!--begin::To the end-->
+            <div class="float-end d-none d-sm-inline">K.K.</div> <!--end::To the end--> <!--begin::Copyright--> <strong>
+                Copyright &copy; 2014-2024&nbsp;
+                Stergo Smart.
+            </strong>
+            All rights reserved.
+            <!--end::Copyright-->
+        </footer> <!--end::Footer-->    </div>
+    
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+    <div id="dialogAlertContainer" class="toast-container position-fixed top-50 start-50 translate-middle p-3"></div>
+
+    <div id="backdrop" class="backdrop"></div>
+    <div id="loader"></div>
+    <!--end::App Wrapper--> 
+    <!--begin::Script-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/4.0.0-beta2/js/adminlte.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+    <script>
+        /*! DataTables Bootstrap 5 integration
+        * ÂŠ SpryMedia Ltd - datatables.net/license
+        */
+       !function (n) { var o, r; "function" == typeof define && define.amd ? define(["jquery", "datatables.net"], function (t) { return n(t, window, document) }) : "object" == typeof exports ? (o = require("jquery"), r = function (t, e) { e.fn.dataTable || require("datatables.net")(t, e) }, "undefined" == typeof window ? module.exports = function (t, e) { return t = t || window, e = e || o(t), r(t, e), n(e, 0, t.document) } : (r(window, o), module.exports = n(o, window, window.document))) : n(jQuery, window, document) }(function (d, t, e) { "use strict"; var n = d.fn.dataTable; return d.extend(!0, n.defaults, { renderer: "bootstrap" }), d.extend(!0, n.ext.classes, { container: "dt-container dt-bootstrap5", search: { input: "form-control form-control-sm" }, length: { select: "form-select form-select-sm" }, processing: { container: "dt-processing card" }, layout: { row: "row mt-2 justify-content-between", cell: "d-md-flex justify-content-between align-items-center", tableCell: "col-12", start: "dt-layout-start col-md-auto me-auto", end: "dt-layout-end col-md-auto ms-auto", full: "dt-layout-full col-md" } }), n.ext.renderer.pagingButton.bootstrap = function (t, e, n, o, r) { var a = ["", "page-item"], o = (o && a.push("active"), r && a.push("disabled"), d("<li>").addClass(a.join(" "))); return { display: o, clicker: d("<button>", { class: "page-link", role: "link", type: "button" }).html(n).appendTo(o) } }, n.ext.renderer.pagingContainer.bootstrap = function (t, e) { return d("<ul/>").addClass("pagination").append(e) }, n });
+    </script>
+
+    <script>
+        var siteName = 'WeatherAttic-898235'; // Replace with a unique identifier for each site - for themes
+        var adminAddress = 'http://192.168.1.101/StergoWeather';
+        // on device = false, 1 on nas true
+        var onNasOrDevice = false;
+        var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
+        //
+        // WiFi Data
+        //
+        var tabScanWifiData;
+        // Protocol http
+        var protocol = window.location.protocol;
+        // hostname 192.168.1.101
+        var hostname = window.location.hostname;
+
+        if ( onNasOrDevice )
+            var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        else
+            var serverAddress = protocol + "//" + hostname + "/";
+
+        // Tables
+        var tableDeviceLog; // in deviceMoreDetailsCard - LOG of device
+
+        // fullset from /deviceinfo.json
+        var deviceInfo;
+        // extracted from Firmware /deviceinfo.json
+        var deviceFirmware;
+        var chidID;
+        var deviceName;
+        var deviceIP;
+
+        // To have it Global
+        var parsedConfigOrigJSON = [];
+        var deviceSwitchData;
+
+        // input receives String : SmartPlug S26|PS002v02-1393511
+        var loadDeviceCurrentInput;
+        // Make Global PS002v02-1393511 - Used in deviceMoreDetailsCard
+        var deviceModelSerial;
+        // PS002v02 array split v 
+        var deviceModelName;
+        
+        var configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+
+        // Handling Theme
+        var storedTheme = localStorage.getItem(`${siteName}_theme`);
+        if (!storedTheme)
+            storedTheme = 'light';
+        else if (storedTheme === 'auto')
+            storedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+        var chartsBackgroundColor = storedTheme === 'dark' ? '#212529' : '#ffffff';
+        
+        function chartsThemeChange( newThemeFromEvent )
+        {
+            var themeOptions = {
+                theme: {
+                    mode: newThemeFromEvent // 'light' or 'dark'
+                },
+                chart: {
+                    foreColor: newThemeFromEvent === 'dark' ? '#f6f7f8' : '#000000',
+                    background: newThemeFromEvent === 'dark' ? '#212529' : '#ffffff'
+                },
+                tooltip: {
+                    theme: newThemeFromEvent // 'light' or 'dark'
+                }
+            }
+            return themeOptions;
+        };
+
+        function chartOptions( temperature, humidity, pressure, timestamp, type ) {
+            
+            var optionsChart = {
+                colors: ["#E91E63", "#0d6efd"],
+                series: [
+                    {
+                        name: 'Temperature',
+                        data: temperature
+                    },
+                    {
+                        name: 'Humidity',
+                        data: humidity
+                    }
+                ],
+                yaxis: {
+                    floating: false,
+                    decimalsInFloat: 1,
+                    labels: {
+                        offsetX: -15,
+                    }
+                }
+            }
+            var optionsPressure = {
+                colors: ["#C5E1A5"],
+                series: [
+                    {
+                        name: 'Air Pressure',
+                        data: pressure
+                    }
+                ],
+                yaxis: {
+                    floating: false,
+                    decimalsInFloat: 0,
+                    labels: {
+                        offsetX: -15,
+                    }
+                }        
+            }
+
+            var options = {
+                theme: { 
+                    mode: storedTheme
+                },
+                chart: {
+                    height: 180,
+                    background: chartsBackgroundColor,
+                    type: "area",
+                    toolbar: {
+                    show: false,
+                    },
+                    offsetX: 0,
+                    offsetY: 0,
+                },
+                legend: {
+                    show: false,
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    curve: "smooth",
+                },
+                xaxis: {
+                    type: "datetime",
+                    categories: timestamp
+                },
+                grid: {
+                    padding: {
+                        left: -5,
+                        top: -20,
+                    }
+                }
+            }
+
+            if ( type == 1 )
+            {
+                var mergedOptions = {
+                    ...options,
+                    ...optionsChart
+                }
+            }
+                
+            
+            if ( type == 2 )
+            {
+                var mergedOptions = {
+                    ...options,
+                    ...optionsPressure
+                }
+            }
+            return mergedOptions;
+            
+        }
+    
+
+        loadDeviceInfoTable().then(result => {
+            if (result === true)
+            {
+                let asd = deviceFirmware.split('-');
+                deviceModelName = asd[1].split('v');
+                deviceModelSerial = asd[0]+'-'+chipID;
+                ourDevice = deviceName + '|' + deviceModelSerial + '|' + deviceIP;
+                loadDeviceInfo(ourDevice); // Using this way so i can use it on test env
+            }
+        });
+        
+        function fwdJsonRequest( serial, type )
+        {
+            var link = serverAddress+'/include/fwdJsonRequest.php?serial='+serial+'&type='+type;
+            return link;
+        }
+
+        function loadDeviceInfo( input )
+        {
+            loadDeviceCurrentInput = input;
+
+            let result = input.split('|');
+            deviceModelName = result[1].split('v');
+
+            deviceModelSerial = result[1];
+            
+            // Populate Buttons in Exe / all link-target with IP
+            // So that we can later when triggered load from JSON their IP address
+            $('#restart').attr('link-target', result[2]);
+            $('#updateFirmware').attr('link-target', result[2]);
+            $('#updateSpiffs').attr('link-target', result[2]);
+            $('#eraseLog').attr('link-target', result[2]);
+            $('#eraseHistory').attr('link-target', result[2]);
+            $('#uploadFile').attr('link-target', result[2]);
+            $('#updateDevice').attr('link-target', result[2]);
+
+            $('#deviceCardNameTitle').text(result[0] + ' Info');
+            $('#deviceCardNameTitle2').text(result[0] + ' Log');
+
+            //	Load deviceinfo.json
+            //  In headStergoMain.js
+
+            loadDeviceInfoTable().then(result => { 
+                if ( result === true ) { 
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                    console.log("Device Info Table has been updated."); // Perform any additional actions here
+                }
+            });
+
+            //	Load log.json
+            //  In headStergoMain.js
+            loadDeviceLog().then(result => { 
+                if ( result === true ) { 
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                    console.log("Log Table has been updated."); // Perform any additional actions here
+                }
+            });
+            
+            //	Load config.json
+            //  In headStergoMain.js
+            loadDeviceConfig().then(result => { 
+                if ( result === true ) { 
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                    console.log("Config All input fields have been updated."); // Perform any additional actions here
+                }
+            });
+        }
+
+        function RSSIFormatter( rssi )
+        {
+            //var rssi = parseInt(row.rssi),
+            var cl = 'success';
+            var htm = '';
+            var signal = Math.min(Math.max(2*(rssi+100),0),100);
+
+            if (signal < 70) cl = 'info';
+            if (signal < 50) cl = 'warning';
+            if (signal < 30) cl = 'danger';
+
+            htm = "<div class='progress mb-2' role='progressbar' aria-label='Signal quality' aria-valuenow='"+signal+"' aria-valuemin='0' aria-valuemax='100'>";
+            htm+= "<div class='progress-bar progress-bar-striped bg-"+cl+"' style='width:"+signal+"%; border-radius: 0.375rem;'>"+rssi+"dB</div>";
+            
+            return htm;
+        }
+
+        async function loadJSON(file) {
+            const response = await fetch(file);
+            const data = await response.json();
+            return data;
+        }
+
+        async function loadDeviceConfig() {
+            const listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
+            const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
+            
+            let data;
+            if ( onNasOrDevice )
+            {
+                //data = await loadJSON('http://192.168.1.74/config.json');
+                let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
+                data = await loadJSON(configOnDeviceJSON);
+            }
+            else
+            {
+                data = await loadJSON('/config.json');
+            }
+            
+            $('#data-container').html(JSON.stringify(data, null, 2));
+            // Make it Global
+            parsedConfigOrigJSON = data;
+            // Go through and set attribute values
+            $.each( data, function( key, value ) {
+                // Populate the input field with the corresponding value
+                if ( listOfspecialsChecked.includes(key) )
+                {
+                    if ( value == 1 )
+                        $('#' + key).prop('checked', true);
+                    else
+                        $('#' + key).prop('checked', false)
+                }
+                // Using generic function name to reduce code writing
+                if ( listOfspecialButtons.includes(key) )
+                    window['set_'+key](value);
+
+                $('#' + key).val(value);
+            });
+
+            return true;
+        }
+
+        async function loadDeviceInfoTable() {
+            // Load Device Info Card	
+            
+            let jsonInfoData;
+            if ( onNasOrDevice )
+            {
+                jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
+                //let jsonInfoDataFile = fwdJsonRequest( 'WS011v02', 4 );
+                //jsonInfoData = await loadJSON(jsonInfoDataFile);
+            }
+            else
+            {
+                jsonInfoData = await loadJSON('/deviceinfo.json');
+            }
+            
+            // Make Global
+            deviceInfo = jsonInfoData.result;
+
+            // set deviceFirmware
+            deviceInfo.forEach(function(item) {
+                if (item.Name === "Firmware") {
+                    deviceFirmware = item.Value;
+                }
+                if (item.Name === "Chip ID") {
+                    chipID = item.Value;
+                }
+                if (item.Name === "DeviceName") {
+                    deviceName = item.Value;
+                }
+                if (item.Name === "DeviceIP") {
+                    deviceIP = item.Value;
+                }
+            });
+
+            var tableBody = $('#deviceInfoCard tbody');
+            tableBody.empty();
+            
+            $.each( deviceInfo, function(index, item) {
+                var row = $('<tr>');
+                $('<td class="bg-success-subtle" style="text-align: right">').text(item.Name).appendTo(row)
+                $('<td style="text-align: left">').text(item.Value).appendTo(row);
+                
+                tableBody.append(row);
+            });
+
+            return true;
+        }
+
+        async function loadDeviceLog() {
+            //
+            // Load Device Logs
+            // 
+            // For Reloading Log files, Destroy previous DataTable, Clear Dom of tbody content
+            if ($.fn.dataTable.isDataTable('#deviceLogCard'))
+            {
+                $('#deviceLogCard').DataTable().destroy();
+                $('#deviceLogCard tbody').empty();
+            }
+
+            let jsonLogData;
+            if ( onNasOrDevice )
+            {
+                const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
+                jsonLogData = await loadJSON(jsonLogDataFile);
+            }
+            else
+            {
+                jsonLogData = await loadJSON('/log.json');
+            }
+
+            var tableBody = $('#deviceLogCard tbody');
+
+            const reversedData = jsonLogData.log.reverse();
+
+            $.each( reversedData, function(index, item) {
+                let row = $('<tr>');
+                
+                let date = new Date(item.id * 1000);
+                date.setHours(date.getHours());
+                let formattedDate = date.toLocaleString('hr-HR');
+
+                $('<td class="bg-success-subtle" style="text-align: right">').text(formattedDate).appendTo(row);
+                $('<td style="text-align: left">').text(item.id3).appendTo(row);
+                
+                tableBody.append(row);
+            });
+                
+            tableDeviceLog = $('#deviceLogCard').DataTable({
+                    info: false,
+                    processing: true,
+                    searching: false,
+                    ordering: false,
+                    paging: true
+            });
+        }
+
+        // Save Config Function 
+        async function saveConfig( device )
+        {
+            // TicTacStateOn | tictac_start, MQTTstateOn | mqtt_start, WhookStateOn | webLoc_start : value to set ON = 1, OFF = 0
+            var deviceRunServicesConfigJSON = {"mqtt_start": "MQTTstateOn", "webLoc_start": "WhookStateOn", "tictac_start":"TicTacStateOn"};
+
+            // Compare to Blank config.json for this device if we have all fields
+            //$.getJSON( jsonConfigBlankFolder+configDisplayDevices[device]['configBlankFile'], function(data) {  
+
+            // Check if Submit is different then original for these values and prepare them 
+            // var parsedConfigOrigJSON vs list gen
+            var comparedDiff = {};
+            $.each( parsedConfigOrigJSON, function( index, item ) {
+                let newInputValue = $('#'+index).val();
+                //Compare original and new value from input, Convert to String for comparing
+                if ( String(parsedConfigOrigJSON[index]) !== String(newInputValue) )
+                {
+                    if ( configJSONAttNumbers.includes(index) )
+                    {
+                        // Now we need to check if those changes include state of Services to run
+                        if ( deviceRunServicesConfigJSON.hasOwnProperty(index) )
+                            comparedDiff[deviceRunServicesConfigJSON[index]] = Number(newInputValue);
+
+                        comparedDiff[index] = Number(newInputValue);
+                    }
+                    else
+                    {
+                        comparedDiff[index] = newInputValue;
+                    }
+                        
+                }
+            });
+            
+            const linkTargetValue = $('#updateDevice').attr('link-target');
+            const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
+            let url;
+            if ( onNasOrDevice )
+                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            else 
+                url = '/gpio?id=updateDevice';
+
+            // IF we have changes
+            if ( Object.keys(comparedDiff).length > 0 )
+            {  
+                console.log(JSON.stringify(comparedDiff));
+                try {
+                    const result = await showConfirmDialogToast( 'Light', 'saveConfigID', 'Save Config Changes', 'Are You sure that you want to save changes to config.json<br/>'+JSON.stringify(comparedDiff) );
+                    if ( result ) {
+                        //saveConfig(deviceModelName[0]);
+                        // Insert target device For forwardPost
+                        comparedDiff['target'] = prepTargetURL;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: comparedDiff,
+                            dataType: 'json',
+                            success: function(response) {
+                                document.getElementById('backdrop').style.display = 'none';
+                                //type, toastID, title, message, titleText = ''
+                                // This is success of PHP, we need to check Device response
+                                if ( response.hasOwnProperty('success') )
+                                    showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
+                                else if ( response.hasOwnProperty('Error') )
+                                    showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
+                            },
+                            error: function(error) {
+                                document.getElementById('backdrop').style.display = 'none';
+                                showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
+                            }
+                        });
+                        return true;
+                    } else {
+                        console.log('User canceled');
+                        return true;
+                    }
+                } catch (error) {
+                    console.error(error);
+                    document.getElementById('backdrop').style.display = 'none';
+                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
+                }
+
+            }
+            else
+            {
+                // No Changes in Config so there is nothing to save
+                document.getElementById('backdrop').style.display = 'none';
+                showToast('Info', 'saveConfigID', 'Save Config Changes', 'There are no Changes made. Nothing to save!' );
+            }
+
+            return false;
+        }
+
+        function saveConfigChanges() {
+            saveConfig(deviceModelName[0]).then(result => { 
+                if (result === true)
+                { 
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                    //reload all Config related
+                    loadDeviceInfo(loadDeviceCurrentInput);
+                    
+                    //console.log("All input fields have been saved."); // Perform any additional actions here
+                }
+            });
+        }
+
+        function checkServerStatus()
+        {
+            let url;
+            if ( onNasOrDevice )
+                urltmp = fwdJsonRequest( 'WS011v02', 4 );
+            else
+                urltmp = '/deviceinfo.json';
+
+            $.ajax(
+                { url: urltmp, // Replace with your remote server URL
+                type: 'GET',
+                success: function(response) {
+                    console.log('Server is up:', response);
+                    location.reload(); // Reload the page
+                },
+                error: function(xhr, status, error) {
+                    console.log('Server is down:', error);
+                }
+            });
+        }
+
+        async function genericDeleteFileContent( what )
+        {				
+            //1. new ID for Toast Div, 2, 3. Title, 4. Message
+            const idOptions = {
+                eraseHistory: [ 'eraseHistoryID', 'eraseHistory', 'Erase History', 'erasing History', 'Please confirm that you want to delete all history data from your device?' ],
+                eraseLog: [ 'eraseLogID', 'eraseLog', 'Erase Log', 'erasing Log', 'Please confirm that you want to delete all data in log file?' ],
+                restart: [ 'restartID', 'restart', 'Reboot', 'restarting', 'Please confirm that you want to Reboot your device?' ],
+                updateFirmware: [ 'updateFirmwareID', 'updateFirmware', 'Firmware update', 'updateing Firmware', 'Please confirm that you want to update Firmware on your device?' ],
+                updateSpiffs: [ 'updateSpiffsID', 'updateSpiffs', 'SPIFFS update', 'updateing SPIFFS', 'Please confirm that you want to upload SPIFFS to your device?' ]
+            };
+
+            // Updated on load as IP address of device
+            const linkTargetValue = $('#'+what).attr('link-target');
+            const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
+
+            let url;
+            if ( onNasOrDevice )
+                url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            else 
+                url = '/gpio?id='+what;
+            
+            try {
+                const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
+                if ( result ) {
+                    $.ajax({
+                        url: url, 
+                        type: 'POST',
+                        data: { target: prepTargetURL },
+                        dataType: 'json',
+                        success: function(response) {
+                            //Hide loader backdrop of showConfirmDialogToast
+                            document.getElementById('backdrop').style.display = 'none';
+                            //type, toastID, title, message, titleText = ''
+                            
+                            // This is success of PHP, we need to check Device response
+                            if ( response.hasOwnProperty('success') )
+                                showToast('Success', idOptions[what][0], idOptions[what][2], response['success'] ); 
+                            else if ( response.hasOwnProperty('Error') )
+                                showToast('Error', idOptions[what][0], idOptions[what][2], response['Error'] );
+                            else if ( response.hasOwnProperty('Info') )
+                                showToast('Info', idOptions[what][0], idOptions[what][2], response['Info'] ); 
+                            
+                            // If we just deleted Log, let's refresh it
+                            if ( what == 'eraseLog' )
+                                loadDeviceLog();
+
+                            // If we restarted device
+                            if ( what == 'restart' )
+                                setInterval(checkServerStatus, 5000); // Show Loading page or Restarting
+
+                        },
+                        error: function(error) {
+                            //Hide loader backdrop of showConfirmDialogToast
+                            document.getElementById('backdrop').style.display = 'none';
+                            showToast('Error', idOptions[what][0], idOptions[what][2], JSON.stringify(error) );
+                        },
+                    });
+                } else {
+                    console.log('User canceled');
+                }
+            } catch (error) {
+                console.error(error);
+                //Hide loader backdrop of showConfirmDialogToast
+                document.getElementById('backdrop').style.display = 'none';
+                showToast('Error', idOptions[what][0], idOptions[what][2], JSON.stringify(error) );
+            }
+
+        }
+    
+        async function updateDeviceDisplay( what, value )
+        {
+            let payloadDisplay = {};
+            //const prepTargetURL = 'http://192.168.1.74/display';
+            //payloadDisplay['target'] = prepTargetURL;
+            //let tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            let tmpurl = '/display';
+            payloadDisplay[what] = value;
+            $.ajax({
+                url: tmpurl,
+                type: 'POST',
+                data: payloadDisplay,
+                dataType: 'json',
+                success: function(response) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    //type, toastID, title, message, titleText = ''
+                    // This is success of PHP, we need to check Device response
+                    if ( response.hasOwnProperty("success") )
+                        showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
+                    else if (response.hasOwnProperty('Error') )
+                        showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
+                },
+                error: function(error) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
+                }
+            });
+        }
+
+        // Nav Sidebar and Bottom TAB control
+        document.addEventListener('DOMContentLoaded', function() {
+            var sidebarNavLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+            var bottomNavLinks = document.querySelectorAll('.bottom-menu .nav-link');
+            var tabPanes = document.querySelectorAll('.tab-pane');
+
+            function handleNavClick(link) {
+                // Remove active class from all nav links
+                sidebarNavLinks.forEach(function(nav) {
+                    nav.classList.remove('active');
+                });
+                bottomNavLinks.forEach(function(nav) {
+                    nav.classList.remove('active');
+                });
+
+                // Add active class to the clicked nav link
+                link.classList.add('active');
+
+                // Hide all tab panes
+                tabPanes.forEach(function(pane) {
+                    pane.classList.remove('show', 'active');
+                });
+
+                // Show the selected tab pane
+                var target = document.querySelector(link.getAttribute('href'));
+                target.classList.add('show', 'active');
+
+                // Remove menu-open class from all nav items
+                var navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(function(item) {
+                    item.classList.remove('menu-open');
+                });
+
+                // Add menu-open class to the parent nav item of the clicked link if it exists
+                var parentNavItem = link.closest('.nav-item');
+                if (parentNavItem) {
+                    parentNavItem.classList.add('menu-open');
+                }
+            }
+
+            sidebarNavLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    handleNavClick(link);
+                });
+            });
+
+            bottomNavLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    handleNavClick(link);
+                });
+            });
+        });
+
+        //Sidebar control
+        const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+        const Default = {
+
+            scrollbarTheme: "os-theme-light",
+            scrollbarAutoHide: "leave",
+            scrollbarClickScroll: true,
+        };
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+            if (
+                sidebarWrapper &&
+                typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+            ) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+        });
+
+    
+        var toastTypes = {
+            Success: 'toast toast-success fade hide',
+            Error: 'toast toast-danger fade hide',
+            Default: 'toast fade hide',
+            Primary: 'toast toast-primary fade hide',
+            Secondary: 'toast toast-secondary fade hide',
+            Info: 'toast toast-info fade hide',
+            Warning: 'toast toast-warning fade hide',
+            Light: 'toast toast-light fade hide',
+            Dark: 'toast toast-dark fade hide'
+        }
+
+        function showToast( type, toastID, title, message, titleText = '' ){
+            
+            var toastHTML = `
+                        <div id="${toastID}" class="${toastTypes[type]}" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header"> <i class="bi bi-circle me-2"></i> <strong class="me-auto">${title}</strong> <small>${titleText}</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> </div>
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                        </div>`;
+        
+            // Append toast to container
+            $('#toastContainer').append(toastHTML);
+                    
+            // Initialize and show toast
+            
+            var toastElement = $('#toastContainer .toast').last();
+            var toast = new bootstrap.Toast(toastElement[0]);
+            toast.show();
+
+            // Remove toast after it hides
+            toastElement.on('hidden.bs.toast', function () {
+                $(this).remove();
+            });
+
+        }
+        // elementID = toastID
+        async function showConfirmDialogToast( type, toastID, title, message, titleText = '' ){
+            
+            var toastHTML = `
+                        <div id="${toastID}" class="${toastTypes[type]}" data-bs-delay="2000" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 11">
+                            <div class="toast-header">
+                                <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#007aff"></rect></svg>
+                                <strong class="me-auto">${title}</strong> <small>${titleText}</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                ${message}
+                                <div class="mt-2 pt-2 border-top d-flex justify-content-end gap-3">
+                                    <button type="button" class="btn btn-primary btn-sm" id="${toastID}-confirmYes">Yes</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" id="${toastID}-confirmNo">No</button>
+                                </div>
+                            </div>
+                        </div>`;
+        
+            // Append toast to container
+            $('#dialogAlertContainer').append(toastHTML);
+
+            return new Promise((resolve) => {
+                // Initialize and show toast
+                var toastElement = $(`#${toastID}`);
+                var toast = new bootstrap.Toast($(toastElement), { autohide: false });
+                toast.show();
+
+                document.getElementById('backdrop').style.display = 'block';
+
+                // Remove toast after it hides
+                document.getElementById(`${toastID}-confirmYes`).onclick = function() { toast.hide(); resolve(true); };
+                document.getElementById(`${toastID}-confirmNo`).onclick = function() { toast.hide(); resolve(false); };
+                toastElement.on('hidden.bs.toast', function () { $(this).remove(); document.getElementById('backdrop').style.display = 'none'; });
+            });
+        }
+
+        var loader = $('#loader');
+        //loader.show();
+        loader.hide();
+  
+        // Checking if width is small and then all collapsable elements that
+        // we add attribute mobile-colapsed='true' We Will set collapsed
+        function isMobile() {
+            return window.matchMedia("(max-width: 767px)").matches;
+        };
+
+        $(document).ready(function() {
+            if ( isMobile() ) {
+                $("[mobile-colapsed='true']").addClass("collapsed-card");
+            }
+        });
+
+        $(document).ready(function() {
+
+            // UploadFile
+            $(document).on("click", "#uploadFile", function() {
+                $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+
+                var file_data = $("#my-file-selector").prop("files")[0]; // Getting the properties of file from file field
+
+                if( !file_data )
+                {
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                    showToast('Error', 'toastUploadFile', 'File Upload', 'No File was choosen' );
+                    return;
+                }
+        
+                const selectedValue = $('input[name="uploadFilePrefix"]:checked').val();
+        
+                const linkTargetValue = $('#uploadFile').attr('link-target');
+
+                var form_data = new FormData(); // Creating object of FormData class
+                form_data.append("file", file_data); // Appending parameter named file with properties of file_field to form_data
+                form_data.append("target_upload", 'http://'+linkTargetValue+'/upload'); 
+                if ( selectedValue != 0 )
+                    form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
+                    
+                let url;
+                if ( onNasOrDevice )
+                    url = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+                else 
+                    url = '/upload';
+
+                $.ajax({
+                    url: url, // Upload Script
+                    type: 'POST',
+                    data: form_data, // Setting the data attribute of ajax with file_data
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false, // Prevent jQuery from setting content type
+                    dataType: 'json',
+                    success: function(response) {
+                        // $('#uploadStatus').text('File uploaded successfully.');
+                        $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                        $('#my-file-selector').val('');
+                        if ( response.hasOwnProperty('success') )
+                            showToast('Success', 'toastUploadFile', 'File Upload', response['success'] ); 
+                        else if ( response.hasOwnProperty('Error') )
+                            showToast('Error', 'toastUploadFile', 'File Upload', response['Error'] );
+                    },
+                    error: function(error) {
+                        $("#moreDetailsRow .loading-mask").toggleClass("d-none");
+                        showToast('Error', 'toastUploadFile', 'File Upload', JSON.stringify(error) );
+                    },
+                });   
+            });
+
+        });
+
+        //	Check Firmware updates / SPIFFS still no versioning available
+        async function checkDeviceFirmwareUpdate() {
+
+            try {
+                $.ajax({
+                    url: adminAddress+'/include/firmwareCheck.php', // forward Script
+                    type: 'POST',
+                    //processData: false, // Prevent jQuery from processing the data
+                    //contentType: false, // Prevent jQuery from setting content type
+                    data: { 
+                        checkversion: 1,
+                        firmware: deviceFirmware
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        // $('#uploadStatus').text('File uploaded successfully.');
+                        document.getElementById('backdrop').style.display = 'none';
+                        
+                        //type, toastID, title, message, titleText = ''
+                        // fetching response to properly show Toast message
+                        if ( response.hasOwnProperty('Info') )
+                            showToast('Info', 'deviceFirmwareCheckID', 'Check Firwmare update', response['Info'] );
+                        else if ( response.hasOwnProperty('success') )
+                            showToast('Success', 'deviceFirmwareCheckID', 'Check Firwmare update', response['success'] );
+                    },
+                    error: function(error) {
+                        document.getElementById('backdrop').style.display = 'none';
+                        showToast('Error', 'deviceFirmwareCheckID', 'Check Firwmare update', JSON.stringify(error) );
+                    },
+                });
+            } catch (error) {
+                console.error(error);
+                document.getElementById('backdrop').style.display = 'none';
+                showToast('Error', 'deviceFirmwareCheckID', 'Check Firwmare update', JSON.stringify(error) );
+            }	
+        }
+
+        async function scanWifi() { 
+            let jsonData6;
+            if ( onNasOrDevice )
+                jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
+            else
+                jsonData6 = '/wifiscan.json';
+            
+            // For Reloading WiFi files
+            // Destroy previous DataTable
+            // Clear Dom of tbody content
+            if ($.fn.dataTable.isDataTable('#tab_scan_data'))
+            {
+                $('#tab_scan_data').DataTable().destroy();
+                $('#tab_scan_data tbody').empty();
+            }
+            
+
+            tabScanWifiData = $('#tab_scan_data').DataTable({
+                info: true,
+                processing: true,
+                searching: false,
+                ordering: true,
+                paging: false,
+                language: {
+                    emptyTable: 'Loading ...'
+                },
+                ajax: {
+                        url: jsonData6,
+                    dataSrc: function(json) {
+                        setTimeout(function() {
+                            // Modify the data
+                            if ( json.status === "OK")
+                            {
+                                json.result.forEach(function(item) {
+                                    // Add an additional column
+                                    item.signal = RSSIFormatter(item.rssi);
+                                });
+                                tabScanWifiData.clear().rows.add(json.result).draw();
+                            } else {
+                                tabScanWifiData.ajax.reload();
+                            }
+                        }, 3000);
+                        return [];
+                    }
+                },
+                columns: [
+                    { data: 'ssid' },
+                    { data: 'signal' },
+                    { data: 'encType' },
+                    { data: 'chann' },
+                    { data: 'rssi' }
+                ],
+                columnDefs: [
+                    { targets: [ 0 ], className: 'dt-head-center'},
+                    { targets: [ 0 ], className: 'dt-left' },
+                    { targets: [ 1 ], className: 'dt-head-center', className: 'dt-center'},
+                    { targets: [ 2 ], className: 'dt-head-center', className: 'dt-center'},
+                    { targets: [ 3 ], className: 'dt-head-center', className: 'dt-center'},
+                    { targets: [ 3 ], className: 'dt-head-center', className: 'dt-center'},
+                    { targets: [ 4 ], className: 'dt-head-center', className: 'dt-center'}
+                ],
+                order: [[4, 'desc']]
+            });
+
+            // Get Modal WiFi Scan Row Clicked 
+            tabScanWifiData.on('click', 'tbody tr', function () {
+                let data = tabScanWifiData.row(this).data();
+            
+                $('#wifi_SSID').val(data.ssid);
+                $('#tab_scan').modal('hide');
+            });
+
+            $('#tab_scan_data tbody').on('mouseenter', 'tr', function() {
+                $(this).addClass('hover-hand');
+            });
+
+            $('#tab_scan_data tbody').on('mouseleave', 'tr', function() {
+                $(this).removeClass('hover-hand');
+            });
+
+        }
+
+        $(document).ready(function(){
+            
+            // Save changes then reload config.json
+            $('#saveConfigChanges').on('click', function() {
+                saveConfigChanges();
+            });
+
+            // Save changes then reload config.json
+            $('#saveWiFiChanges').on('click', function() {
+                saveConfigChanges();
+            });
+        });
+
+        // Color Mode Toggler
+        (() => {
+            "use strict";
+
+            const storedTheme = localStorage.getItem(`${siteName}_theme`);
+
+            const getPreferredTheme = () => {
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                return window.matchMedia("(prefers-color-scheme: dark)").matches ?
+                    "dark" :
+                    "light";
+            };
+
+            const setTheme = function(theme) {
+                if (
+                    theme === "auto" &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                ) {
+                    document.documentElement.setAttribute("data-bs-theme", "dark");
+                } else {
+                    document.documentElement.setAttribute("data-bs-theme", theme);
+                }
+            };
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                console.log('Showing active theme:', theme);
+                const themeSwitcher = document.querySelector("#bd-theme");
+
+                if (!themeSwitcher) {
+                    return;
+                }
+
+                const themeSwitcherText = document.querySelector("#bd-theme-text");
+                const activeThemeIcon = document.querySelector(".theme-icon-active i");
+                const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+
+                if (!btnToActive) {
+                    console.error(`Button with data-bs-theme-value="${theme}" not found`);
+                    return;
+                }
+
+                const svgOfActiveBtn = btnToActive.querySelector("i").getAttribute("class");
+
+                for (const element of document.querySelectorAll("[data-bs-theme-value]")) {
+                    element.classList.remove("active");
+                    element.setAttribute("aria-pressed", "false");
+                }
+
+                btnToActive.classList.add("active");
+                btnToActive.setAttribute("aria-pressed", "true");
+                activeThemeIcon.setAttribute("class", svgOfActiveBtn);
+                const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`;
+                themeSwitcher.setAttribute("aria-label", themeSwitcherLabel);
+
+                if (focus) {
+                    themeSwitcher.focus();
+                }
+            };
+
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", () => {
+                    if (storedTheme !== "light" || storedTheme !== "dark") {
+                        setTheme(getPreferredTheme());
+                    }
+                });
+
+            window.addEventListener("DOMContentLoaded", () => {
+                showActiveTheme(getPreferredTheme());
+
+                for (const toggle of document.querySelectorAll(
+                        "[data-bs-theme-value]"
+                    )) {
+                    toggle.addEventListener("click", () => {
+                        const theme = toggle.getAttribute("data-bs-theme-value");
+                        localStorage.setItem(`${siteName}_theme`, theme);
+                        window.dispatchEvent(new CustomEvent('localStorageChange', { detail: { key: `${siteName}_theme`, value: theme } }));
+                        setTheme(theme);
+                        showActiveTheme(theme, true);
+                    });
+                }
+            });
+        })();
+    </script>
+
+</body><!--end::Body-->
+</html>
