@@ -9,8 +9,13 @@
 	<meta http-equiv=“Expires” content=”-1″>
 	<meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
 
-    <title>Stergo Smart | Dashboard </title>
-
+    
+    <!-- @if NODE_ENV='production' -->
+    <title>Stergo Smart | Dashboard Prod</title>
+    <!-- @endif -->
+    <!-- @if NODE_ENV='development' -->
+    <title>Stergo Smart | Dashboard Dev</title>
+    <!-- @endif -->
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="title" content="Stergo Smart | Dashboard ">
@@ -1422,6 +1427,9 @@
             const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
+            
+            /*
+            let data;
             if ( onNasOrDevice )
             {
                 //data = await loadJSON('http://192.168.1.74/config.json');
@@ -1432,7 +1440,16 @@
             {
                 data = await loadJSON('/config.json');
             }
-            
+            */
+           
+            // @if NODE_ENV='development'
+            data = await loadJSON('/config.json');
+            // @endif
+            // @if NODE_ENV='production'
+            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
+            data = await loadJSON(configOnDeviceJSON);
+            // @endif
+
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global
             parsedConfigOrigJSON = data;
