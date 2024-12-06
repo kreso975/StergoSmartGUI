@@ -6,8 +6,8 @@
 
 <span align="center">
 
-### Stergo Smart GUI
-# Bootstrap 5 
+### Bootstrap 5
+# Stergo Smart GUI 
 
 </span>
 
