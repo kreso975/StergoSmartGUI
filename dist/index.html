@@ -144,13 +144,6 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
-                                                <label id='currentPressure'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col -->
                                 </div> <!-- /.row -->
                                 <script>
                                 var tUnit = " &#8451;";
@@ -163,12 +156,11 @@
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                     });
                                 });
-                                </script>            
+                                </script>
                                 <!--begin::Row-->
-                                <div class="row g-1 mb-3">     
+                                <div class="row g-1 mb-3">
                                     <div class="col-md-6">
                                         <div mobile-colapsed="true" id="mobileCollapsable" class="card mb-6">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
@@ -186,21 +178,6 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-md-6">
-                                        <div mobile-colapsed="true" class="card mb-6">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h5 class="card-title">24h Air Pressure</h5>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
-                                                </div>
-                                            </div> <!-- /.card-header -->
-                                            <div class="card-body"> <!--begin::Row-->
-                                                <div class="row">
-                                                    <div id="weatherPressureChart"></div>
-                                                </div> <!--end::Row-->
-                                            </div> <!-- ./card-body -->
-                                        </div> <!-- /.card -->
-                                    </div>
                                     <!-- /.col -->
                                     <!-- apexcharts -->
                                     <script>
@@ -219,13 +196,9 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
-                                                let pressures = jsonData.sensor.map(item => item[3]);
-
-                                                chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities,pressures,timestamps, 1 ));
+                                                chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
-                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
-                                                chartPressure.render();
                                             });  
 
 
@@ -1101,7 +1074,7 @@
             return themeOptions;
         };
 
-        function chartOptions( temperature, humidity, pressure, timestamp, type ) {
+        function chartOptions( temperature, humidity, pressure = 0, timestamp, type ) {
             
             var optionsChart = {
                 colors: ["#E91E63", "#0d6efd"],
@@ -1583,35 +1556,6 @@
 
         }
     
-        async function updateDeviceDisplay( what, value )
-        {
-            let payloadDisplay = {};
-            //const prepTargetURL = 'http://192.168.1.74/display';
-            //payloadDisplay['target'] = prepTargetURL;
-            //let tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
-            let tmpurl = '/display';
-            payloadDisplay[what] = value;
-            $.ajax({
-                url: tmpurl,
-                type: 'POST',
-                data: payloadDisplay,
-                dataType: 'json',
-                success: function(response) {
-                    document.getElementById('backdrop').style.display = 'none';
-                    //type, toastID, title, message, titleText = ''
-                    // This is success of PHP, we need to check Device response
-                    if ( response.hasOwnProperty("success") )
-                        showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
-                    else if (response.hasOwnProperty('Error') )
-                        showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
-                },
-                error: function(error) {
-                    document.getElementById('backdrop').style.display = 'none';
-                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
-                }
-            });
-        }
-
         // Nav Sidebar and Bottom TAB control
         document.addEventListener('DOMContentLoaded', function() {
             var sidebarNavLinks = document.querySelectorAll('.sidebar-menu .nav-link');

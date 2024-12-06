@@ -1,18 +1,37 @@
+/*
+* STERGO_PROGRAM :
+ *
+ * PowerSwitch                  = 0
+ * StergoWeather BME280         = 1
+ * ticTacToe                    = 2
+ * StergoWeather+PowerSwitch    = 3
+ * StergoWeather DHT22          = 4
+ * StergoWeather DS18B20        = 5
+
+  MODEL_NUMBER "v01" ( ESP8266 default 01S)
+  MODEL_NUMBER "v02" ( LOLIN D1 mini)
+
+  Screen or Led On device WS001 = Second 0 == device type
+  FE: WS014 = WeatherStation 1 = LED 8x32, 4 = DHT22
+*/
+
 const fs = require('fs');
 const preprocess = require('preprocess');
 const { exec } = require('child_process');
 
-const device = 'WS001';
+const device = 'WS004';
 const onNasOrDevice = 'development'; // production || development
 
 const context = {
+    RS001: [onNasOrDevice, 'SWITCH'],
     WS001: [onNasOrDevice],
     WS003: [onNasOrDevice],
-    WS011: [onNasOrDevice, 'display']
+    WS004: [onNasOrDevice, 'WEATHER'],
+    WS011: [onNasOrDevice, 'DISPLAY', 'WEATHER', 'BME280']
 };
 
 // Ensure all context variables are either true or false
-const allKeys = ['production', 'development', 'display'];
+const allKeys = ['production', 'development', 'DISPLAY', 'WEATHER','BME280', 'SWITCH'];
 const finalContext = {};
 
 // Set all keys to false initially
