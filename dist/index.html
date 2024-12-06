@@ -144,6 +144,13 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
+                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
+                                                <label id='currentPressure'>-</label></span>
+                                            </div> <!-- /.info-box-content -->
+                                        </div> <!-- /.info-box -->
+                                    </div> <!-- /.col -->
                                 </div> <!-- /.row -->
                                 <script>
                                 var tUnit = " &#8451;";
@@ -156,6 +163,7 @@
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
+                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                     });
                                 });
                                 </script>
@@ -178,6 +186,21 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div mobile-colapsed="true" class="card mb-6">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h5 class="card-title">24h Air Pressure</h5>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
+                                                </div>
+                                            </div> <!-- /.card-header -->
+                                            <div class="card-body"> <!--begin::Row-->
+                                                <div class="row">
+                                                    <div id="weatherPressureChart"></div>
+                                                </div> <!--end::Row-->
+                                            </div> <!-- ./card-body -->
+                                        </div> <!-- /.card -->
+                                    </div>
                                     <!-- /.col -->
                                     <!-- apexcharts -->
                                     <script>
@@ -196,9 +219,12 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
+                                                let pressures = jsonData.sensor.map(item => item[3]);
                                                 chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
+                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
+                                                chartPressure.render();
                                             });  
 
 
@@ -224,6 +250,120 @@
                                         }); 
                                         
                                     </script> <!--end::Script-->
+                                    <!-- Start Display Card -->
+                                    <div class="col-md-6 mb-2" id="DisplaySetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-tv"></i> Display</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- Brightness Slider -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Brightness:</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="range" class="form-range" id="brightness" name="brightness" min="0" max="255" value="128">
+                                                        <span id="brightnessValue" class="ms-2">128</span>
+                                                    </div>
+                                                </div>
+                                                <!-- Refresh Interval Slider -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Refresh Interval (ms):</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="range" class="form-range" id="refreshInterval" name="refreshInterval" min="10" max="1000" value="500">
+                                                        <span id="refreshIntervalValue" class="ms-2">500</span>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#brightness').on('input', function() {
+                                                        $('#brightnessValue').text($(this).val());
+                                                    });
+
+                                                    $('#brightness').on('mouseup touchend', function() {
+                                                        //alert('Done 1');
+                                                        // here i need to send new value to Device
+                                                        updateDeviceDisplay('brightness',$(this).val());
+                                                    });
+
+                                                    $('#refreshInterval').on('input', function() {
+                                                        $('#refreshIntervalValue').text($(this).val());
+                                                    });
+
+                                                    $('#refreshInterval').on('mouseup touchend', function() {
+                                                        //alert('Done 1');
+                                                        // here i need to send new value to Device
+                                                        updateDeviceDisplay('refreshInterval',$(this).val());
+                                                    });
+                                                </script>
+                                                <!-- Time Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Time Format:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <select class="form-select" id="time_format" name="time_format">
+                                                            <option value="24h">24h</option>
+                                                            <option value="12h">12h</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Date Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-7">Date:</span>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="date" class="form-control" id="date" name="date">
+                                                    </div>
+                                                </div>
+                                                <!-- Timezone Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Timezone:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <select class="form-select" id="timezone" name="timezone">
+                                                            <!-- Add timezone options here -->
+                                                            <option value="UTC">UTC</option>
+                                                            <option value="CET">CET</option>
+                                                            <option value="EST">EST</option>
+                                                            <!-- Add more timezones as needed -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Color Picker -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Color Picker:</span>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <input type="color" class="form-control form-control-color" id="color_picker" name="color_picker" value="#ff0000">
+                                                    </div>
+                                                </div>
+                                                <!-- Simple Text Input -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
+                                                    <div class="col-8 d-flex justify-content-end">
+                                                        <input type="text" class="form-control" id="messageDisplay" name="messageDisplay" placeholder="Enter text">
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#color_picker').on('input', function() {	
+                                                        updateDeviceDisplay('color', $(this).val());
+                                                    });
+                                                    
+                                                    // Detect Enter/Return key press
+                                                    $('#messageDisplay').on('keypress', function(event) {
+                                                        if (event.which === 13)
+                                                            updateDeviceDisplay('messageDisplay', $(this).val());
+                                                    });
+                                                    // Detect focus change (blur event)
+                                                    $('#messageDisplay').on('blur', function() {
+                                                        updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
+                                                    });
+                                                    
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Display Card -->
                                 </div>  
                             </div>  
                         </div>
@@ -1556,6 +1696,34 @@
 
         }
     
+        async function updateDeviceDisplay( what, value )
+        {
+            let payloadDisplay = {};
+            //const prepTargetURL = 'http://192.168.1.74/display';
+            //payloadDisplay['target'] = prepTargetURL;
+            //let tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            let tmpurl = '/display';
+            payloadDisplay[what] = value;
+            $.ajax({
+                url: tmpurl,
+                type: 'POST',
+                data: payloadDisplay,
+                dataType: 'json',
+                success: function(response) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    //type, toastID, title, message, titleText = ''
+                    // This is success of PHP, we need to check Device response
+                    if ( response.hasOwnProperty("success") )
+                        showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
+                    else if (response.hasOwnProperty('Error') )
+                        showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
+                },
+                error: function(error) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
+                }
+            });
+        }
         // Nav Sidebar and Bottom TAB control
         document.addEventListener('DOMContentLoaded', function() {
             var sidebarNavLinks = document.querySelectorAll('.sidebar-menu .nav-link');

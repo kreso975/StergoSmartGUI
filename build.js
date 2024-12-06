@@ -19,7 +19,7 @@ const fs = require('fs');
 const preprocess = require('preprocess');
 const { exec } = require('child_process');
 
-const device = 'WS004';
+const device = 'WS011';
 const onNasOrDevice = 'development'; // production || development
 
 const context = {
