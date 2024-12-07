@@ -47,7 +47,7 @@ context[device].forEach(key => {
 });
 
 // Preprocess HTML file
-const htmlInput = fs.readFileSync('index.html', 'utf8');
+const htmlInput = fs.readFileSync('captive.html', 'utf8');
 const htmlOutput = preprocess.preprocess(htmlInput, finalContext, { type: 'html' });
 
 // Preprocess the JavaScript inside <script> tags separately
@@ -57,7 +57,7 @@ const processedOutput = htmlOutput.replace(scriptRegex, (match, p1) => {
     return `<script>${processedScript}</script>`;
 });
 
-fs.writeFileSync('dist/index.html', processedOutput);
+fs.writeFileSync('dist/captive.html', processedOutput);
 
 /* IF USING Node ZLIB
 // Compress the HTML file to .gz using zlib with ultra compression
@@ -71,7 +71,7 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 */
 
 // Check if the .gz file exists and remove it
-const gzFilePath = 'dist/index.html.gz';
+const gzFilePath = 'dist/captive.html.gz';
 if (fs.existsSync(gzFilePath)) {
     fs.unlinkSync(gzFilePath);
     console.log('Existing .gz file removed');
@@ -79,7 +79,7 @@ if (fs.existsSync(gzFilePath)) {
 
 // Compress the HTML file to .gz using 7z with ultra compression
 const sevenZipPath = '"C:\\Program Files\\7-Zip\\7z.exe"'; // Adjust this path if necessary
-const command = `${sevenZipPath} a -tgzip -mx=9 dist/index.html.gz dist/index.html`;
+const command = `${sevenZipPath} a -tgzip -mx=9 dist/captive.html.gz dist/captive.html`;
 
 exec(command, (err, stdout, stderr) => {
     if (err) {

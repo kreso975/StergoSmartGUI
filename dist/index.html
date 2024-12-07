@@ -144,13 +144,6 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
-                                                <label id='currentPressure'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col -->
                                 </div> <!-- /.row -->
                                 <script>
                                 var tUnit = " &#8451;";
@@ -158,12 +151,11 @@
                                 $(document).ready(function() {
 
                                     let url;
-                                    url = fwdJsonRequest( 'WS011v02-898235', 1 );
+                                    url = 'measures.json';
 
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                     });
                                 });
                                 </script>
@@ -186,21 +178,6 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-md-6">
-                                        <div mobile-colapsed="true" class="card mb-6">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h5 class="card-title">24h Air Pressure</h5>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
-                                                </div>
-                                            </div> <!-- /.card-header -->
-                                            <div class="card-body"> <!--begin::Row-->
-                                                <div class="row">
-                                                    <div id="weatherPressureChart"></div>
-                                                </div> <!--end::Row-->
-                                            </div> <!-- ./card-body -->
-                                        </div> <!-- /.card -->
-                                    </div>
                                     <!-- /.col -->
                                     <!-- apexcharts -->
                                     <script>
@@ -209,7 +186,7 @@
                                         $(document).ready(function() { 
                                             
                                             let url;
-                                            url = fwdJsonRequest( 'WS011v02-898235', 2 );
+                                            url = 'history.json';
 
                                             $.getJSON(url, function(jsonData) {
                                                 // Extract data for the chart
@@ -219,12 +196,9 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
-                                                let pressures = jsonData.sensor.map(item => item[3]);
                                                 chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
-                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
-                                                chartPressure.render();
                                             });  
 
 
@@ -487,12 +461,6 @@
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
                                                 </div>
                                             </div>
-                                            <div class="row d-flex justify-content-end" id="MQTT_Pressure">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Pressure</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Pressure" name="mqtt_Pressure" maxlength="120" value="" placeholder="Pressure">
-                                                </div>
-                                            </div>
                                             <div class="row justify-content-end d-none" id="MQTTswitch">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
@@ -652,99 +620,9 @@
                                                     }
                                                 </script>
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Pressure</span>
-                                                    <input type="hidden" id="p_measure" value="0">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_p_measure(1);" id="p_measure1" value="1">in</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_p_measure(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#p_measure').val(0);
-                                                            $('#p_measure1').removeClass('btn-success disabled active');
-                                                            $('#p_measure1').addClass('btn-secondary');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-secondary');
-                                                            $('#p_measure0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#p_measure').val(1);
-                                                            $('#p_measure1').removeClass('btn-secondary');
-                                                            $('#p_measure1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-success disabled active');
-                                                            $('#p_measure0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
                                                         <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
-                                                    </div>
-                                                </div>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="0">
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#p_adjust').on('change', function() {
-                                                        if ( $(this).is(':checked') )
-                                                            $('#p_adjust').val(1);
-                                                        else
-                                                            $('#p_adjust').val(0);
-                                                    });
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Elevation unit</span>
-                                                    <input type="hidden" id="pa_unit" value="0">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group" role="group" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_pa_unit(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#pa_unit').val(0);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-success disabled active');
-                                                            $('#pa_unit1').addClass('btn-secondary');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-secondary');
-                                                            $('#pa_unit0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#pa_unit').val(1);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-secondary');
-                                                            $('#pa_unit1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-success disabled active');
-                                                            $('#pa_unit0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-8">Elevation</span>
-                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm text-end" id="pl_adj" name="pl_adj" maxlength="12" value="" placeholder="Local elevation">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1168,7 +1046,7 @@
         var hostname = window.location.hostname;
 
         
-        var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        var serverAddress = protocol + "//" + hostname + "/";
 
         var tableDeviceLog;
         var deviceInfo;
@@ -1186,8 +1064,8 @@
         // PS002v02 array split v 
         var deviceModelName;
         
-        var configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
-
+        var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+        configJSONAttNumbers =  ["t_measure", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         // Handling Theme
         var storedTheme = localStorage.getItem(`${siteName}_theme`);
         if (!storedTheme)
@@ -1401,12 +1279,13 @@
         }
 
         async function loadDeviceConfig() {
-            const listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
-            const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
+            let listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
+            let listOfspecialButtons = [ 'wifi_static' ];
+            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
+            listOfspecialButtons = [ 't_measure', 'wifi_static' ];
             
             let data;
-            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
-            data = await loadJSON(configOnDeviceJSON);
+            data = await loadJSON('/config.json');
 
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global
@@ -1435,7 +1314,7 @@
             // Load Device Info Card	
             
             let jsonInfoData;
-            jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
+            jsonInfoData = await loadJSON('/deviceinfo.json');
             
             // Make Global
             deviceInfo = jsonInfoData.result;
@@ -1482,8 +1361,7 @@
             }
 
             let jsonLogData;
-            const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
-            jsonLogData = await loadJSON(jsonLogDataFile);
+            jsonLogData = await loadJSON('/log.json');
             var tableBody = $('#deviceLogCard tbody');
 
             const reversedData = jsonLogData.log.reverse();
@@ -1546,7 +1424,7 @@
             const linkTargetValue = $('#updateDevice').attr('link-target');
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
             let url;
-            url = serverAddress+'/include/fwdJsonRequest.php';
+            url = '/gpio?id=updateDevice';
 
             // IF we have changes
             if ( Object.keys(comparedDiff).length > 0 )
@@ -1615,7 +1493,7 @@
         function checkServerStatus()
         {
             let url;
-            urltmp = fwdJsonRequest( 'WS011v02', 4 );
+            urltmp = '/deviceinfo.json';
 
             $.ajax(
                 { url: urltmp, // Replace with your remote server URL
@@ -1646,7 +1524,7 @@
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
 
             let url;
-            url = serverAddress+'/include/fwdJsonRequest.php';
+            url = '/gpio?id='+what;
 
             try {
                 const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
@@ -1699,9 +1577,6 @@
         async function updateDeviceDisplay( what, value )
         {
             let payloadDisplay = {};
-            //const prepTargetURL = 'http://192.168.1.74/display';
-            //payloadDisplay['target'] = prepTargetURL;
-            //let tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
             let tmpurl = '/display';
             payloadDisplay[what] = value;
             $.ajax({
@@ -1919,7 +1794,7 @@
                     form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
                     
                 let url;
-                url = serverAddress+'/include/fwdJsonRequest.php';
+                url = '/upload';
 
                 $.ajax({
                     url: url, // Upload Script
@@ -1985,7 +1860,7 @@
 
         async function scanWifi() { 
             let jsonData6;
-            jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
+            jsonData6 = '/wifiscan.json';
             
             // For Reloading WiFi files
             // Destroy previous DataTable

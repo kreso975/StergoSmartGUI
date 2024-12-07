@@ -135,17 +135,23 @@
                                     $(document).ready(function() {
                                         var switchID = $('#switchID');
                                         var switchVarsSuffix = 1;
+                                        var urlSwitch = '';
+                                        // @if development
+                                        urlSwitch = 'http://192.168.1.73';
+                                        // @endif
+                                        
+
                                         var content = `
                                         <div id="switch_${switchVarsSuffix}" class="col-12 col-sm-6 col-md-3">
                                             <div class="info-box">
-                                                <span onclick="submitDelockPlug${switchVarsSuffix}('TOGGLE')" id="iconBack${switchVarsSuffix}" class="info-box-icon shadow-sm hover-hand">
+                                                <span onclick="submitSwitch${switchVarsSuffix}('TOGGLE')" id="iconBack${switchVarsSuffix}" class="info-box-icon shadow-sm hover-hand">
                                                     <i class="bi bi-lightbulb-fill"></i>
                                                 </span>
                                                 <div class="info-box-content">
                                                     <h5 class="card-title">NEED A NAME</h5>
                                                     <div class="btn-group float-end">
-                                                        <button type="button" onclick="submitDelockPlug${switchVarsSuffix}('ON')" name="stateOn" id="SWITCH_ON${switchVarsSuffix}" value="ON" class="btn">ON</button>
-                                                        <button type="button" onclick="submitDelockPlug${switchVarsSuffix}('OFF')" name="stateOff" id="SWITCH_OFF${switchVarsSuffix}" value="OFF" class="btn">OFF</button>
+                                                        <button type="button" onclick="submitSwhitch${switchVarsSuffix}('ON')" name="stateOn" id="SWITCH_ON${switchVarsSuffix}" value="ON" class="btn">ON</button>
+                                                        <button type="button" onclick="submitSwitch${switchVarsSuffix}('OFF')" name="stateOff" id="SWITCH_OFF${switchVarsSuffix}" value="OFF" class="btn">OFF</button>
                                                     </div>
                                                 </div> <!-- /.info-box-content -->
                                             </div> <!-- /.info-box -->
@@ -154,7 +160,7 @@
                                         var SWITCH_status${switchVarsSuffix};
                                         var SWITCH_active${switchVarsSuffix} = 1;
 
-                                        function submitDelockPlug${switchVarsSuffix}(a) {
+                                        function submitSwitch${switchVarsSuffix}(a) {
                                             if ( a === 'TOGGLE' )
                                             {
                                                 if ( $('#SWITCH_ON${switchVarsSuffix}').is(':disabled') ) 
@@ -163,8 +169,7 @@
                                                     a = 'ON';
                                             }
 
-                                            var mrkl = 'http://192.168.1.73/POWER?state=' + a;
-                                            console.log(mrkl);
+                                            var mrkl = '${urlSwitch}/POWER?state=' + a;
                                             $.ajax({
                                                 url: mrkl,
                                                 type: 'GET',
@@ -173,12 +178,12 @@
                                                         console.log('Error Power: ' + JSON.stringify(data));
                                                     } else {
                                                         console.log('Power: ' + JSON.stringify(data));
-                                                        delockPlugCheckStatus${switchVarsSuffix}();
+                                                        switchCheckStatus${switchVarsSuffix}();
                                                     }
                                                 },
                                                 error: function (data) {
                                                     console.log('Power SubmitProblem');
-                                                    delockPlugCheckStatus${switchVarsSuffix}();
+                                                    switchCheckStatus${switchVarsSuffix}();
                                                 },
                                                 cache: false,
                                                 contentType: false,
@@ -186,8 +191,8 @@
                                             });
                                         }
 
-                                        function delockPlugCheckStatus${switchVarsSuffix}() {
-                                            $.getJSON('http://192.168.1.73/POWER', function(data, status, xhr) {
+                                        function switchCheckStatus${switchVarsSuffix}() {
+                                            $.getJSON('${urlSwitch}/POWER', function(data, status, xhr) {
                                                 if (status == "success") {
                                                     SWITCH_status${switchVarsSuffix} = data.POWER;
                                                     $('#SWITCH_OFFLINE').hide();
@@ -220,9 +225,9 @@
                                         }
 
                                         // Load JSON every 5 seconds
-                                        setInterval(delockPlugCheckStatus${switchVarsSuffix}, 5000);
+                                        setInterval(switchCheckStatus${switchVarsSuffix}, 5000);
 
-                                        delockPlugCheckStatus${switchVarsSuffix}();
+                                        switchCheckStatus${switchVarsSuffix}();
                                         <\/script>`;
 
                                         switchID.append(content);
@@ -250,7 +255,7 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                    <!-- @if BME280 -->
+                                    <!-- @if AIR_PRESSURE -->
                                     <div class="col-12 col-sm-6 col-md-4">
                                         <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
                                             <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
@@ -276,7 +281,7 @@
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                        // @if BME280
+                                        // @if AIR_PRESSURE
                                         $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                         // @endif
                                     });
@@ -303,7 +308,7 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
-                                    <!-- @if BME280 -->     
+                                    <!-- @if AIR_PRESSURE -->     
                                     <div class="col-md-6">
                                         <div mobile-colapsed="true" class="card mb-6">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
@@ -343,13 +348,13 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
-                                                // @if BME280
+                                                // @if AIR_PRESSURE
                                                 let pressures = jsonData.sensor.map(item => item[3]);
                                                 // @endif
                                                 chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
-                                                // @if BME280
+                                                // @if AIR_PRESSURE
                                                 chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
                                                 chartPressure.render();
                                                 // @endif
@@ -618,12 +623,14 @@
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
                                                 </div>
                                             </div>
+                                            <!-- @if AIR_PRESSURE -->
                                             <div class="row d-flex justify-content-end" id="MQTT_Pressure">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Pressure</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_Pressure" name="mqtt_Pressure" maxlength="120" value="" placeholder="Pressure">
                                                 </div>
                                             </div>
+                                            <!-- @endif -->
                                             <div class="row justify-content-end d-none" id="MQTTswitch">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
@@ -782,6 +789,7 @@
 
                                                     }
                                                 </script>
+                                                <!-- @if AIR_PRESSURE -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-9">Pressure</span>
                                                     <input type="hidden" id="p_measure" value="0">
@@ -816,12 +824,14 @@
                                                         
                                                     }
                                                 </script>
+                                                <!-- @endif -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
                                                         <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
                                                     </div>
                                                 </div>
+                                                <!-- @if AIR_PRESSURE -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
@@ -878,6 +888,7 @@
                                                         <input type="text" class="form-control form-control-sm text-end" id="pl_adj" name="pl_adj" maxlength="12" value="" placeholder="Local elevation">
                                                     </div>
                                                 </div>
+                                                <!-- @endif -->
                                             </div>
                                         </div>
                                     </div>
@@ -1322,8 +1333,13 @@
         // PS002v02 array split v 
         var deviceModelName;
         
-        var configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
-
+        var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+        // @if WEATHER
+        configJSONAttNumbers =  ["t_measure", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+        // @endif
+        // @if AIR_PRESSURE
+        configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+        // @endif
         // Handling Theme
         var storedTheme = localStorage.getItem(`${siteName}_theme`);
         if (!storedTheme)
@@ -1537,8 +1553,16 @@
         }
 
         async function loadDeviceConfig() {
-            const listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
-            const listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
+            let listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
+            let listOfspecialButtons = [ 'wifi_static' ];
+            // @if WEATHER
+            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
+            listOfspecialButtons = [ 't_measure', 'wifi_static' ];
+            // @endif
+            // @if AIR_PRESSURE
+            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
+            listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
+            // @endif
             
             let data;
             /* @if production */
@@ -1866,10 +1890,11 @@
         async function updateDeviceDisplay( what, value )
         {
             let payloadDisplay = {};
-            //const prepTargetURL = 'http://192.168.1.74/display';
-            //payloadDisplay['target'] = prepTargetURL;
-            //let tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
             let tmpurl = '/display';
+            // @if development
+            payloadDisplay['target'] = 'http://192.168.1.74/display';
+            tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            // @endif
             payloadDisplay[what] = value;
             $.ajax({
                 url: tmpurl,

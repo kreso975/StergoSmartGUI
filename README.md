@@ -21,14 +21,12 @@ This is GUI for StergoSmart project running on IoT devices
   
 ## 💡 Switch
 > [!NOTE]
-> HTTP - Read Status (On/Off), Turn ON (url), Turn OFF (url)  
-> MQTT - Turn ON/OFF | Values: On = 1, Off = 0    
-> Discord Webhook publishes switch status to your Discord channel    
+> For compiling GUI in order to optimize code and code size, it is required to install node module preprocess https://www.npmjs.com/package/preprocess  
+> Inside your project repository
+> $ npm install --save preprocess
+>
 
 > [!TIP]
-> If you don't have Manual switch and you don't mind when Homebridge is rebooted, your device is going to be set as OFF
-> then you don't have to use Parameter urlStatus. 
->  
 > How to setup Discord Webhooks: [link](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 > [!IMPORTANT]

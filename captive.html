@@ -1,0 +1,532 @@
+<html><head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<style type='text/css'>
+	.form-style-10{
+	    width:86%;
+	    padding:30px;
+	    margin:10px auto;
+	    background: #FFF;
+	    border-radius: 10px;
+	    -webkit-border-radius:10px;
+	    -moz-border-radius: 10px;
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+	    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+	    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+	}
+	.form-style-10 .inner-wrap{
+	    padding: 15px;
+	    background: #F8F8F8;
+	    border-radius: 6px;
+	    margin-bottom: 15px;
+	}
+	.form-style-10 .inner-wrap > span{
+		font: normal 16px 'Bitter', serif;
+		color: #888;
+	}
+	.form-style-10 h1{
+	    background: #2A88AD;
+	    padding: 20px 30px 15px 30px;
+	    margin: -30px -30px 30px -30px;
+	    border-radius: 10px 10px 0 0;
+	    -webkit-border-radius: 10px 10px 0 0;
+	    -moz-border-radius: 10px 10px 0 0;
+	    color: #fff;
+	    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+	    font: normal 30px 'Bitter', serif;
+	    -moz-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    -webkit-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    border: 1px solid #257C9E;
+	}
+	.form-style-10 h1 > span{
+	    display: block;
+	    margin-top: 2px;
+	    font: 20px Arial, Helvetica, sans-serif;
+	}
+	.form-style-10 label{
+	    display: block;
+	    font: 20px Arial, Helvetica, sans-serif;
+	    color: #888;
+	    margin-bottom: 15px;
+	}
+	.form-style-10 input[type='text'],
+	/*.form-style-10 input[type='checkbox'],*/
+	.form-style-10 input[type='date'],
+	.form-style-10 input[type='datetime'],
+	.form-style-10 input[type='email'],
+	.form-style-10 input[type='number'],
+	.form-style-10 input[type='search'],
+	.form-style-10 input[type='time'],
+	.form-style-10 input[type='url'],
+	.form-style-10 input[type='password'],
+	.form-style-10 textarea,
+	.form-style-10 select {
+	    display: block;
+	    box-sizing: border-box;
+	    -webkit-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    width: 100%;
+	    padding: 8px;
+	    border-radius: 6px;
+	    -webkit-border-radius:6px;
+	    -moz-border-radius:6px;
+	    border: 2px solid #fff;
+		font: 18px Arial, Helvetica, sans-serif;
+	    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
+	    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
+	    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
+	}
+	.form-style-10 .section{
+	    font: normal 20px 'Bitter', serif;
+	    color: #2A88AD;
+	    margin-bottom: 5px;
+	}
+	.form-style-10 .section span {
+	    background: #2A88AD;
+	    padding: 5px 10px 5px 10px;
+	    position: absolute;
+	    border-radius: 50%;
+	    -webkit-border-radius: 50%;
+	    -moz-border-radius: 50%;
+	    border: 4px solid #fff;
+	    font-size: 16px;
+	    margin-left: -45px;
+	    color: #fff;
+	    margin-top: -3px;
+	}
+	.form-style-10 button[type='button'],
+	.form-style-10 button[type='submit']{
+	    background: #2A88AD;
+	    padding: 8px 20px 8px 20px;
+	    border-radius: 5px;
+	    -webkit-border-radius: 5px;
+	    -moz-border-radius: 5px;
+	    color: #fff;
+	    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+	    font: normal 18px 'Bitter', serif;
+	    -moz-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    -webkit-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.17);
+	    border: 1px solid #257C9E;
+	}
+	.form-style-10 button[type='button']:hover,
+	.form-style-10 button[type='submit']:hover{
+	    background: #2A6881;
+	    -moz-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.28);
+	    -webkit-box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.28);
+	    box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.28);
+	}
+
+	.form-style-10 .select-style {
+	    padding: 0;
+	    margin: 0;
+	    border: 1px solid #ccc;
+	    width: 100%;
+	    border-radius: 3px;
+	    overflow: hidden;
+	    background-color: #fff;
+	}
+	.form-style-10 .select-style select {
+	     padding: 5px 8px;
+	     width: 100%;
+	     border: none;
+	     box-shadow: none;
+	     background-color: transparent;
+	     background-image: none;
+	     -webkit-appearance: none;
+	     -moz-appearance: none;
+	  }
+	.form-style-10  .select-style select:focus {
+	      outline: none;
+	}
+
+	*, *:after, *:before {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: "Open Sans";
+	}
+
+	/* Form Progress */
+	.progress {
+		width: 100%;
+		margin: 10px auto;
+		text-align: center;
+	}
+	.progress .circle,
+	.progress .bar {
+		display: inline-block;
+		background: #fff;
+		width: 40px; height: 40px;
+		border-radius: 40px;
+		border: 1px solid #d5d5da;
+	}
+	.progress .bar {
+		position: relative;
+		width: 20%;
+		height: 6px;
+		margin: 0 -5px 17px -5px;
+		border-left: none;
+		border-right: none;
+		border-radius: 0;
+	}
+	.progress .circle .label {
+		display: inline-block;
+		width: 32px;
+		height: 32px;
+		line-height: 32px;
+		border-radius: 32px;
+		margin-top: 3px;
+		color: #b5b5ba;
+		font-size: 17px;
+	}
+	.progress .circle .title {
+		color: #b5b5ba;
+		font-size: 13px;
+		line-height: 30px;
+		margin-left: -5px;
+	}
+
+	/* Done / Active */
+	.progress .bar.done,
+	.progress .circle.done {
+		background: #eee;
+	}
+	.progress .bar.active {
+		background: linear-gradient(to right, #EEE 40%, #FFF 60%);
+	}
+	.progress .circle.done .label {
+		color: #FFF;
+		background: #8bc435;
+		box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+	}
+	.progress .circle.done .title {
+		color: #444;
+	}
+	.progress .circle.active .label {
+		color: #FFF;
+		background: #0c95be;
+		box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+	}
+	.progress .circle.active .title {
+		color: #0c95be;
+	}
+
+	.onoffswitch {
+		position: relative; width: 55px;
+		-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+	}
+	.onoffswitch-checkbox {
+		display: none;
+	}
+	.onoffswitch-label {
+		display: block; overflow: hidden; cursor: pointer;
+		height: 20px; padding: 0; line-height: 20px;
+		border: 0 solid #FFFFFF; border-radius: 30px;
+		background-color: #9E9E9E;
+	}
+	.onoffswitch-label:before {
+		content: "";
+		display: block; width: 30px; margin: -5px;
+		background: #1BB015;
+		position: absolute; top: 0; bottom: 0;
+		right: 31px;
+		border-radius: 30px;
+		box-shadow: 0 6px 12px 0 #757575;
+		transition: all 0.3s ease-in 0s;
+	}
+	.onoffswitch-checkbox:checked + .onoffswitch-label {
+		background-color: #627A6B;
+	}
+	.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+		border-color: #627A6B;
+	}
+	.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+		margin-left: 0;
+	}
+	.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+		right: 0;
+		background-color: #1BB015;
+		box-shadow: 3px 6px 18px 0 rgba(0, 0, 0, 0.2);
+	}
+	</style>
+</head>
+<body>
+	<div class='form-style-10'>
+		<h1>Initial Setup!<span>Folow guidelines below!</span></h1>
+		<div class="progress">
+			<div class="circle active"><span class="label">1</span><span class="title">WiFi</span></div>
+			<span class="bar active"></span>
+			<div class="circle"><span class="label">2</span><span class="title">Measures</span></div>
+			<span class="bar"></span>
+			<div class="circle"><span class="label">3</span><span class="title">Finish</span></div>
+		</div>
+		<form method='POST' id="initialSetup" action="/gpio?id=updateDevice" >
+			<div class="tab-nav-wifi" id="tab-nav-wifi">
+				<div class='section'><span>1</span>WiFi Setup</div>
+				<div class='inner-wrap'>
+					<span>You need to setup WiFi connection for WeatherStation. Select your WiFi network and enter password.
+					If you want to use static IP, please enter one in Static IP field.</span>
+				</div>
+				<div class='inner-wrap'>
+					<label>WiFi SSID Name <button style="float:right;" type='button' onclick="loadWiFi();">R</button>
+						<div class="select-style"><select class="selectpicker" name='wifi_SSID' placeholder='network'></select></div>
+					</label>
+					<label>Password <input type='text' placeholder='Password' name='wifi_password' id="wifi_password" /></label>
+					<label>Static IP<input type='text' placeholder='Static IP' name='wifi_StaticIP' id="wifi_StaticIP" /></label>
+				</div>
+				<div class='button-section'>
+					<button style="float:right;" type='button' onclick="toggleTabs(2)">Next</button>
+				</div>
+				<br />
+			</div>
+			<div class="tab-nav-config" id="tab-nav-config" style="display:none">
+				<div class='section'><span>2</span>Setup Measure values</div>
+				<div class='inner-wrap'><span>Please select Measure units and by your choice adjust device location altitude.</span></div>
+				<div class='section'>Temperature</div>
+				<div class='inner-wrap'>
+					<div>
+						<div style="float:left;"><label>&#8457;&nbsp;&nbsp;&nbsp;</label></div>
+						<div style="float:left;"><input type="checkbox" name="t_measure" id="t_measure" value="0" checked></div>
+						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;&#8451;</label></div>
+						<br />
+					</div>
+				</div>
+				<!-- @if AIR_PRESSURE -->
+				<div class='section'>Pressure</div>
+				<div class='inner-wrap'>
+					<div>
+						<div style="float:left;"><label>in&nbsp;&nbsp;&nbsp;</label></div>
+						<div style="float:left;"><input type="checkbox" name="p_measure" id="p_measure" value="0" checked></div>
+						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;hPa</label></div>
+						<br />
+					</div>
+				</div>
+				<div class='section'>Adjust pressure</div>
+				<div class='inner-wrap'>
+					<div>
+						<div style="float:left;"><label>No&nbsp;&nbsp;&nbsp;</label></div>
+						<div style="float:left;"><input type="checkbox" name="p_adjust" id="p_adjust" value="1"></div>
+						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;Yes</label></div>
+					</div>
+					<br />
+					<div style="clear: both;">
+						<div style="float:left;"><label>Feet&nbsp;&nbsp;&nbsp;</label></div>
+						<div style="float:left;"><input type="checkbox" name="pa_unit" id="pa_unit" value="0" checked></div>
+						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;Meter</label></div>
+						<br />
+					</div>
+					<br />
+					<label style="clear: both;">Elevation<input type='text' placeholder='Altitude' name='pl_adj' /></label>
+				</div>
+				<!-- @endif -->
+				<div class='button-section'>
+					<button style="float:left;" type='button' onclick="toggleTabs(1)">Previous</button>
+					<button style="float:right;" type='button' onclick="toggleTabs(3)">Next</button>
+				</div>
+				<br />
+			</div>
+			<div class="tab-nav-restart" id="tab-nav-restart" style="display:none">
+				<div class='section'><span>3</span>Finish</div>
+				<div class='inner-wrap'><span>Before you Finish, check your entries. Device will restart and connect to your local WiFi.</span></div>
+				<div class='inner-wrap'><span>After restart you can access your device using StergoWeather.local. You must be connected to the same network in order to access it.</span></div>
+				<div class='button-section'>
+					<button style="float:left;" type='button' onclick="toggleTabs(2)">Previous</button>
+					<button style="float:right;" type='submit' id="submit">Finish</button>
+				</div>
+				<br />
+			</div>
+		</form>
+	</div>
+	<br />
+
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		toggleSwitch(document.getElementById('t_measure'));
+		
+		// @if AIR_PRESSURE
+		toggleSwitch(document.getElementById('p_measure'));
+		toggleSwitch(document.getElementById('p_adjust'));
+		toggleSwitch(document.getElementById('pa_unit'));
+		// @endif
+	});
+
+	function toggleSwitch(element) {
+		var id = element.id;
+		var switchDivId = id + "-switch";
+
+		var switchDiv = document.createElement("div");
+		switchDiv.className = "onoffswitch";
+		switchDiv.id = switchDivId;
+		element.parentNode.insertBefore(switchDiv, element.nextSibling);
+
+		var clonedElement = element.cloneNode(true);
+		clonedElement.classList.add("onoffswitch-checkbox");
+		switchDiv.appendChild(clonedElement);
+
+		var label = document.createElement("label");
+		label.className = "onoffswitch-label";
+		label.setAttribute("for", id);
+		switchDiv.appendChild(label);
+
+		element.remove();
+	}
+	
+	function drawProgress(position) {
+		var progressBar = document.querySelectorAll('.progress .bar');
+		var progressCircle = document.querySelectorAll('.progress .circle');
+
+		progressCircle.forEach(function(circle) {
+			circle.className = 'circle';
+		});
+
+		progressBar.forEach(function(bar) {
+			bar.className = 'bar';
+		});
+
+		if (position > 0 && position <= progressCircle.length) {
+			progressCircle[position - 1].classList.add('active');
+			if (position > 1) {
+				progressCircle[position - 2].classList.remove('active');
+				progressCircle[position - 2].classList.add('done');
+			}
+			if (position === 3) {
+				progressCircle[position - 3].classList.remove('active');
+				progressCircle[position - 3].classList.add('done');
+			}
+			if (position === 2) {
+				progressCircle[position - 1].querySelector('.label').innerHTML = '2';
+			}
+			if (position === 1) {
+				progressCircle[position - 1].querySelector('.label').innerHTML = '1';
+			}
+			progressCircle[position - 2].querySelector('.label').innerHTML = '&#10003;';
+		}
+
+		if (position > 1 && position <= progressBar.length + 1) {
+			progressBar[position - 2].classList.add('active');
+			if (position > 2) {
+				progressBar[position - 3].classList.remove('active');
+				progressBar[position - 3].classList.add('done');
+			}
+		}
+
+		if (position === 0) {
+			progressBar.forEach(function(bar) {
+				bar.className = 'bar';
+			});
+			progressCircle.forEach(function(circle) {
+				circle.className = 'circle';
+			});
+		}
+	}
+
+	document.addEventListener("DOMContentLoaded", function() {
+		var forms = document.querySelectorAll("form");
+
+		forms.forEach(function(form) {
+			form.addEventListener("submit", function(e) {
+				e.preventDefault();
+				var formID = form.id;
+				var targetForm = document.getElementById(formID);
+
+				var formData = new FormData(form);
+
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", targetForm.action, true);
+				xhr.responseType = 'json';
+
+				xhr.send(formData);
+				restartESP8266();
+			});
+		});
+	});
+
+	function restartESP8266() {
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "/gpio?id=restart", true);
+		xhr.send();
+	}
+
+
+
+	document.addEventListener("DOMContentLoaded", function() { loadWiFi(); });
+
+	// @if development
+	var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        
+	function fwdJsonRequest( serial, type )
+	{
+		var link = serverAddress+'/include/fwdJsonRequest.php?serial='+serial+'&type='+type;
+		return link;
+	}
+	// @endif
+
+	function loadWiFi() {
+		let jsonData6;
+        // @if development
+        jsonData6 = fwdJsonRequest( 'WS011v02-898235', 6 );
+        // @endif
+        // @if production
+        jsonData6 = '/wifiscan.json';
+        // @endif
+		fetch(jsonData6)
+			.then(response => response.json())
+			.then(data => {
+				console.log(JSON.stringify(data));
+
+				var wifiSelect = document.querySelector('select[name="wifi_SSID"]');
+				wifiSelect.innerHTML = ''; // Clear existing options
+
+				if (data.status === 'OK') {
+					data.result.forEach((val, key) => {
+						var option = document.createElement('option');
+						option.id = key;
+						option.value = val.ssid;
+						option.textContent = val.ssid;
+						wifiSelect.appendChild(option);
+					});
+				} else {
+					var option = document.createElement('option');
+					option.id = '0';
+					option.value = '0';
+					option.disabled = true;
+					option.textContent = 'No WiFi';
+					wifiSelect.appendChild(option);
+				}
+			})
+			.catch(error => console.error('Error fetching WiFi data:', error));
+	}
+
+	function toggleTabs( where )
+	{
+		if ( where === 1 )
+		{
+			document.getElementById('tab-nav-wifi').style.display = 'block';
+			document.getElementById('tab-nav-config').style.display = 'none';
+			document.getElementById('tab-nav-restart').style.display = 'none';
+			drawProgress(1);
+		}
+		if ( where === 2 )
+		{
+			document.getElementById('tab-nav-wifi').style.display = 'none';
+			document.getElementById('tab-nav-config').style.display = 'block';
+			document.getElementById('tab-nav-restart').style.display = 'none';
+			drawProgress(2);
+		}
+		if ( where === 3 )
+		{
+			document.getElementById('tab-nav-wifi').style.display = 'none';
+			document.getElementById('tab-nav-config').style.display = 'none';
+			document.getElementById('tab-nav-restart').style.display = 'block';
+			drawProgress(3);
+		}
+		window.scrollTo(0, 0);
+		
+	}
+
+
+
+</script>
+</body>
+</html>
