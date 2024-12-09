@@ -20,8 +20,8 @@ const fs = require('fs');
 const preprocess = require('preprocess');
 const { exec } = require('child_process');
 
-const device = 'WS014';
-const onNasOrDevice = 'production'; // production || development
+const device = 'WS011';
+const onNasOrDevice = 'development'; // production || development
 
 const context = {
     RS001: [onNasOrDevice, 'SWITCH'],
@@ -91,6 +91,53 @@ exec(command, (err, stdout, stderr) => {
     console.log(stdout);
 });
 
+console.log('Index.html Build complete!');
 
+// Preprocess HTML file
+const htmlInput2 = fs.readFileSync('captive.html', 'utf8');
+const htmlOutput2 = preprocess.preprocess(htmlInput2, finalContext, { type: 'html' });
+
+// Preprocess the JavaScript inside <script> tags separately
+const processedOutput2 = htmlOutput2.replace(scriptRegex, (match, p1) => {
+    const processedScript = preprocess.preprocess(p1, finalContext, { type: 'js' });
+    return `<script>${processedScript}</script>`;
+});
+
+fs.writeFileSync('dist/captive.html', processedOutput2);
+
+/* IF USING Node ZLIB
+// Compress the HTML file to .gz using zlib with ultra compression
+const gzip = zlib.createGzip({ level: 9 });
+const input = fs.createReadStream('dist/index.html');
+const output = fs.createWriteStream('dist/index.html.gz');
+
+input.pipe(gzip).pipe(output).on('finish', () => {
+    console.log('File compressed successfully with ultra compression');
+});
+*/
+
+// Check if the .gz file exists and remove it
+const gzFilePath2 = 'dist/captive.html.gz';
+if (fs.existsSync(gzFilePath2)) {
+    fs.unlinkSync(gzFilePath2);
+    console.log('Existing .gz file removed');
+}
+
+// Compress the HTML file to .gz using 7z with ultra compression
+const command2 = `${sevenZipPath} a -tgzip -mx=9 dist/captive.html.gz dist/captive.html`;
+
+exec(command2, (err, stdout, stderr) => {
+    if (err) {
+        console.error(`Error compressing file: ${err.message}`);
+        console.error(stderr);
+        return;
+    }
+    console.log('File compressed successfully with ultra compression');
+    console.log(stdout);
+});
+
+
+
+console.log('Captive.html Build complete!');
 
 console.log('Build complete!');

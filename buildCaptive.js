@@ -21,7 +21,7 @@ const preprocess = require('preprocess');
 const { exec } = require('child_process');
 
 const device = 'WS014';
-const onNasOrDevice = 'production'; // production || development
+const onNasOrDevice = 'development'; // production || development
 
 const context = {
     RS001: [onNasOrDevice, 'SWITCH'],
