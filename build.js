@@ -44,7 +44,7 @@ finalContext['THEME_STORAGE_NAME'] = `var themeStorageName = '${device}-${random
 
 const context = {
     RS001: [onNasOrDevice, 'SWITCH'],
-    WS001: [onNasOrDevice],
+    WS001: [onNasOrDevice, 'WEATHER', 'AIR_PRESSURE'],
     WS003: [onNasOrDevice],
     WS004: [onNasOrDevice, 'WEATHER'],
     WS014: [onNasOrDevice, 'DISPLAY', 'WEATHER'],
