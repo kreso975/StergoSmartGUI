@@ -126,7 +126,7 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <!--begin::Row main-->
-                            <h5 class="mb-2"><strong>Weather Attic</strong></h5> 
+                            <h5 id="MainTitle" class="mb-2"><strong>-</strong></h5> 
                             <div class="row">
                                 <!-- @if SWITCH -->
                                 <!--Start::Switches-->
@@ -363,7 +363,7 @@
 
                                             // Listen on Theme change and apply new theme to Charts 'light' or 'dark'
                                             window.addEventListener('localStorageChange', function(event) {
-                                                if (event.detail.key === `${siteName}_theme`) {
+                                                if (event.detail.key === `${themeStorageName}_theme`) {
                                                         
                                                     var newThemeFromEvent = event.detail.value;
                                                     if ( newThemeFromEvent === 'auto' ){
@@ -611,6 +611,7 @@
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_myTopic" name="mqtt_myTopic" maxlength="120" value="" placeholder="My Topic">
                                                 </div>
                                             </div>
+                                            <!-- @if WEATHER -->
                                             <div class="row d-flex justify-content-end" id="MQTT_Temperature">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Temperature</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
@@ -631,18 +632,21 @@
                                                 </div>
                                             </div>
                                             <!-- @endif -->
-                                            <div class="row justify-content-end d-none" id="MQTTswitch">
+                                            <!-- @endif -->
+                                            <!-- @if SWITCH -->
+                                            <div class="row justify-content-end" id="MQTTswitch">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_switch" name="mqtt_switch" maxlength="120" value="" placeholder="Switch Topic">
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-end d-none" id="MQTTswitch2">
+                                            <div class="row justify-content-end" id="MQTTswitch2">
                                                 <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 2</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_switch2" name="mqtt_switch2" maxlength="120" value="" placeholder="Switch 2 Topic">
                                                 </div>
                                             </div>
+                                            <!-- @endif -->
                                         </div>
                                     </div>
                                 </div>
@@ -743,25 +747,26 @@
                             <!-- End of Setup first row -->
                             <!-- Start second row : Device setup -->
                             <div class="row">
-                                    <div class="col-md-6 px-1">
-                                        <input type="hidden" name="deviceID" id="deviceID" value="1">
+                                <div class="col-md-6 px-1">
+                                    <input type="hidden" name="deviceID" id="deviceID" value="1">
                                     <input type="hidden" name="deviceType" id="deviceType" value="1">
                                     <input id="moduleName" name="moduleName" value="" hidden="">
+                                    <!-- @if WEATHER -->
                                     <!-- Start Weather module setup -->
-                                        <div class="col-md-12 mb-2" id="WeatherSetupModule">
-                                        <div mobile-colapsed="true" class="card card-success">
+                                    <div class="col-md-12 mb-2" id="WeatherSetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                    <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun "></i>&nbsp;Weather module</h3>
-                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun"></i> Weather module</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-9">Temperature</span>
-                                                    <input type="hidden" id="t_measure" value="0">
+                                                    <input type="hidden" id="t_measure" value="">
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                         <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -792,11 +797,11 @@
                                                 <!-- @if AIR_PRESSURE -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-9">Pressure</span>
-                                                    <input type="hidden" id="p_measure" value="0">
+                                                    <input type="hidden" id="p_measure" value="">
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                         <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_p_measure(1);" id="p_measure1" value="1">in</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_p_measure(1);" id="p_measure1" value="1">in</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -835,7 +840,7 @@
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="0">
+                                                        <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="">
                                                     </div>
                                                 </div>
                                                 <script>
@@ -848,11 +853,11 @@
                                                 </script>
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-9">Elevation unit</span>
-                                                    <input type="hidden" id="pa_unit" value="0">
+                                                    <input type="hidden" id="pa_unit" value="">
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                         <div class="btn-group" role="group" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -893,27 +898,30 @@
                                         </div>
                                     </div>
                                     <!-- End Weather module setup -->
+                                    <!-- @endif -->
+                                    <!-- @if SWITCH -->
                                     <!-- Start Switch & TicTac module setup -->
-                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule" style="display: none;">
-                                        <div mobile-colapsed="true" class="card card-success">
+                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                    <h3 class="card-title" id="SwitchTicTacModuleTitle"><i class="bi bi-hash"></i> Module</h3>
-                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                                <h3 class="card-title" id="SwitchTicTacModuleTitle"><!-- @echo DEVICENAME --></h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi "></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm" id="SwitchTicTacName" name="SwitchTicTacName" maxlength="32" value="" placeholder="Device Name">
+                                                        <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- End Switch & TicTac module setup -->
+                                    <!-- @endif -->
                                 </div>
                                 
-                                    <div class="col-md-6 px-1">
+                                <div class="col-md-6 px-1">
                                     <!-- Start Tic Tac Toe -->
                                     <div class="col-md-12 mb-2">
                                         <div mobile-colapsed="true" class="card card-success">
@@ -1296,7 +1304,8 @@
     </script>
 
     <script>
-        var siteName = 'WeatherAttic-898235'; // Replace with a unique identifier for each site - for themes
+        // Replace with a unique identifier for each site - for themes
+        // @echo THEME_STORAGE_NAME 
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
@@ -1341,7 +1350,7 @@
         configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         // @endif
         // Handling Theme
-        var storedTheme = localStorage.getItem(`${siteName}_theme`);
+        var storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
         if (!storedTheme)
             storedTheme = 'light';
         else if (storedTheme === 'auto')
@@ -1487,6 +1496,7 @@
 
             deviceModelSerial = result[1];
             
+
             // Populate Buttons in Exe / all link-target with IP
             // So that we can later when triggered load from JSON their IP address
             $('#restart').attr('link-target', result[2]);
@@ -1497,12 +1507,12 @@
             $('#uploadFile').attr('link-target', result[2]);
             $('#updateDevice').attr('link-target', result[2]);
 
+            $('#MainTitle strong').text(result[0]);
             $('#deviceCardNameTitle').text(result[0] + ' Info');
             $('#deviceCardNameTitle2').text(result[0] + ' Log');
 
             //	Load deviceinfo.json
             //  In headStergoMain.js
-
             loadDeviceInfoTable().then(result => { 
                 if ( result === true ) { 
                     $("#moreDetailsRow .loading-mask").toggleClass("d-none");
@@ -1866,6 +1876,10 @@
                             // If we restarted device
                             if ( what == 'restart' )
                                 setInterval(checkServerStatus, 5000); // Show Loading page or Restarting
+
+                            if ( what == 'updateSpiffs' )
+                                location.reload(true);  // Reload the current page, bypassing the cache
+
 
                         },
                         error: function(error) {
@@ -2282,7 +2296,7 @@
         (() => {
             "use strict";
 
-            const storedTheme = localStorage.getItem(`${siteName}_theme`);
+            const storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
 
             const getPreferredTheme = () => {
                 if (storedTheme) {
@@ -2358,8 +2372,8 @@
                     )) {
                     toggle.addEventListener("click", () => {
                         const theme = toggle.getAttribute("data-bs-theme-value");
-                        localStorage.setItem(`${siteName}_theme`, theme);
-                        window.dispatchEvent(new CustomEvent('localStorageChange', { detail: { key: `${siteName}_theme`, value: theme } }));
+                        localStorage.setItem(`${themeStorageName}_theme`, theme);
+                        window.dispatchEvent(new CustomEvent('localStorageChange', { detail: { key: `${themeStorageName}_theme`, value: theme } }));
                         setTheme(theme);
                         showActiveTheme(theme, true);
                     });

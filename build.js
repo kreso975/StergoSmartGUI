@@ -20,8 +20,27 @@ const fs = require('fs');
 const preprocess = require('preprocess');
 const { exec } = require('child_process');
 
-const device = 'WS011';
+// in finalContext we will add all that needs to change
+const finalContext = {};
+
+
+const device = 'WS014';
 const onNasOrDevice = 'development'; // production || development
+
+
+// Preprocess DEVICENAME and DEVICEICON separately
+var configDisplayDevices = {
+    RS001: { title: "Relay Switch module", icon: "bi-toggles" },
+    PS001: { title: "Power Switch module", icon: "bi-plugin" },
+    LS001: { title: "Light Switch module", icon: "bi-lightbulb-fill" }
+}
+
+const deviceName = configDisplayDevices[device]?.title || 'Unknown Device';
+const deviceIcon = configDisplayDevices[device]?.icon || 'bi-question-circle';
+const randomNumber = Math.floor(10000000 + Math.random() * 90000000);
+
+finalContext['DEVICENAME'] = `<i class="bi ${deviceIcon}"></i> ${deviceName}`;
+finalContext['THEME_STORAGE_NAME'] = `var themeStorageName = '${device}-${randomNumber}';`;
 
 const context = {
     RS001: [onNasOrDevice, 'SWITCH'],
@@ -34,7 +53,6 @@ const context = {
 
 // Ensure all context variables are either true or false
 const allKeys = ['production', 'development', 'DISPLAY', 'WEATHER','AIR_PRESSURE', 'SWITCH'];
-const finalContext = {};
 
 // Set all keys to false initially
 allKeys.forEach(key => {
@@ -45,6 +63,7 @@ allKeys.forEach(key => {
 context[device].forEach(key => {
     finalContext[key] = true;
 });
+
 
 // Preprocess HTML file
 const htmlInput = fs.readFileSync('index.html', 'utf8');

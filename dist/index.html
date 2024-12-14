@@ -126,7 +126,7 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <!--begin::Row main-->
-                            <h5 class="mb-2"><strong>Weather Attic</strong></h5> 
+                            <h5 id="MainTitle" class="mb-2"><strong>-</strong></h5> 
                             <div class="row">
                                 <!--begin::Row for module-->
                                 <div class="row">
@@ -144,13 +144,6 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
-                                                <label id='currentPressure'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col -->
                                 </div> <!-- /.row -->
                                 <script>
                                 var tUnit = " &#8451;";
@@ -163,7 +156,6 @@
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                     });
                                 });
                                 </script>
@@ -186,21 +178,6 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-md-6">
-                                        <div mobile-colapsed="true" class="card mb-6">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h5 class="card-title">24h Air Pressure</h5>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
-                                                </div>
-                                            </div> <!-- /.card-header -->
-                                            <div class="card-body"> <!--begin::Row-->
-                                                <div class="row">
-                                                    <div id="weatherPressureChart"></div>
-                                                </div> <!--end::Row-->
-                                            </div> <!-- ./card-body -->
-                                        </div> <!-- /.card -->
-                                    </div>
                                     <!-- /.col -->
                                     <!-- apexcharts -->
                                     <script>
@@ -219,18 +196,15 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
-                                                let pressures = jsonData.sensor.map(item => item[3]);
                                                 chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
-                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
-                                                chartPressure.render();
                                             });  
 
 
                                             // Listen on Theme change and apply new theme to Charts 'light' or 'dark'
                                             window.addEventListener('localStorageChange', function(event) {
-                                                if (event.detail.key === `${siteName}_theme`) {
+                                                if (event.detail.key === `${themeStorageName}_theme`) {
                                                         
                                                     var newThemeFromEvent = event.detail.value;
                                                     if ( newThemeFromEvent === 'auto' ){
@@ -487,24 +461,6 @@
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
                                                 </div>
                                             </div>
-                                            <div class="row d-flex justify-content-end" id="MQTT_Pressure">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Pressure</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Pressure" name="mqtt_Pressure" maxlength="120" value="" placeholder="Pressure">
-                                                </div>
-                                            </div>
-                                            <div class="row justify-content-end d-none" id="MQTTswitch">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch" name="mqtt_switch" maxlength="120" value="" placeholder="Switch Topic">
-                                                </div>
-                                            </div>
-                                            <div class="row justify-content-end d-none" id="MQTTswitch2">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 2</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch2" name="mqtt_switch2" maxlength="120" value="" placeholder="Switch 2 Topic">
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -605,25 +561,25 @@
                             <!-- End of Setup first row -->
                             <!-- Start second row : Device setup -->
                             <div class="row">
-                                    <div class="col-md-6 px-1">
-                                        <input type="hidden" name="deviceID" id="deviceID" value="1">
+                                <div class="col-md-6 px-1">
+                                    <input type="hidden" name="deviceID" id="deviceID" value="1">
                                     <input type="hidden" name="deviceType" id="deviceType" value="1">
                                     <input id="moduleName" name="moduleName" value="" hidden="">
                                     <!-- Start Weather module setup -->
-                                        <div class="col-md-12 mb-2" id="WeatherSetupModule">
-                                        <div mobile-colapsed="true" class="card card-success">
+                                    <div class="col-md-12 mb-2" id="WeatherSetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                    <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun "></i>&nbsp;Weather module</h3>
-                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun"></i> Weather module</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-9">Temperature</span>
-                                                    <input type="hidden" id="t_measure" value="0">
+                                                    <input type="hidden" id="t_measure" value="">
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                         <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -652,126 +608,18 @@
                                                     }
                                                 </script>
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Pressure</span>
-                                                    <input type="hidden" id="p_measure" value="0">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_p_measure(1);" id="p_measure1" value="1">in</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_p_measure(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#p_measure').val(0);
-                                                            $('#p_measure1').removeClass('btn-success disabled active');
-                                                            $('#p_measure1').addClass('btn-secondary');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-secondary');
-                                                            $('#p_measure0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#p_measure').val(1);
-                                                            $('#p_measure1').removeClass('btn-secondary');
-                                                            $('#p_measure1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-success disabled active');
-                                                            $('#p_measure0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
                                                         <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
-                                                    </div>
-                                                </div>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="0">
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#p_adjust').on('change', function() {
-                                                        if ( $(this).is(':checked') )
-                                                            $('#p_adjust').val(1);
-                                                        else
-                                                            $('#p_adjust').val(0);
-                                                    });
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Elevation unit</span>
-                                                    <input type="hidden" id="pa_unit" value="0">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group" role="group" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onclick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
-                                                            <label class="btn btn-sm btn-success disabled active" onclick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_pa_unit(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#pa_unit').val(0);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-success disabled active');
-                                                            $('#pa_unit1').addClass('btn-secondary');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-secondary');
-                                                            $('#pa_unit0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#pa_unit').val(1);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-secondary');
-                                                            $('#pa_unit1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-success disabled active');
-                                                            $('#pa_unit0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-8">Elevation</span>
-                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm text-end" id="pl_adj" name="pl_adj" maxlength="12" value="" placeholder="Local elevation">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- End Weather module setup -->
-                                    <!-- Start Switch & TicTac module setup -->
-                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule" style="display: none;">
-                                        <div mobile-colapsed="true" class="card card-success">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                    <h3 class="card-title" id="SwitchTicTacModuleTitle"><i class="bi bi-hash"></i> Module</h3>
-                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-5">Device Name</span>
-                                                    <div class="form-check form-switch col-7 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm" id="SwitchTicTacName" name="SwitchTicTacName" maxlength="32" value="" placeholder="Device Name">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Switch & TicTac module setup -->
                                 </div>
                                 
-                                    <div class="col-md-6 px-1">
+                                <div class="col-md-6 px-1">
                                     <!-- Start Tic Tac Toe -->
                                     <div class="col-md-12 mb-2">
                                         <div mobile-colapsed="true" class="card card-success">
@@ -1154,7 +1002,8 @@
     </script>
 
     <script>
-        var siteName = 'WeatherAttic-898235'; // Replace with a unique identifier for each site - for themes
+        // Replace with a unique identifier for each site - for themes
+        var themeStorageName = 'WS014-18581700';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
@@ -1188,9 +1037,8 @@
         
         var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         configJSONAttNumbers =  ["t_measure", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
-        configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         // Handling Theme
-        var storedTheme = localStorage.getItem(`${siteName}_theme`);
+        var storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
         if (!storedTheme)
             storedTheme = 'light';
         else if (storedTheme === 'auto')
@@ -1336,6 +1184,7 @@
 
             deviceModelSerial = result[1];
             
+
             // Populate Buttons in Exe / all link-target with IP
             // So that we can later when triggered load from JSON their IP address
             $('#restart').attr('link-target', result[2]);
@@ -1346,12 +1195,12 @@
             $('#uploadFile').attr('link-target', result[2]);
             $('#updateDevice').attr('link-target', result[2]);
 
+            $('#MainTitle strong').text(result[0]);
             $('#deviceCardNameTitle').text(result[0] + ' Info');
             $('#deviceCardNameTitle2').text(result[0] + ' Log');
 
             //	Load deviceinfo.json
             //  In headStergoMain.js
-
             loadDeviceInfoTable().then(result => { 
                 if ( result === true ) { 
                     $("#moreDetailsRow .loading-mask").toggleClass("d-none");
@@ -1406,8 +1255,6 @@
             let listOfspecialButtons = [ 'wifi_static' ];
             listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
             listOfspecialButtons = [ 't_measure', 'wifi_static' ];
-            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
-            listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
             
             let data;
             let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
@@ -1681,6 +1528,10 @@
                             // If we restarted device
                             if ( what == 'restart' )
                                 setInterval(checkServerStatus, 5000); // Show Loading page or Restarting
+
+                            if ( what == 'updateSpiffs' )
+                                location.reload(true);  // Reload the current page, bypassing the cache
+
 
                         },
                         error: function(error) {
@@ -2083,7 +1934,7 @@
         (() => {
             "use strict";
 
-            const storedTheme = localStorage.getItem(`${siteName}_theme`);
+            const storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
 
             const getPreferredTheme = () => {
                 if (storedTheme) {
@@ -2159,8 +2010,8 @@
                     )) {
                     toggle.addEventListener("click", () => {
                         const theme = toggle.getAttribute("data-bs-theme-value");
-                        localStorage.setItem(`${siteName}_theme`, theme);
-                        window.dispatchEvent(new CustomEvent('localStorageChange', { detail: { key: `${siteName}_theme`, value: theme } }));
+                        localStorage.setItem(`${themeStorageName}_theme`, theme);
+                        window.dispatchEvent(new CustomEvent('localStorageChange', { detail: { key: `${themeStorageName}_theme`, value: theme } }));
                         setTheme(theme);
                         showActiveTheme(theme, true);
                     });
