@@ -1,17 +1,20 @@
 <html><head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<style type='text/css'>
+	.hover-hand {
+		cursor: pointer;
+	}
 	.form-style-10{
 	    width:86%;
 	    padding:30px;
 	    margin:10px auto;
 	    background: #FFF;
-	    border-radius: 10px;
 	    -webkit-border-radius:10px;
 	    -moz-border-radius: 10px;
-	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+		border-radius: 10px;
 	    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
 	    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
 	}
 	.form-style-10 .inner-wrap{
 	    padding: 15px;
@@ -27,9 +30,9 @@
 	    background: #2A88AD;
 	    padding: 20px 30px 15px 30px;
 	    margin: -30px -30px 30px -30px;
-	    border-radius: 10px 10px 0 0;
 	    -webkit-border-radius: 10px 10px 0 0;
 	    -moz-border-radius: 10px 10px 0 0;
+		border-radius: 10px 10px 0 0;
 	    color: #fff;
 	    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
 	    font: normal 30px 'Bitter', serif;
@@ -62,19 +65,19 @@
 	.form-style-10 textarea,
 	.form-style-10 select {
 	    display: block;
-	    box-sizing: border-box;
 	    -webkit-box-sizing: border-box;
 	    -moz-box-sizing: border-box;
+		box-sizing: border-box;
 	    width: 100%;
 	    padding: 8px;
-	    border-radius: 6px;
 	    -webkit-border-radius:6px;
 	    -moz-border-radius:6px;
+		border-radius: 6px;
 	    border: 2px solid #fff;
 		font: 18px Arial, Helvetica, sans-serif;
-	    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
 	    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
 	    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
 	}
 	.form-style-10 .section{
 	    font: normal 20px 'Bitter', serif;
@@ -85,9 +88,9 @@
 	    background: #2A88AD;
 	    padding: 5px 10px 5px 10px;
 	    position: absolute;
-	    border-radius: 50%;
 	    -webkit-border-radius: 50%;
 	    -moz-border-radius: 50%;
+		border-radius: 50%;
 	    border: 4px solid #fff;
 	    font-size: 16px;
 	    margin-left: -45px;
@@ -98,9 +101,9 @@
 	.form-style-10 button[type='submit']{
 	    background: #2A88AD;
 	    padding: 8px 20px 8px 20px;
-	    border-radius: 5px;
 	    -webkit-border-radius: 5px;
 	    -moz-border-radius: 5px;
+		border-radius: 5px;
 	    color: #fff;
 	    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
 	    font: normal 18px 'Bitter', serif;
@@ -135,6 +138,7 @@
 	     background-image: none;
 	     -webkit-appearance: none;
 	     -moz-appearance: none;
+		 appearance: none;
 	  }
 	.form-style-10  .select-style select:focus {
 	      outline: none;
@@ -214,7 +218,10 @@
 
 	.onoffswitch {
 		position: relative; width: 55px;
-		-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		-webkit-user-select:none;
+		-moz-user-select:none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 	.onoffswitch-checkbox {
 		display: none;
@@ -249,6 +256,25 @@
 		background-color: #1BB015;
 		box-shadow: 3px 6px 18px 0 rgba(0, 0, 0, 0.2);
 	}
+
+	.rotate { 
+		animation: rotate 2s linear infinite;
+	}
+
+	.rotate-icon {
+		display: inline-block;
+		animation: rotate 2s linear infinite;
+	}
+
+	@keyframes rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
 	</style>
 </head>
 <body>
@@ -269,7 +295,12 @@
 					If you want to use static IP, please enter one in Static IP field.</span>
 				</div>
 				<div class='inner-wrap'>
-					<label>WiFi SSID Name <button style="float:right;" type='button' onclick="loadWiFi();">R</button>
+					<label>WiFi SSID Name <button id="refreshButton" style="float:right;" type='button' onclick="loadWiFi();"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+							<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+							<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+						  </svg> </button>
+						
+						
 						<div class="select-style"><select class="selectpicker" name='wifi_SSID' placeholder='network'></select></div>
 					</label>
 					<label>Password <input type='text' placeholder='Password' name='wifi_password' id="wifi_password" /></label>
@@ -461,41 +492,80 @@
 		return link;
 	}
 	// @endif
+	var isWiFiRotating = false;
+	async function loadWiFi() {
+		if ( !isWiFiRotating )
+		{
+			// Add the 'rotate-icon' class to the SVG inside the button
+			document.querySelector('#refreshButton svg').classList.add('rotate-icon');
+			// Remove the 'hover-hand' class from the button
+			document.getElementById('refreshButton').classList.remove('hover-hand');
+			// Disable further clicks on the button
+			document.getElementById('refreshButton').onclick = null;
+			// Set the isWiFiRotating variable to true
+			isWiFiRotating = true;
 
-	function loadWiFi() {
-		let jsonData6;
-        // @if development
-        jsonData6 = fwdJsonRequest( 'WS011v02-898235', 6 );
-        // @endif
-        // @if production
-        jsonData6 = '/wifiscan.json';
-        // @endif
-		fetch(jsonData6)
-			.then(response => response.json())
-			.then(data => {
-				console.log(JSON.stringify(data));
+			// Set the isWiFiRotating variable to true
+			isWiFiRotating = true;
 
-				var wifiSelect = document.querySelector('select[name="wifi_SSID"]');
-				wifiSelect.innerHTML = ''; // Clear existing options
+			let jsonData6;
+			// @if development
+			jsonData6 = fwdJsonRequest( 'WS011v02-898235', 6 );
+			// @endif
+			// @if production
+			jsonData6 = '/wifiscan.json';
+			// @endif
+			fetch(jsonData6)
+				.then(response => response.json())
+				.then(data => {
+					console.log(JSON.stringify(data));
 
-				if (data.status === 'OK') {
-					data.result.forEach((val, key) => {
+					var wifiSelect = document.querySelector('select[name="wifi_SSID"]');
+					wifiSelect.innerHTML = ''; // Clear existing options
+
+					if (data.status === 'OK') {
+						data.result.forEach((val, key) => {
+							var option = document.createElement('option');
+							option.id = key;
+							option.value = val.ssid;
+							option.textContent = val.ssid;
+							wifiSelect.appendChild(option);
+						});
+						// Remove the 'rotate-icon' class from the SVG inside the button
+						document.querySelector('#refreshButton svg').classList.remove('rotate-icon');
+						// Add the 'hover-hand' class to the button
+						document.getElementById('refreshButton').classList.add('hover-hand');
+						// Set the isWiFiRotating variable to false
+						isWiFiRotating = false;
+						document.getElementById('refreshButton').addEventListener('click', function() {	loadWiFi(); });
+
+					} else {
 						var option = document.createElement('option');
-						option.id = key;
-						option.value = val.ssid;
-						option.textContent = val.ssid;
+						option.id = '0';
+						option.value = '0';
+						option.disabled = true;
+						option.textContent = 'No WiFi';
 						wifiSelect.appendChild(option);
-					});
-				} else {
-					var option = document.createElement('option');
-					option.id = '0';
-					option.value = '0';
-					option.disabled = true;
-					option.textContent = 'No WiFi';
-					wifiSelect.appendChild(option);
-				}
-			})
-			.catch(error => console.error('Error fetching WiFi data:', error));
+
+						// Remove the 'rotate-icon' class from the SVG inside the button
+						document.querySelector('#refreshButton svg').classList.remove('rotate-icon');
+						// Add the 'hover-hand' class to the button
+						document.getElementById('refreshButton').classList.add('hover-hand');
+						// Set the isWiFiRotating variable to false
+						isWiFiRotating = false;
+						document.getElementById('refreshButton').addEventListener('click', function() {	loadWiFi(); });
+					}
+				})
+				.catch(error => { 
+					// Remove the 'rotate-icon' class from the SVG inside the button
+					document.querySelector('#refreshButton svg').classList.remove('rotate-icon');
+					// Add the 'hover-hand' class to the button
+					document.getElementById('refreshButton').classList.add('hover-hand');
+					// Set the isWiFiRotating variable to false
+					isWiFiRotating = false; });
+					document.getElementById('refreshButton').addEventListener('click', function() {	loadWiFi(); });
+		}
+		
 	}
 
 	function toggleTabs( where )

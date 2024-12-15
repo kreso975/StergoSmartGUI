@@ -24,8 +24,8 @@ const { exec } = require('child_process');
 const finalContext = {};
 
 
-const device = 'WS014';
-const onNasOrDevice = 'development'; // production || development
+const device = 'WS001';
+const onNasOrDevice = 'production'; // production || development
 
 
 // Preprocess DEVICENAME and DEVICEICON separately
@@ -52,7 +52,7 @@ const context = {
 };
 
 // Ensure all context variables are either true or false
-const allKeys = ['production', 'development', 'DISPLAY', 'WEATHER','AIR_PRESSURE', 'SWITCH'];
+const allKeys = ['production', 'development', 'exclude', 'DISPLAY', 'WEATHER','AIR_PRESSURE', 'SWITCH'];
 
 // Set all keys to false initially
 allKeys.forEach(key => {
@@ -90,7 +90,7 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 */
 
 // Check if the .gz file exists and remove it
-const gzFilePath = 'dist/index.html.gz';
+const gzFilePath = 'dist/data/index.html.gz';
 if (fs.existsSync(gzFilePath)) {
     fs.unlinkSync(gzFilePath);
     console.log('Existing .gz file removed');
@@ -98,7 +98,7 @@ if (fs.existsSync(gzFilePath)) {
 
 // Compress the HTML file to .gz using 7z with ultra compression
 const sevenZipPath = '"C:\\Program Files\\7-Zip\\7z.exe"'; // Adjust this path if necessary
-const command = `${sevenZipPath} a -tgzip -mx=9 dist/index.html.gz dist/index.html`;
+const command = `${sevenZipPath} a -tgzip -mx=9 dist/data/index.html.gz dist/index.html`;
 
 exec(command, (err, stdout, stderr) => {
     if (err) {
@@ -136,14 +136,14 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 */
 
 // Check if the .gz file exists and remove it
-const gzFilePath2 = 'dist/captive.html.gz';
+const gzFilePath2 = 'dist/data/captive.html.gz';
 if (fs.existsSync(gzFilePath2)) {
     fs.unlinkSync(gzFilePath2);
     console.log('Existing .gz file removed');
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
-const command2 = `${sevenZipPath} a -tgzip -mx=9 dist/captive.html.gz dist/captive.html`;
+const command2 = `${sevenZipPath} a -tgzip -mx=9 dist/data/captive.html.gz dist/captive.html`;
 
 exec(command2, (err, stdout, stderr) => {
     if (err) {
