@@ -290,7 +290,7 @@
                                                 </div>
                                                 <!-- Timezone Setup -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Timezone:</span>
+                                                    <label class="input-group-text-sm col-9" for="timezone">Timezone:</label>
                                                     <div class="col-3 d-flex justify-content-end">
                                                         <select class="form-select" id="timezone" name="timezone">
                                                             <!-- Add timezone options here -->
@@ -303,7 +303,7 @@
                                                 </div>
                                                 <!-- Color Picker -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Color Picker:</span>
+                                                    <label class="input-group-text-sm col-9" for="color_picker">Color Picker:</label>
                                                     <div class="col-3 d-flex justify-content-end">
                                                         <input type="color" class="form-control form-control-color" id="color_picker" name="color_picker" value="#ff0000">
                                                     </div>
@@ -389,7 +389,7 @@
                                         </div>
                                         <div class="card-body" style="box-sizing: border-box; display: block;">
                                             <div class="row d-flex align-items-center mb-2">
-                                                <span class="input-group-text-sm col-8">Measure Interval (sec)</span>
+                                                <label class="input-group-text-sm col-8" for="mqtt_interval">Measure Interval (sec)</label>
                                                 <div class="form-check form-switch col-4 d-flex justify-content-end">
                                                     <input type="text" class="form-control form-control-sm text-end" id="mqtt_interval" name="mqtt_interval" maxlength="5" value="">
                                                 </div>
@@ -471,7 +471,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row d-flex align-items-center mb-1">
-                                                    <span class="input-group-text-sm col-8">Measure Interval (sec)</span>
+                                                    <label class="input-group-text-sm col-8" for="webLoc_interval">Measure Interval (sec)</label>
                                                     <div class="form-check form-switch col-4 d-flex justify-content-end">
                                                         <input type="text" class="form-control form-control-sm text-end" id="webLoc_interval" name="webLoc_interval" maxlength="5" value="">
                                                     </div>
@@ -517,9 +517,9 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Enable MQTT</span>
+                                                    <label class="input-group-text-sm col-9" for="mqtt_start">Enable MQTT</label>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="mqtt_start" value="1">
+                                                        <input class="form-check-input large-switch" type="checkbox" id="mqtt_start" value="1">
                                                     </div>
                                                     <script>
                                                         $('#mqtt_start').on('change', function() {
@@ -633,7 +633,7 @@
                                                 </div>
                                                 
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Publish to Webhook:</span>
+                                                    <label class="input-group-text-sm col-9" for="tictac_webhook">Publish to Webhook:</label>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                             <input class="form-check-input large-switch" type="checkbox" id="tictac_webhook" value="0">
                                                     </div>
@@ -648,7 +648,7 @@
                                                         
                                                 </div>
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Publish to Discord:</span>
+                                                    <label class="input-group-text-sm col-9" for="tictac_discord">Publish to Discord:</lanel>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                             <input class="form-check-input large-switch" type="checkbox" id="tictac_discord" value="1">
                                                     </div>
@@ -1000,7 +1000,7 @@
 
     <script>
         // Replace with a unique identifier for each site - for themes
-        var themeStorageName = 'WS014-65290259';
+        var themeStorageName = 'WS014-90174335';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";

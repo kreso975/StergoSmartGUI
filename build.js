@@ -19,6 +19,7 @@ const fs = require('fs');
 //const zlib = require('zlib'); //If using node zlib not 7-zip | npm install zlib
 const preprocess = require('preprocess');
 const { exec } = require('child_process');
+var finalBuildMessage = '';
 
 // in finalContext we will add all that needs to change
 const finalContext = {};
@@ -93,7 +94,8 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 const gzFilePath = 'dist/data/index.html.gz';
 if (fs.existsSync(gzFilePath)) {
     fs.unlinkSync(gzFilePath);
-    console.log('Existing .gz file removed');
+    //console.log('Existing .gz file removed');
+    finalBuildMessage += 'index.html : Existing .gz file removed\n';
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
@@ -106,11 +108,13 @@ exec(command, (err, stdout, stderr) => {
         console.error(stderr);
         return;
     }
-    console.log('File compressed successfully with ultra compression');
-    console.log(stdout);
+    //console.log('File compressed successfully with ultra compression');
+    //console.log(stdout);
+    finalBuildMessage += 'index.html : File compressed successfully with ultra compression\n';
 });
 
-console.log('Index.html Build complete!');
+//console.log('Index.html Build complete!');
+finalBuildMessage += 'index.html : Build complete!\n\n';
 
 // Preprocess HTML file
 const htmlInput2 = fs.readFileSync('captive.html', 'utf8');
@@ -139,7 +143,8 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 const gzFilePath2 = 'dist/data/captive.html.gz';
 if (fs.existsSync(gzFilePath2)) {
     fs.unlinkSync(gzFilePath2);
-    console.log('Existing .gz file removed');
+    //console.log('Existing .gz file removed');
+    finalBuildMessage += 'captive.html : Existing .gz file removed\n';
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
@@ -151,12 +156,13 @@ exec(command2, (err, stdout, stderr) => {
         console.error(stderr);
         return;
     }
-    console.log('File compressed successfully with ultra compression');
-    console.log(stdout);
+    //console.log('File compressed successfully with ultra compression');
+    //console.log(stdout);
+    finalBuildMessage += 'captive.html : File compressed successfully with ultra compression\n';
 });
 
-
-
-console.log('Captive.html Build complete!');
-
-console.log('Build complete!');
+//console.log('Captive.html Build complete!');
+//console.log('Build complete!');
+finalBuildMessage += 'captive.html : Build complete!\n\n';
+finalBuildMessage += 'Build complete!\n';
+console.log(finalBuildMessage);
