@@ -24,7 +24,7 @@ const { exec } = require('child_process');
 const finalContext = {};
 
 
-const device = 'WS001';
+const device = 'WS014';
 const onNasOrDevice = 'production'; // production || development
 
 
