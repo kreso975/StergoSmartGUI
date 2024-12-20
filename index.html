@@ -404,12 +404,13 @@
                                             <div class="card-body">
                                                 <!-- Brightness Slider -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-7" for="brightness">Brightness:</label>
+                                                    <label class="input-group-text-sm col-7" for="maxBrightness">Brightness:</label>
                                                     <div class="col-5 d-flex justify-content-end">
-                                                        <input type="range" class="form-range" id="brightness" name="brightness" min="0" max="255" value="128">
+                                                        <input type="range" class="form-range" id="maxBrightness" name="maxBrightness" min="0" max="255" value="128">
                                                         <span id="brightnessValue" class="ms-2">128</span>
                                                     </div>
                                                 </div>
+                                                <!-- @if exclude -->
                                                 <!-- Refresh Interval Slider -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-7" for="refreshInterval">Refresh Interval (ms):</label>
@@ -418,17 +419,19 @@
                                                         <span id="refreshIntervalValue" class="ms-2">500</span>
                                                     </div>
                                                 </div>
+                                                <!-- @endif -->
                                                 <script>
-                                                    $('#brightness').on('input', function() {
+                                                    $('#maxBrightness').on('input', function() {
                                                         $('#brightnessValue').text($(this).val());
                                                     });
 
-                                                    $('#brightness').on('mouseup touchend', function() {
+                                                    $('#maxBrightness').on('mouseup touchend', function() {
                                                         //alert('Done 1');
                                                         // here i need to send new value to Device
                                                         updateDeviceDisplay('brightness',$(this).val());
                                                     });
 
+                                                    // @if exclude
                                                     $('#refreshInterval').on('input', function() {
                                                         $('#refreshIntervalValue').text($(this).val());
                                                     });
@@ -438,7 +441,9 @@
                                                         // here i need to send new value to Device
                                                         updateDeviceDisplay('refreshInterval',$(this).val());
                                                     });
+                                                    // @endif
                                                 </script>
+                                                <!-- @if exclude -->
                                                 <!-- Time Setup -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-9" for="time_format">Time Format:</label>
@@ -456,24 +461,45 @@
                                                         <input type="date" class="form-control" id="date" name="date">
                                                     </div>
                                                 </div>
+                                                <!-- @endif -->
                                                 <!-- Timezone Setup -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="timezone">Timezone:</label>
-                                                    <div class="col-3 d-flex justify-content-end">
-                                                        <select class="form-select" id="timezone" name="timezone">
-                                                            <!-- Add timezone options here -->
-                                                            <option value="UTC">UTC</option>
-                                                            <option value="CET">CET</option>
-                                                            <option value="EST">EST</option>
-                                                            <!-- Add more timezones as needed -->
+                                                    <label class="input-group-text-sm col-7" for="timeZone">Timezone:</label>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <select class="form-select" id="timeZone" name="timeZone">
+                                                            <option value="-12">(GMT -12) Baker Island</option>
+                                                                <option value="-11">(GMT -11) Pago Pago</option>
+                                                                <option value="-10">(GMT -10) Honolulu</option>
+                                                                <option value="-9">(GMT -9) Anchorage</option>
+                                                                <option value="-8">(GMT -8) Los Angeles</option>
+                                                                <option value="-7">(GMT -7) Denver</option>
+                                                                <option value="-6">(GMT -6) Chicago</option>
+                                                                <option value="-5">(GMT -5) New York</option>
+                                                                <option value="-4">(GMT -4) Caracas</option>
+                                                                <option value="-3">(GMT -3) Buenos Aires</option>
+                                                                <option value="-2">(GMT -2) South Georgia</option>
+                                                                <option value="-1">(GMT -1) Azores</option>
+                                                                <option value="0">(GMT 0) London</option>
+                                                                <option value="1">(GMT +1) Zagreb</option>
+                                                                <option value="2">(GMT +2) Cairo</option>
+                                                                <option value="3">(GMT +3) Moscow</option>
+                                                                <option value="4">(GMT +4) Dubai</option>
+                                                                <option value="5">(GMT +5) Karachi</option>
+                                                                <option value="6">(GMT +6) Dhaka</option>
+                                                                <option value="7">(GMT +7) Bangkok</option>
+                                                                <option value="8">(GMT +8) Beijing</option>
+                                                                <option value="9">(GMT +9) Tokyo</option>
+                                                                <option value="10">(GMT +10) Sydney</option>
+                                                                <option value="11">(GMT +11) Noumea</option>
+                                                                <option value="12">(GMT +12) Auckland</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <!-- Color Picker -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="color_picker">Color Picker:</label>
+                                                    <label class="input-group-text-sm col-9" for="displayColor">Color Picker:</label>
                                                     <div class="col-3 d-flex justify-content-end">
-                                                        <input type="color" class="form-control form-control-color" id="color_picker" name="color_picker" value="#ff0000">
+                                                        <input type="color" class="form-control form-control-color" id="displayColor" name="displayColor" value="#ff0000">
                                                     </div>
                                                 </div>
                                                 <!-- Simple Text Input -->
@@ -484,7 +510,7 @@
                                                     </div>
                                                 </div>
                                                 <script>
-                                                    $('#color_picker').on('input', function() {	
+                                                    $('#displayColor').on('input', function() {	
                                                         updateDeviceDisplay('color', $(this).val());
                                                     });
                                                     
@@ -494,9 +520,11 @@
                                                             updateDeviceDisplay('messageDisplay', $(this).val());
                                                     });
                                                     // Detect focus change (blur event)
+                                                    /*
                                                     $('#messageDisplay').on('blur', function() {
                                                         updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
                                                     });
+                                                    */
                                                     
                                                 </script>
                                             </div>
@@ -1348,11 +1376,15 @@
         
         var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         // @if WEATHER
-        configJSONAttNumbers =  ["t_measure", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
-        // @endif
+        configJSONAttNumbers.push( "t_measure" );
+         // @endif
         // @if AIR_PRESSURE
-        configJSONAttNumbers =  ["t_measure", "p_measure", "p_adjust", "pa_unit", "pl_adj", "wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
+        configJSONAttNumbers.push( "p_measure", "p_adjust", "pa_unit" );
         // @endif
+        // @if DISPLAY
+        configJSONAttNumbers.push( "maxBrightness", "timeZone" );
+        // @endif
+
         // Handling Theme
         var storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
         if (!storedTheme)
@@ -1410,9 +1442,7 @@
             if (pressure !== 0) {
                 optionsPressure.series.push({
                     name: 'Air Pressure',
-                    data: pressure.map((pres, index) => {
-                        return { x: timestamp[index], y: pres };
-                    })
+                    data: pressure.map((pres, index) => { return { x: timestamp[index], y: pres }; })
                 });
             }
 
@@ -1543,13 +1573,18 @@
             });
             
             //	Load config.json
-            //  In headStergoMain.js
             loadDeviceConfig().then(result => { 
                 if ( result === true ) { 
                     $("#moreDetailsRow .loading-mask").toggleClass("d-none");
                     console.log("Config All input fields have been updated."); // Perform any additional actions here
                 }
             });
+
+            // @if DISPLAY
+            setInterval(() => { 
+                loadDeviceDisplayData().then(result => { if (result === true) { $("#moreDetailsRow .loading-mask").toggleClass("d-none"); } });
+            }, 5000);
+            // @endif
         }
 
         function RSSIFormatter( rssi )
@@ -1579,12 +1614,14 @@
             let listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
             let listOfspecialButtons = [ 'wifi_static' ];
             // @if WEATHER
-            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
-            listOfspecialButtons = [ 't_measure', 'wifi_static' ];
+            listOfspecialButtons.push( "t_measure" );
             // @endif
             // @if AIR_PRESSURE
-            listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server', 'p_adjust'];
-            listOfspecialButtons = [ 'pa_unit', 'p_measure', 't_measure', 'wifi_static' ];
+            listOfspecialsChecked.push( "p_adjust" );
+            listOfspecialButtons.push( "pa_unit", "p_measure" );
+            // @endif
+            // @if DISPLAY
+            listOfspecialsChecked.push( "timeZone" );
             // @endif
             
             let data;
@@ -1613,11 +1650,33 @@
                 if ( listOfspecialButtons.includes(key) )
                     window['set_'+key](value);
 
+                if ( key === "maxBrightness")
+                    $('#brightnessValue').text(value);
+
                 $('#' + key).val(value);
             });
 
             return true;
         }
+
+        async function loadDeviceDisplayData() {
+            // Load Device Info Card	
+            
+            let jsonDisplayData;
+            // @if development
+            jsonDisplayData = await loadJSON('http://192.168.1.74/display.json');
+            // @endif
+            // @if production
+            jsonDisplayData = await loadJSON('/display');
+            // @endif
+            
+            $('#brightnessValue').text(jsonDisplayData['Brightness']);
+            $('#maxBrightness').val(jsonDisplayData['Brightness']);
+            $('#displayColor').val(jsonDisplayData['displayColor']);
+            
+            return true;
+        }
+
 
         async function loadDeviceInfoTable() {
             // Load Device Info Card	
@@ -2111,9 +2170,6 @@
             if ( isMobile() ) {
                 $("[mobile-colapsed='true']").addClass("collapsed-card");
             }
-        });
-
-        $(document).ready(function() {
 
             // UploadFile
             $(document).on("click", "#uploadFile", function() {
