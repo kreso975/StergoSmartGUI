@@ -25,12 +25,13 @@ var finalBuildMessage = '';
 const finalContext = {};
 
 
-const device = 'WS014';
+const device = 'SC001';
 const onNasOrDevice = 'production'; // production || development
 
 
 // Preprocess DEVICENAME and DEVICEICON separately
 var configDisplayDevices = {
+    SC001: { title: "Stergo Core module", icon: "bi-toggles" },
     RS001: { title: "Relay Switch module", icon: "bi-toggles" },
     PS001: { title: "Power Switch module", icon: "bi-plugin" },
     LS001: { title: "Light Switch module", icon: "bi-lightbulb-fill" }
@@ -44,16 +45,17 @@ finalContext['DEVICENAME'] = `<i class="bi ${deviceIcon}"></i> ${deviceName}`;
 finalContext['THEME_STORAGE_NAME'] = `var themeStorageName = '${device}-${randomNumber}';`;
 
 const context = {
-    RS001: [onNasOrDevice, 'SWITCH'],
-    WS001: [onNasOrDevice, 'WEATHER', 'AIR_PRESSURE'],
+    SC001: [onNasOrDevice, 'STERGO_CORE'],
+    RS001: [onNasOrDevice, 'SWITCH', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
+    WS001: [onNasOrDevice, 'WEATHER', 'AIR_PRESSURE', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
     WS003: [onNasOrDevice],
-    WS004: [onNasOrDevice, 'WEATHER'],
-    WS014: [onNasOrDevice, 'DISPLAY', 'WEATHER'],
-    WS011: [onNasOrDevice, 'DISPLAY', 'WEATHER', 'AIR_PRESSURE']
+    WS004: [onNasOrDevice, 'WEATHER', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
+    WS014: [onNasOrDevice, 'DISPLAY', 'WEATHER', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
+    WS011: [onNasOrDevice, 'DISPLAY', 'WEATHER', 'AIR_PRESSURE', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING']
 };
 
 // Ensure all context variables are either true or false
-const allKeys = ['production', 'development', 'exclude', 'DISPLAY', 'WEATHER','AIR_PRESSURE', 'SWITCH'];
+const allKeys = ['production', 'development', 'exclude', 'DISPLAY', 'WEATHER', 'AIR_PRESSURE', 'SWITCH', 'STERGO_CORE', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'];
 
 // Set all keys to false initially
 allKeys.forEach(key => {

@@ -127,201 +127,8 @@
                             <!--begin::Row main-->
                             <h5 id="MainTitle" class="mb-2"><strong>-</strong></h5> 
                             <div class="row">
-                                <!--begin::Row for module-->
-                                <div class="row">
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-thermometer-half"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Temperature</span> <span class="info-box-number">
-                                                <label id='currentTemperature'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col -->
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-moisture"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Humidity</span> <span class="info-box-number">
-                                                <label id='currentHumidity'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                </div> <!-- /.row -->
-                                <script>
-                                var tUnit = " &#8451;";
-                                var pUnit = " hPa";
-                                $(document).ready(function() {
-
-                                    let url;
-                                    url = 'measures.json';
-
-                                    $.getJSON(url, function(jsonCurrentData) {
-                                        $('#currentTemperature').html(jsonCurrentData.t + tUnit);
-                                        $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                    });
-                                });
-                                </script>
                                 <!--begin::Row-->
                                 <div class="row g-1 mb-3">
-                                    <div class="col-md-6">
-                                        <div mobile-colapsed="true" id="mobileCollapsable" class="card mb-6">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h5 class="card-title">24h Temperature & Humidity</h5>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i></button>
-                                                </div>
-                                            </div> <!-- /.card-header -->
-                                            <div class="card-body"> <!--begin::Row-->
-                                                <div class="row">
-                                                    <div id="weatherChart"></div>
-                                                </div> <!--end::Row-->
-                                            </div> <!-- ./card-body -->
-                                            <div class="overlay"><i class="fas fa-2x fa-sync-alt"></i></div>
-                                        </div> <!-- /.card -->
-                                    </div>
-                                    <!-- /.col -->
-                                    <!-- /.col -->
-                                    <!-- apexcharts -->
-                                    <script>
-                                        var chart;
-                                        $(document).ready(function() { 
-                                            
-                                            let url;
-                                            url = 'history.json';
-
-                                            $.getJSON(url, function(jsonData) {
-                                                // Extract data for the chart
-                                                let timestamps = jsonData.sensor.map(item => {
-                                                    return new Date(item[0] * 1000); // Convert Unix timestamp to Date object
-                                                });
-                                                let temperatures = jsonData.sensor.map(item => item[1]);
-                                                let humidities = jsonData.sensor.map(item => item[2]);
-                                                chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
-                                                chart.render();
-                                                
-                                            });  
-
-
-                                            // Listen on Theme change and apply new theme to Charts 'light' or 'dark'
-                                            window.addEventListener('localStorageChange', function(event) {
-                                                if (event.detail.key === `${themeStorageName}_theme`) {
-                                                        
-                                                    var newThemeFromEvent = event.detail.value;
-                                                    if ( newThemeFromEvent === 'auto' ){
-                                                        newThemeFromEvent = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                                                    }
-
-                                                    // functions are in headStergoMainJS
-                                                    chart.updateOptions(chartsThemeChange(newThemeFromEvent));
-                                                    //console.log('The value of yourKey has changed to', event.detail.value);
-                                                    // Add your custom logic here
-                                                }
-                                            });
-
-                                            
-                                            
-                                        }); 
-                                        
-                                    </script> <!--end::Script-->
-                                    <!-- Start Display Card -->
-                                    <div class="col-md-6 mb-2" id="DisplaySetupModule">
-                                        <div mobile-colapsed='true' class="card card-success">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title"><i class="bi bi-tv"></i> Display</h3>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <!-- Brightness Slider -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-7" for="maxBrightness">Brightness:</label>
-                                                    <div class="col-5 d-flex justify-content-end">
-                                                        <input type="range" class="form-range" id="maxBrightness" name="maxBrightness" min="0" max="255" value="128">
-                                                        <span id="brightnessValue" class="ms-2">128</span>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#maxBrightness').on('input', function() {
-                                                        $('#brightnessValue').text($(this).val());
-                                                    });
-
-                                                    $('#maxBrightness').on('mouseup touchend', function() {
-                                                        //alert('Done 1');
-                                                        // here i need to send new value to Device
-                                                        updateDeviceDisplay('brightness',$(this).val());
-                                                    });
-
-                                                </script>
-                                                <!-- Timezone Setup -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-7" for="timeZone">Timezone:</label>
-                                                    <div class="col-5 d-flex justify-content-end">
-                                                        <select class="form-select" id="timeZone" name="timeZone">
-                                                            <option value="-12">(GMT -12) Baker Island</option>
-                                                                <option value="-11">(GMT -11) Pago Pago</option>
-                                                                <option value="-10">(GMT -10) Honolulu</option>
-                                                                <option value="-9">(GMT -9) Anchorage</option>
-                                                                <option value="-8">(GMT -8) Los Angeles</option>
-                                                                <option value="-7">(GMT -7) Denver</option>
-                                                                <option value="-6">(GMT -6) Chicago</option>
-                                                                <option value="-5">(GMT -5) New York</option>
-                                                                <option value="-4">(GMT -4) Caracas</option>
-                                                                <option value="-3">(GMT -3) Buenos Aires</option>
-                                                                <option value="-2">(GMT -2) South Georgia</option>
-                                                                <option value="-1">(GMT -1) Azores</option>
-                                                                <option value="0">(GMT 0) London</option>
-                                                                <option value="1">(GMT +1) Zagreb</option>
-                                                                <option value="2">(GMT +2) Cairo</option>
-                                                                <option value="3">(GMT +3) Moscow</option>
-                                                                <option value="4">(GMT +4) Dubai</option>
-                                                                <option value="5">(GMT +5) Karachi</option>
-                                                                <option value="6">(GMT +6) Dhaka</option>
-                                                                <option value="7">(GMT +7) Bangkok</option>
-                                                                <option value="8">(GMT +8) Beijing</option>
-                                                                <option value="9">(GMT +9) Tokyo</option>
-                                                                <option value="10">(GMT +10) Sydney</option>
-                                                                <option value="11">(GMT +11) Noumea</option>
-                                                                <option value="12">(GMT +12) Auckland</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <!-- Color Picker -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="displayColor">Color Picker:</label>
-                                                    <div class="col-3 d-flex justify-content-end">
-                                                        <input type="color" class="form-control form-control-color" id="displayColor" name="displayColor" value="#ff0000">
-                                                    </div>
-                                                </div>
-                                                <!-- Simple Text Input -->
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
-                                                    <div class="col-8 d-flex justify-content-end">
-                                                        <input type="text" class="form-control" id="messageDisplay" name="messageDisplay" placeholder="Enter text">
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#displayColor').on('input', function() {	
-                                                        updateDeviceDisplay('color', $(this).val());
-                                                    });
-                                                    
-                                                    // Detect Enter/Return key press
-                                                    $('#messageDisplay').on('keypress', function(event) {
-                                                        if (event.which === 13)
-                                                            updateDeviceDisplay('messageDisplay', $(this).val());
-                                                    });
-                                                    // Detect focus change (blur event)
-                                                    /*
-                                                    $('#messageDisplay').on('blur', function() {
-                                                        updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
-                                                    });
-                                                    */
-                                                    
-                                                </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Display Card -->
                                 </div>  
                             </div>  
                         </div>
@@ -367,179 +174,7 @@
                         <div class="tab-pane fade" role="tabpanel" id="publish" aria-labelledby="publish-tab">
                             
                             <div class="row">
-                                <div class="col-md-6 mb-2 px-1">
-                                    <!-- Start : MQTT -->
-                                    <div mobile-colapsed="false" class="card card-warning">
-                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                            <h3 class="card-title"><i class="bi bi-activity"></i> MQTT</h3>
-                                            <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                        </div>
-                                        <div class="card-body" style="box-sizing: border-box; display: block;">
-                                            <div class="row d-flex align-items-center mb-2">
-                                                <label class="input-group-text-sm col-8" for="mqtt_interval">Measure Interval (sec)</label>
-                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_interval" name="mqtt_interval" maxlength="5" value="">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex align-items-center mb-2">
-                                                <span class="input-group-text-sm col-4">Client ID</span>
-                                                <div class="col-8 d-flex align-items-center justify-content-ends">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientName" name="mqtt_clientName" maxlength="32" value="" placeholder="Client Name">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex align-items-center mb-2">
-                                                <span class="input-group-text-sm col-4">Username</span>
-                                                <div class="col-8 d-flex align-items-center justify-content-ends">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientUsername" name="mqtt_clientUsername" maxlength="64" value="" placeholder="Username">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex align-items-center mb-2">
-                                                <span class="input-group-text-sm col-4">Password</span>
-                                                <div class="col-8 d-flex align-items-center justify-content-ends">
-                                                    <input type="password" class="form-control form-control-sm" id="mqtt_clientPassword" name="mqtt_clientPassword" maxlength="64" value="" placeholder="Password">	
-                                                    <i class="bi bi-eye" id="toggleMQTTPassword" style="cursor: pointer; margin-left: -30px; z-index: 10;"></i>
-                                                </div>
-                                                <script>
-                                                    const passwordMQTTField = document.getElementById('mqtt_clientPassword');
-                                                    const toggleMQTTButton = document.getElementById('toggleMQTTPassword');
-
-                                                    toggleMQTTButton.addEventListener('click', function () {
-                                                        if ( passwordMQTTField.getAttribute('type') === 'password' )
-                                                        {
-                                                            passwordMQTTField.setAttribute('type', 'text');
-                                                            $('#toggleMQTTPassword').removeClass('bi-eye').addClass('bi-eye-slash');
-                                                        } else {
-                                                            passwordMQTTField.setAttribute('type', 'password');
-                                                            $('#toggleMQTTPassword').removeClass('bi-eye-slash').addClass('bi-eye');
-                                                        }
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="row d-flex align-items-center mb-2">
-                                                <span class="input-group-text-sm col-4">Server</span>
-                                                <div class="col-8 d-flex align-items-center justify-content-ends">
-                                                    <input type="ip" class="form-control form-control-sm" id="mqtt_server" name="mqtt_server" maxlength="32" value="" placeholder="Server address">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex align-items-center mb-1">
-                                                <span class="input-group-text-sm col-8">Port</span>
-                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_port" name="mqtt_port" maxlength="6" value="" placeholder="MQTT Port">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex justify-content-end">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">My Topic</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_myTopic" name="mqtt_myTopic" maxlength="120" value="" placeholder="My Topic">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex justify-content-end" id="MQTT_Temperature">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Temperature</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Temperature" name="mqtt_Temperature" maxlength="64" value="" placeholder="Temperature">
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex justify-content-end" id="MQTT_Humidity">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Humidity</label>
-                                                <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-md-6 px-1">
-                                    <div class="col-md-12 mb-2">
-                                        <!-- Start Webhook -->
-                                        <div mobile-colapsed="true" class="card card-warning">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title"><i class="bi bi bi-activity"></i> Webhook</h3>
-                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row d-flex align-items-center mb-1">
-                                                    <label class="input-group-text-sm col-8" for="webLoc_interval">Measure Interval (sec)</label>
-                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm text-end" id="webLoc_interval" name="webLoc_interval" maxlength="5" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="row d-flex justify-content-end">
-                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Server</label>
-                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
-                                                        <input type="url" class="form-control form-control-sm" id="webLoc_server" name="webLoc_server" value="" placeholder="Server address">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
-                                        <!-- Start Discord Webhook -->
-                                        <div mobile-colapsed="true" class="card card-warning">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title"><i class="bi bi-activity"></i> Discord Webhook</h3>
-                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row d-flex justify-content-end">
-                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Webhook URL</label>
-                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
-                                                        <input type="url" class="form-control  form-control-sm" id="discord_url" name="discord_url" value="" placeholder="Discord URL">
-                                                    </div>
-                                                </div>
-                                                <div class="row d-flex justify-content-end">
-                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label ">Discord avatar</label>
-                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
-                                                        <input type="url" class="form-control  form-control-sm" id="discord_avatar" name="discord_avatar" value="" placeholder="Discord Avatar URL">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    <div class="col-md-12 mb-2">
-                                        <!-- Start Publishing -->
-                                            <div mobile-colapsed="true" class="card card-warning">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title"><i class="bi bi-activity"></i> Publishing</h3>
-                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="mqtt_start">Enable MQTT</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <input class="form-check-input large-switch" type="checkbox" id="mqtt_start" value="1">
-                                                    </div>
-                                                    <script>
-                                                        $('#mqtt_start').on('change', function() {
-                                                            if ( $(this).is(':checked') )
-                                                                $('#mqtt_start').val(1);
-                                                            else
-                                                                $('#mqtt_start').val(0);
-
-                                                            saveConfigChanges();
-                                                        });
-                                                    </script>
-                                                        
-                                                </div>
-                                                <div class="row d-flex align-items-center">
-                                                    <label class="input-group-text-sm col-9" for="webLoc_start">Enable Webhook</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="webLoc_start" name="webLoc_start" value="0">
-                                                    </div>
-
-                                                    <script>
-                                                        $('#webLoc_start').on('change', function() {
-                                                            if ( $(this).is(':checked') )
-                                                                $('#webLoc_start').val(1);
-                                                            else
-                                                                $('#webLoc_start').val(0);
-
-                                                            saveConfigChanges();
-                                                        });
-                                                    </script>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <!-- End of Setup first row -->
@@ -549,48 +184,14 @@
                                     <input type="hidden" name="deviceID" id="deviceID" value="1">
                                     <input type="hidden" name="deviceType" id="deviceType" value="1">
                                     <input id="moduleName" name="moduleName" value="" hidden="">
-                                    <!-- Start Weather module setup -->
-                                    <div class="col-md-12 mb-2" id="WeatherSetupModule">
+                                    <!-- Start Stergo Core module setup -->
+                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule">
                                         <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun"></i> Weather module</h3>
-                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                                <h3 class="card-title" id="StergoCoreModuleTitle"><i class="bi bi-toggles"></i> Stergo Core module</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi "></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Temperature</span>
-                                                    <input type="hidden" id="t_measure" value="">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_t_measure(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#t_measure').val(0);
-                                                            $('#t_measure1').removeClass('btn-success disabled active');
-                                                            $('#t_measure1').addClass('btn-secondary');
-                                                            
-                                                            $('#t_measure0').removeClass('btn-secondary');
-                                                            $('#t_measure0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#t_measure').val(1);
-                                                            $('#t_measure1').removeClass('btn-secondary');
-                                                            $('#t_measure1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#t_measure0').removeClass('btn-success disabled active');
-                                                            $('#t_measure0').addClass('btn-secondary');
-                                                        }
-
-                                                    }
-                                                </script>
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
@@ -600,78 +201,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End Weather module setup -->
+                                    <!-- End Stergo Core module setup -->
                                 </div>
                                 
                                 <div class="col-md-6 px-1">
-                                    <!-- Start Tic Tac Toe -->
-                                    <div class="col-md-12 mb-2">
-                                        <div mobile-colapsed="true" class="card card-success">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                    <h3 class="card-title"><i class="bi bi-hash"></i> Tic Tac Toe</h3>
-                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Invite to Play Interval (min):</span>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm text-end" id="tictac_interval" name="tictac_interval" maxlength="3" value="" placeholder="60">
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="tictac_webhook">Publish to Webhook:</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_webhook" value="0">
-                                                    </div>
-                                                    <script>
-                                                        $('#tictac_webhook').on('change', function() {
-                                                            if ( $(this).is(':checked') )
-                                                                $('#tictac_webhook').val(1);
-                                                            else
-                                                                $('#tictac_webhook').val(0);
-                                                        });
-                                                    </script>
-                                                        
-                                                </div>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="tictac_discord">Publish to Discord:</lanel>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_discord" value="1">
-                                                    </div>
-                                                    <script>
-                                                        
-                                                        $('#tictac_discord').on('change', function() {
-                                                            if ( $(this).is(':checked') )
-                                                                $('#tictac_discord').val(1);
-                                                            else
-                                                                $('#tictac_discord').val(0);
-                                                        });
-                                                            
-                                                    </script>
-                                                        
-                                                </div>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="tictac_start">Enable Tic Tac Toe</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_start" value="1">
-                                                    </div>
-                                                    <script>
-                                                        $('#tictac_start').on('change', function() {
-                                                            if ( $(this).is(':checked') )
-                                                                $('#tictac_start').val(1);
-                                                            else
-                                                                $('#tictac_start').val(0);
-
-                                                            saveConfigChanges();
-                                                        });
-                                                    </script>
-                                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Tic Tac Toe -->
                                     <!-- Start save Config -->
                                     <div class="">
                                         <div id="saveConfigChanges" class="small-box text-bg-danger hover-hand">
@@ -987,7 +520,7 @@
 
     <script>
         // Replace with a unique identifier for each site - for themes
-        var themeStorageName = 'WS014-46214656';
+        var themeStorageName = 'SC001-55135009';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
@@ -1020,8 +553,6 @@
         var deviceModelName;
         
         var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
-        configJSONAttNumbers.push( "t_measure" );
-        configJSONAttNumbers.push( "maxBrightness", "timeZone" );
 
         // Handling Theme
         var storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
@@ -1197,9 +728,6 @@
                 }
             });
 
-            setInterval(() => { 
-                loadDeviceDisplayData().then(result => { if (result === true) { $("#moreDetailsRow .loading-mask").toggleClass("d-none"); } });
-            }, 5000);
         }
 
         function RSSIFormatter( rssi )
@@ -1228,8 +756,6 @@
         async function loadDeviceConfig() {
             let listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
             let listOfspecialButtons = [ 'wifi_static' ];
-            listOfspecialButtons.push( "t_measure" );
-            listOfspecialsChecked.push( "timeZone" );
             
             let data;
             data = await loadJSON('/config.json');
@@ -1251,25 +777,10 @@
                 if ( listOfspecialButtons.includes(key) )
                     window['set_'+key](value);
 
-                if ( key === "maxBrightness")
-                    $('#brightnessValue').text(value);
 
                 $('#' + key).val(value);
             });
 
-            return true;
-        }
-
-        async function loadDeviceDisplayData() {
-            // Load Device Info Card	
-            
-            let jsonDisplayData;
-            jsonDisplayData = await loadJSON('/display');
-            
-            $('#brightnessValue').text(jsonDisplayData['Brightness']);
-            $('#maxBrightness').val(jsonDisplayData['Brightness']);
-            $('#displayColor').val(jsonDisplayData['displayColor']);
-            
             return true;
         }
 
@@ -1356,7 +867,7 @@
         async function saveConfig( device )
         {
             // TicTacStateOn | tictac_start, MQTTstateOn | mqtt_start, WhookStateOn | webLoc_start : value to set ON = 1, OFF = 0
-            var deviceRunServicesConfigJSON = {"mqtt_start": "MQTTstateOn", "webLoc_start": "WhookStateOn", "tictac_start":"TicTacStateOn"};
+            var deviceRunServicesConfigJSON = {"mqtt_start": "MQTTstateOn", "webLoc_start": "WhookStateOn", "tictac_start":"TicTacStateOn", "displayON":"displayON"};
 
             // Compare to Blank config.json for this device if we have all fields
             //$.getJSON( jsonConfigBlankFolder+configDisplayDevices[device]['configBlankFile'], function(data) {  
@@ -1542,31 +1053,6 @@
 
         }
     
-        async function updateDeviceDisplay( what, value )
-        {
-            let payloadDisplay = {};
-            let tmpurl = '/display';
-            payloadDisplay[what] = value;
-            $.ajax({
-                url: tmpurl,
-                type: 'POST',
-                data: payloadDisplay,
-                dataType: 'json',
-                success: function(response) {
-                    document.getElementById('backdrop').style.display = 'none';
-                    //type, toastID, title, message, titleText = ''
-                    // This is success of PHP, we need to check Device response
-                    if ( response.hasOwnProperty("success") )
-                        showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
-                    else if (response.hasOwnProperty('Error') )
-                        showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
-                },
-                error: function(error) {
-                    document.getElementById('backdrop').style.display = 'none';
-                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
-                }
-            });
-        }
         // Nav Sidebar and Bottom TAB control
         document.addEventListener('DOMContentLoaded', function() {
             var sidebarNavLinks = document.querySelectorAll('.sidebar-menu .nav-link');
@@ -1913,6 +1399,7 @@
             $('#saveWiFiChanges').on('click', function() {
                 saveConfigChanges();
             });
+
         });
 
         // Color Mode Toggler

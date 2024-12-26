@@ -267,7 +267,7 @@
                                     <!-- @endif -->
                                 </div> <!-- /.row -->
                                 <script>
-                                var tUnit = " &#8451;";
+                                var tUnit = " &#8451;"; // &#8457; F 
                                 var pUnit = " hPa";
                                 $(document).ready(function() {
 
@@ -402,6 +402,24 @@
                                                 </div>
                                             </div>
                                             <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="displayON">Display status:</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="displayON" value="1">
+                                                    </div>
+                                                    <script>
+                                                        
+                                                        $('#displayON').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#displayON').val(1);
+                                                            else
+                                                                $('#displayON').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                            
+                                                    </script>
+                                                </div>
                                                 <!-- Brightness Slider -->
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-7" for="maxBrightness">Brightness:</label>
@@ -464,8 +482,8 @@
                                                 <!-- @endif -->
                                                 <!-- Timezone Setup -->
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-7" for="timeZone">Timezone:</label>
-                                                    <div class="col-5 d-flex justify-content-end">
+                                                    <label class="input-group-text-sm col-7 col-md-6" for="timeZone">Timezone:</label>
+                                                    <div class="col-5 col-md-6 d-flex justify-content-end">
                                                         <select class="form-select" id="timeZone" name="timeZone">
                                                             <option value="-12">(GMT -12) Baker Island</option>
                                                                 <option value="-11">(GMT -11) Pago Pago</option>
@@ -503,11 +521,17 @@
                                                     </div>
                                                 </div>
                                                 <!-- Simple Text Input -->
-                                                <div class="row d-flex align-items-center mb-3">
+                                                <div class="row d-flex align-items-center mb-4">
                                                     <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
+                                                    <div class="d-flex align-items-center justify-content-ends col-8">
+                                                        <input type="text" class="form-control form-control-sm text-center" id="messageDisplay" name="messageDisplay" value="" placeholder="Message to Display">
+                                                        <button class="btn btn-sm btn-outline-success" type="button" id="btn_messageDisplay" onClick="updateDeviceDisplay('messageDisplay', $('#messageDisplay').val());">&nbsp;<i class="bi bi-wifi"></i></button>										
+                                                    </div>
+                                                    <!-- @if exclude -->
                                                     <div class="col-8 d-flex justify-content-end">
                                                         <input type="text" class="form-control" id="messageDisplay" name="messageDisplay" placeholder="Enter text">
                                                     </div>
+                                                    <!-- @endif -->
                                                 </div>
                                                 <script>
                                                     $('#displayColor').on('input', function() {	
@@ -527,6 +551,12 @@
                                                     */
                                                     
                                                 </script>
+                                                <div class="row d-flex align-items-center mb-1">
+                                                    <label class="input-group-text-sm col-7" for="messageDisplay"></label>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger" id="saveDisplayChanges" name="saveDisplayChanges">Permanent Save</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -577,6 +607,7 @@
                         <div class="tab-pane fade" role="tabpanel" id="publish" aria-labelledby="publish-tab">
                             
                             <div class="row">
+                                <!-- @if MQTT -->
                                 <div class="col-md-6 mb-2 px-1">
                                     <!-- Start : MQTT -->
                                     <div mobile-colapsed="false" class="card card-warning">
@@ -682,7 +713,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- @endif -->
                                 <div class="col-md-6 px-1">
+                                    <!-- @if WEBHOOK -->
                                     <div class="col-md-12 mb-2">
                                         <!-- Start Webhook -->
                                         <div mobile-colapsed="true" class="card card-warning">
@@ -706,6 +739,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- @endif -->
+                                    <!-- @if DISCORD_WEBHOOK -->
                                     <div class="col-md-12 mb-2">
                                         <!-- Start Discord Webhook -->
                                         <div mobile-colapsed="true" class="card card-warning">
@@ -728,7 +763,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
+                                    </div>
+                                    <!-- @endif -->
+                                    <!-- @if PUBLISHING -->
                                     <div class="col-md-12 mb-2">
                                         <!-- Start Publishing -->
                                             <div mobile-colapsed="true" class="card card-warning">
@@ -774,6 +811,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- @endif -->
                                 </div>
                             </div>
                             <!-- End of Setup first row -->
@@ -797,8 +835,8 @@
                                                     <input type="hidden" id="t_measure" value="">
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                         <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(0);" id="t_measure0" value="0">℃</label>
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(1);" id="t_measure1" value="1">℉</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(0);" id="t_measure0" value="0">&deg;C</label>
+                                                            <label class="btn btn-sm btn-secondary" onClick="set_t_measure(1);" id="t_measure1" value="1">&deg;F</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -951,9 +989,30 @@
                                     </div>
                                     <!-- End Switch & TicTac module setup -->
                                     <!-- @endif -->
+                                    <!-- @if STERGO_CORE -->
+                                    <!-- Start Stergo Core module setup -->
+                                    <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title" id="StergoCoreModuleTitle"><!-- @echo DEVICENAME --></h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi "></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-5">Device Name</span>
+                                                    <div class="form-check form-switch col-7 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Stergo Core module setup -->
+                                    <!-- @endif -->
                                 </div>
                                 
                                 <div class="col-md-6 px-1">
+                                    <!-- @if TIC_TAC_TOE -->
                                     <!-- Start Tic Tac Toe -->
                                     <div class="col-md-12 mb-2">
                                         <div mobile-colapsed="true" class="card card-success">
@@ -985,7 +1044,7 @@
                                                         
                                                 </div>
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="tictac_discord">Publish to Discord:</lanel>
+                                                    <label class="input-group-text-sm col-9" for="tictac_discord">Publish to Discord:</label>
                                                     <div class="form-check form-switch col-3 d-flex justify-content-end">
                                                             <input class="form-check-input large-switch" type="checkbox" id="tictac_discord" value="1">
                                                     </div>
@@ -999,7 +1058,6 @@
                                                         });
                                                             
                                                     </script>
-                                                        
                                                 </div>
                                                 <div class="row d-flex align-items-center mb-3">
                                                     <label class="input-group-text-sm col-9" for="tictac_start">Enable Tic Tac Toe</label>
@@ -1022,6 +1080,7 @@
                                         </div>
                                     </div>
                                     <!-- End Tic Tac Toe -->
+                                    <!-- @endif -->
                                     <!-- Start save Config -->
                                     <div class="">
                                         <div id="saveConfigChanges" class="small-box text-bg-danger hover-hand">
@@ -1382,7 +1441,7 @@
         configJSONAttNumbers.push( "p_measure", "p_adjust", "pa_unit" );
         // @endif
         // @if DISPLAY
-        configJSONAttNumbers.push( "maxBrightness", "timeZone" );
+        configJSONAttNumbers.push( "maxBrightness", "timeZone", "displayON" );
         // @endif
 
         // Handling Theme
@@ -1583,7 +1642,7 @@
             // @if DISPLAY
             setInterval(() => { 
                 loadDeviceDisplayData().then(result => { if (result === true) { $("#moreDetailsRow .loading-mask").toggleClass("d-none"); } });
-            }, 5000);
+            }, 20000);
             // @endif
         }
 
@@ -1621,7 +1680,7 @@
             listOfspecialButtons.push( "pa_unit", "p_measure" );
             // @endif
             // @if DISPLAY
-            listOfspecialsChecked.push( "timeZone" );
+            listOfspecialsChecked.push( "timeZone", "displayON" );
             // @endif
             
             let data;
@@ -1650,8 +1709,10 @@
                 if ( listOfspecialButtons.includes(key) )
                     window['set_'+key](value);
 
+                // @if DISPLAY
                 if ( key === "maxBrightness")
                     $('#brightnessValue').text(value);
+                // @endif
 
                 $('#' + key).val(value);
             });
@@ -1659,6 +1720,7 @@
             return true;
         }
 
+        // @if DISPLAY
         async function loadDeviceDisplayData() {
             // Load Device Info Card	
             
@@ -1673,10 +1735,15 @@
             $('#brightnessValue').text(jsonDisplayData['Brightness']);
             $('#maxBrightness').val(jsonDisplayData['Brightness']);
             $('#displayColor').val(jsonDisplayData['displayColor']);
+
+            if ( jsonDisplayData['displayON'] == 1 )
+                $('#displayON').prop('checked', true);
+            else
+                $('#displayON').prop('checked', false)
             
             return true;
         }
-
+        // @endif
 
         async function loadDeviceInfoTable() {
             // Load Device Info Card	
@@ -1771,7 +1838,7 @@
         async function saveConfig( device )
         {
             // TicTacStateOn | tictac_start, MQTTstateOn | mqtt_start, WhookStateOn | webLoc_start : value to set ON = 1, OFF = 0
-            var deviceRunServicesConfigJSON = {"mqtt_start": "MQTTstateOn", "webLoc_start": "WhookStateOn", "tictac_start":"TicTacStateOn"};
+            var deviceRunServicesConfigJSON = {"mqtt_start": "MQTTstateOn", "webLoc_start": "WhookStateOn", "tictac_start":"TicTacStateOn", "displayON":"displayON"};
 
             // Compare to Blank config.json for this device if we have all fields
             //$.getJSON( jsonConfigBlankFolder+configDisplayDevices[device]['configBlankFile'], function(data) {  
@@ -2359,6 +2426,13 @@
             $('#saveWiFiChanges').on('click', function() {
                 saveConfigChanges();
             });
+
+            // @if DISPLAY
+            // Save changes then reload config.json
+            $('#saveDisplayChanges').on('click', function() {
+                saveConfigChanges();
+            });
+            // @endif
         });
 
         // Color Mode Toggler

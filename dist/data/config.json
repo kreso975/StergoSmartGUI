@@ -20,7 +20,7 @@
     "wifi_gateway": "",
     "wifi_subnet": "",
     "wifi_DNS": "",
-    "mqtt_start": 0,
+    "mqtt_start": 1,
     "mqtt_interval": 1800,
     "webLoc_start": 0,
     "webLoc_interval": 60,
@@ -40,10 +40,11 @@
     "mqtt_Humidity": "iot/things/AtticClock/Humidity",
     "mqtt_Temperature": "iot/things/AtticClock/Temperature",
     "mqtt_Pressure": "",
-    "mqtt_switch": "iot/things/AtticClock/displayON",
+    "mqtt_displayON": "iot/things/AtticClock/displayON",
     "mqtt_Brightness": "iot/things/AtticClock/Brightness",
     "mqtt_Color": "iot/things/AtticClock/Color",
+    "displayON": 1,
     "maxBrightness": 30,
-    "displayColor": "#FF0000",
+    "displayColor": "#0000FF",
     "timeZone": 1
 }
