@@ -25,19 +25,21 @@ var finalBuildMessage = '';
 const finalContext = {};
 
 
-const device = 'SC001';
+const device = 'LS001';
 const onNasOrDevice = 'production'; // production || development
 
 
 // Preprocess DEVICENAME and DEVICEICON separately
 var configDisplayDevices = {
     SC001: { title: "Stergo Core module", icon: "bi-toggles" },
+    TT001: { title: "Tic-Tac-Toe module", icon: "bi-toggles" },
     RS001: { title: "Relay Switch module", icon: "bi-toggles" },
     PS001: { title: "Power Switch module", icon: "bi-plugin" },
-    LS001: { title: "Light Switch module", icon: "bi-lightbulb-fill" }
+    LS001: { title: "Light Switch module", icon: "bi-lightbulb-fill" },
+    WS014: { title: "Weather Stand Clock", icon: "bi-alarm" }
 }
 
-const deviceName = configDisplayDevices[device]?.title || 'Unknown Device';
+const deviceName = configDisplayDevices[device]?.title || 'Weather Module';
 const deviceIcon = configDisplayDevices[device]?.icon || 'bi-question-circle';
 const randomNumber = Math.floor(10000000 + Math.random() * 90000000);
 
@@ -46,7 +48,9 @@ finalContext['THEME_STORAGE_NAME'] = `var themeStorageName = '${device}-${random
 
 const context = {
     SC001: [onNasOrDevice, 'STERGO_CORE'],
+    TT001: [onNasOrDevice, 'STERGO_CORE', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE'],
     RS001: [onNasOrDevice, 'SWITCH', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
+    LS001: [onNasOrDevice, 'SWITCH', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
     WS001: [onNasOrDevice, 'WEATHER', 'AIR_PRESSURE', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
     WS003: [onNasOrDevice],
     WS004: [onNasOrDevice, 'WEATHER', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'],
@@ -55,7 +59,8 @@ const context = {
 };
 
 // Ensure all context variables are either true or false
-const allKeys = ['production', 'development', 'exclude', 'DISPLAY', 'WEATHER', 'AIR_PRESSURE', 'SWITCH', 'STERGO_CORE', 'MQTT', 'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'];
+const allKeys = ['production', 'development', 'exclude', 'DISPLAY', 'WEATHER', 'AIR_PRESSURE', 'SWITCH', 'STERGO_CORE', 'MQTT', 
+            'WEBHOOK', 'DISCORD_WEBHOOK', 'TIC_TAC_TOE', 'PUBLISHING'];
 
 // Set all keys to false initially
 allKeys.forEach(key => {

@@ -127,6 +127,110 @@
                             <!--begin::Row main-->
                             <h5 id="MainTitle" class="mb-2"><strong>-</strong></h5> 
                             <div class="row">
+                                <!--Start::Switches-->
+                                <div id="switchID" class="row"></div><!--end::Switches-->
+                                <script>
+                                    $(document).ready(function() {
+                                        var switchID = $('#switchID');
+                                        var switchVarsSuffix = 1;
+                                        var urlSwitch = '';
+                                        
+
+                                        var content = `
+                                        <div id="switch_${switchVarsSuffix}" class="col-12 col-sm-6 col-md-3">
+                                            <div class="info-box">
+                                                <span onclick="submitSwitch${switchVarsSuffix}('TOGGLE')" id="iconBack${switchVarsSuffix}" class="info-box-icon shadow-sm hover-hand">
+                                                    <i class="bi bi-lightbulb-fill"></i>
+                                                </span>
+                                                <div class="info-box-content">`;
+                                        content += `    <div class="btn-group float-end">
+                                                        <button type="button" onclick="submitSwitch${switchVarsSuffix}('ON')" name="stateOn" id="SWITCH_ON${switchVarsSuffix}" value="ON" class="btn">ON</button>
+                                                        <button type="button" onclick="submitSwitch${switchVarsSuffix}('OFF')" name="stateOff" id="SWITCH_OFF${switchVarsSuffix}" value="OFF" class="btn">OFF</button>
+                                                    </div>
+                                                </div> <!-- /.info-box-content -->
+                                            </div> <!-- /.info-box -->
+                                        </div> <!-- /.col -->
+                                        <script>
+                                        var SWITCH_status${switchVarsSuffix};
+                                        var SWITCH_active${switchVarsSuffix} = 1;
+
+                                        function submitSwitch${switchVarsSuffix}(a) {
+                                            if ( a === 'TOGGLE' )
+                                            {
+                                                if ( $('#SWITCH_ON${switchVarsSuffix}').is(':disabled') ) 
+                                                    a = 'OFF';
+                                                if ( $('#SWITCH_OFF${switchVarsSuffix}').is(':disabled') )
+                                                    a = 'ON';
+                                            }
+
+                                            var mrkl = '${urlSwitch}/POWER?state=' + a;
+                                            $.ajax({
+                                                url: mrkl,
+                                                type: 'GET',
+                                                success: function (data) {
+                                                    if ('Error' in data) {
+                                                        console.log('Error Power: ' + JSON.stringify(data));
+                                                    } else {
+                                                        console.log('Power: ' + JSON.stringify(data));
+                                                        switchCheckStatus${switchVarsSuffix}();
+                                                    }
+                                                },
+                                                error: function (data) {
+                                                    console.log('Power SubmitProblem');
+                                                    switchCheckStatus${switchVarsSuffix}();
+                                                },
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false
+                                            });
+                                        }
+
+                                        function switchCheckStatus${switchVarsSuffix}() {
+                                            $.getJSON('${urlSwitch}/POWER', function(data, status, xhr) {
+                                                if (status == "success") {
+                                                    SWITCH_status${switchVarsSuffix} = data.POWER;
+                                                    $('#SWITCH_OFFLINE').hide();
+                                                    $('#SWITCH').show();
+                                                    if (SWITCH_status${switchVarsSuffix} === "ON") {
+                                                        $('#iconBack${switchVarsSuffix}').removeClass('text-bg-secondary').addClass('text-bg-warning');
+                                                        $('#SWITCH_ON${switchVarsSuffix}').addClass('btn-success active').attr('disabled', true);
+                                                        $('#SWITCH_OFF${switchVarsSuffix}').addClass('btn-secondary').attr('disabled', false);
+                                                    } else {
+                                                        $('#iconBack${switchVarsSuffix}').removeClass('text-bg-warning').addClass('text-bg-secondary');
+                                                        $('#SWITCH_OFF${switchVarsSuffix}').addClass('btn-secondary active').attr('disabled', true);
+                                                        $('#SWITCH_ON${switchVarsSuffix}').addClass('btn-success').attr('disabled', false);
+                                                    }
+                                                } else if (status == "timeout" || status == "error" || status == "parsererror") {
+                                                    console.log('Error Power: An error occurred');
+                                                    showHidePower1${switchVarsSuffix}();
+                                                } else {
+                                                    console.log('Error Power: datatosend did not change');
+                                                    showHidePower1${switchVarsSuffix}();
+                                                }
+                                            }).fail(function(err) {
+                                                console.log("Check Dedlock Power status error: " + JSON.stringify(err));
+                                                showHidePower1${switchVarsSuffix}();
+                                            });
+                                        }
+
+                                        function showHidePower1${switchVarsSuffix}() {
+                                            $('#SWITCH${switchVarsSuffix}').hide();
+                                            $('#SWITCH_OFFLINE').show();
+                                        }
+
+                                        // Load JSON every 5 seconds
+                                        setInterval(switchCheckStatus${switchVarsSuffix}, 5000);
+
+                                        switchCheckStatus${switchVarsSuffix}();
+                                        <\/script>`;
+
+                                        switchID.append(content);
+                                        switchVarsSuffix++;
+
+                                            
+                                    });
+
+                                </script>
                                 <!--begin::Row-->
                                 <div class="row g-1 mb-3">
                                 </div>  
@@ -174,7 +278,179 @@
                         <div class="tab-pane fade" role="tabpanel" id="publish" aria-labelledby="publish-tab">
                             
                             <div class="row">
+                                <div class="col-md-6 mb-2 px-1">
+                                    <!-- Start : MQTT -->
+                                    <div mobile-colapsed="false" class="card card-warning">
+                                        <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                            <h3 class="card-title"><i class="bi bi-activity"></i> MQTT</h3>
+                                            <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                        </div>
+                                        <div class="card-body" style="box-sizing: border-box; display: block;">
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <label class="input-group-text-sm col-8" for="mqtt_interval">Measure Interval (sec)</label>
+                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_interval" name="mqtt_interval" maxlength="5" value="">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Client ID</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientName" name="mqtt_clientName" maxlength="32" value="" placeholder="Client Name">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Username</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_clientUsername" name="mqtt_clientUsername" maxlength="64" value="" placeholder="Username">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Password</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="password" class="form-control form-control-sm" id="mqtt_clientPassword" name="mqtt_clientPassword" maxlength="64" value="" placeholder="Password">	
+                                                    <i class="bi bi-eye" id="toggleMQTTPassword" style="cursor: pointer; margin-left: -30px; z-index: 10;"></i>
+                                                </div>
+                                                <script>
+                                                    const passwordMQTTField = document.getElementById('mqtt_clientPassword');
+                                                    const toggleMQTTButton = document.getElementById('toggleMQTTPassword');
+
+                                                    toggleMQTTButton.addEventListener('click', function () {
+                                                        if ( passwordMQTTField.getAttribute('type') === 'password' )
+                                                        {
+                                                            passwordMQTTField.setAttribute('type', 'text');
+                                                            $('#toggleMQTTPassword').removeClass('bi-eye').addClass('bi-eye-slash');
+                                                        } else {
+                                                            passwordMQTTField.setAttribute('type', 'password');
+                                                            $('#toggleMQTTPassword').removeClass('bi-eye-slash').addClass('bi-eye');
+                                                        }
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-2">
+                                                <span class="input-group-text-sm col-4">Server</span>
+                                                <div class="col-8 d-flex align-items-center justify-content-ends">
+                                                    <input type="ip" class="form-control form-control-sm" id="mqtt_server" name="mqtt_server" maxlength="32" value="" placeholder="Server address">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex align-items-center mb-1">
+                                                <span class="input-group-text-sm col-8">Port</span>
+                                                <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                    <input type="text" class="form-control form-control-sm text-end" id="mqtt_port" name="mqtt_port" maxlength="6" value="" placeholder="MQTT Port">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">My Topic</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_myTopic" name="mqtt_myTopic" maxlength="120" value="" placeholder="My Topic">
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-end" id="MQTTswitch">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 1</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch" name="mqtt_switch" maxlength="120" value="" placeholder="Switch Topic">
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-end" id="MQTTswitch2">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Switch 2</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_switch2" name="mqtt_switch2" maxlength="120" value="" placeholder="Switch 2 Topic">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-6 px-1">
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Webhook -->
+                                        <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi bi-activity"></i> Webhook</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-1">
+                                                    <label class="input-group-text-sm col-8" for="webLoc_interval">Measure Interval (sec)</label>
+                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm text-end" id="webLoc_interval" name="webLoc_interval" maxlength="5" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Server</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control form-control-sm" id="webLoc_server" name="webLoc_server" value="" placeholder="Server address">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Discord Webhook -->
+                                        <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-activity"></i> Discord Webhook</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label">Webhook URL</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control  form-control-sm" id="discord_url" name="discord_url" value="" placeholder="Discord URL">
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex justify-content-end">
+                                                    <label class="col-sm-4 col-md-12 col-lg-12 col-xl-12 col-xxl-3 col-form-label ">Discord avatar</label>
+                                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 col-xxl-9">
+                                                        <input type="url" class="form-control  form-control-sm" id="discord_avatar" name="discord_avatar" value="" placeholder="Discord Avatar URL">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <!-- Start Publishing -->
+                                            <div mobile-colapsed="true" class="card card-warning">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-activity"></i> Publishing</h3>
+                                                <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="mqtt_start">Enable MQTT</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <input class="form-check-input large-switch" type="checkbox" id="mqtt_start" value="1">
+                                                    </div>
+                                                    <script>
+                                                        $('#mqtt_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#mqtt_start').val(1);
+                                                            else
+                                                                $('#mqtt_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                                <div class="row d-flex align-items-center">
+                                                    <label class="input-group-text-sm col-9" for="webLoc_start">Enable Webhook</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="webLoc_start" name="webLoc_start" value="0">
+                                                    </div>
+
+                                                    <script>
+                                                        $('#webLoc_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#webLoc_start').val(1);
+                                                            else
+                                                                $('#webLoc_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- End of Setup first row -->
@@ -184,11 +460,11 @@
                                     <input type="hidden" name="deviceID" id="deviceID" value="1">
                                     <input type="hidden" name="deviceType" id="deviceType" value="1">
                                     <input id="moduleName" name="moduleName" value="" hidden="">
-                                    <!-- Start Stergo Core module setup -->
+                                    <!-- Start Switch & TicTac module setup -->
                                     <div class="col-md-12 mb-2" id="SwitchTicTacSetupModule">
                                         <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title" id="StergoCoreModuleTitle"><i class="bi bi-toggles"></i> Stergo Core module</h3>
+                                                <h3 class="card-title" id="SwitchTicTacModuleTitle"><i class="bi bi-lightbulb-fill"></i> Light Switch module</h3>
                                                 <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi "></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
@@ -201,10 +477,77 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End Stergo Core module setup -->
+                                    <!-- End Switch & TicTac module setup -->
                                 </div>
                                 
                                 <div class="col-md-6 px-1">
+                                    <!-- Start Tic Tac Toe -->
+                                    <div class="col-md-12 mb-2">
+                                        <div mobile-colapsed="true" class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                    <h3 class="card-title"><i class="bi bi-hash"></i> Tic Tac Toe</h3>
+                                                    <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <span class="input-group-text-sm col-9">Invite to Play Interval (min):</span>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                        <input type="text" class="form-control form-control-sm text-end" id="tictac_interval" name="tictac_interval" maxlength="3" value="" placeholder="60">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="tictac_webhook">Publish to Webhook:</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_webhook" value="0">
+                                                    </div>
+                                                    <script>
+                                                        $('#tictac_webhook').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_webhook').val(1);
+                                                            else
+                                                                $('#tictac_webhook').val(0);
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="tictac_discord">Publish to Discord:</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_discord" value="1">
+                                                    </div>
+                                                    <script>
+                                                        
+                                                        $('#tictac_discord').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_discord').val(1);
+                                                            else
+                                                                $('#tictac_discord').val(0);
+                                                        });
+                                                            
+                                                    </script>
+                                                </div>
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="tictac_start">Enable Tic Tac Toe</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="tictac_start" value="1">
+                                                    </div>
+                                                    <script>
+                                                        $('#tictac_start').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#tictac_start').val(1);
+                                                            else
+                                                                $('#tictac_start').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                    </script>
+                                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Tic Tac Toe -->
                                     <!-- Start save Config -->
                                     <div class="">
                                         <div id="saveConfigChanges" class="small-box text-bg-danger hover-hand">
@@ -491,7 +834,7 @@
          
         <footer class="app-footer"> <!--begin::To the end-->
             <div class="float-end d-none d-sm-inline">K.K.</div> <!--end::To the end--> <!--begin::Copyright--> <strong>
-                Copyright &copy; 2014-2024&nbsp;
+                Copyright &copy; 2014-2025&nbsp;
                 Stergo Smart.
             </strong>
             All rights reserved.
@@ -520,7 +863,7 @@
 
     <script>
         // Replace with a unique identifier for each site - for themes
-        var themeStorageName = 'SC001-55135009';
+        var themeStorageName = 'LS001-51733853';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";

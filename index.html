@@ -710,6 +710,26 @@
                                                 </div>
                                             </div>
                                             <!-- @endif -->
+                                            <!-- @if DISPLAY -->
+                                            <div class="row d-flex justify-content-end" id="MQTT_DisplayON">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Display ON/OFF</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_displayON" name="mqtt_displayON" maxlength="120" value="" placeholder="Display On/Off">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Brightness">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Brightness</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Brightness" name="mqtt_Brightness" maxlength="120" value="" placeholder="Display Brightness">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Color">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Color</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Color" name="mqtt_Color" maxlength="120" value="" placeholder="Display Color">
+                                                </div>
+                                            </div>
+                                            <!-- @endif -->
                                         </div>
                                     </div>
                                 </div>
@@ -826,7 +846,7 @@
                                     <div class="col-md-12 mb-2" id="WeatherSetupModule">
                                         <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-thermometer-sun"></i> Weather module</h3>
+                                                <h3 class="card-title" id="WeatherModuleTitle"><!-- @echo DEVICENAME --></h3>
                                                 <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
@@ -1367,7 +1387,7 @@
          
         <footer class="app-footer"> <!--begin::To the end-->
             <div class="float-end d-none d-sm-inline">K.K.</div> <!--end::To the end--> <!--begin::Copyright--> <strong>
-                Copyright &copy; 2014-2024&nbsp;
+                Copyright &copy; 2014-2025&nbsp;
                 Stergo Smart.
             </strong>
             All rights reserved.
