@@ -14,31 +14,29 @@
 <img src="https://img.shields.io/badge/node-^18.20.4%20%7C%7C%20^20.16.0%20%7C%7C%20^22.5.1-brightgreen"> &nbsp;
 [![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/kreso975)
 
-This is GUI for StergoSmart project running on IoT devices 
-
+This is GUI for StergoSmart project running on IoT devices  
+It compiles index.html and captive.html
 <br><br>
   
   
-## 💡 Switch
+
 > [!NOTE]
 > For compiling GUI in order to optimize code and code size, it is required to install node module preprocess https://www.npmjs.com/package/preprocess  
-> Inside your project repository
-> $ npm install --save preprocess
->
+> Inside your project repository  
+> $ npm install --save preprocess  
+>  
+> Github https://github.com/jsoverson/preprocess  
+>  
 
 > [!TIP]
-> How to setup Discord Webhooks: [link](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+> In file build.js Change:  
+> const device = 'LS001';  - WHERE LS001 is Device Type
+> const onNasOrDevice = 'production'; // production || development  
+>  
 
 > [!IMPORTANT]
-> Use HTTP or MQTT not both for same accessory.  
->   
-> Parameters required in Config:  
-> 
-> deviceType = 'Switch',  
-> deviceName = 'Name your Accessory',  
-> deviceID = 'Put something unique / chars and numbers',  
-> urlON = 'URL that triggers your device to change state to ON',  
-> urlOFF = 'URL that triggers your device to change state to OFF'
+> Build Captive nad index:  
+> command: node build  
 
 > [!CAUTION]
 > Parameter:
@@ -50,19 +48,13 @@ This is GUI for StergoSmart project running on IoT devices
 ```
 <br><br>  
   
-
+## 💡 Switch
 ## 🌡️ Temperature and Humidity sensor
+## ⚙️ Config example
 > [!NOTE]
 > Sensor - Read JSON Or MQTT for Temperature, Humidity  
 >   
 
-<br>
-
-## ⚙️ Config example
-
-<br><br>
-
-## ⚙️ Config params
 
 | **Param** 	| **Description** 	| **Param needed** 	|
 |---	|---	|:---:	|
@@ -70,4 +62,3 @@ This is GUI for StergoSmart project running on IoT devices
 
 <br><br>  
   
-
