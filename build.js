@@ -216,7 +216,16 @@ if (settings.insertENVvalues === true) {
     envContent.split('\n').forEach(line => {
         const [key, value] = line.split('=').map(item => item.trim());
         if (key && value) {
-            envSettings[key] = value.replace(/"/g, '');
+            if (value.startsWith('[') && value.endsWith(']')) {
+                // Parse array-like structure
+                envSettings[key] = value.slice(1, -1).split(',').map(item => item.trim());
+            } else if (value === 'true' || value === 'false') {
+                envSettings[key] = value === 'true';
+            } else if (!isNaN(value)) {
+                envSettings[key] = Number(value);
+            } else {
+                envSettings[key] = value.replace(/"/g, '');
+            }
         }
     });
 }
