@@ -15,19 +15,42 @@
   FE: WS014 = WeatherStation 1 = LED 8x32, 4 = DHT22
 */
 
-const fs = require('fs');
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
+
 //const zlib = require('zlib'); //If using node zlib not 7-zip | npm install zlib
-const preprocess = require('preprocess');
-const { exec } = require('child_process');
+import { preprocess as _preprocess } from 'preprocess';
+import { exec } from 'child_process';
+
 var finalBuildMessage = '';
+
+// Read settings.inc file
+const settingsContent = readFileSync('settings.ini', 'utf-8');
+
+// Parse settings.inc content [String, number, boolean, array like]
+const settings = {};
+settingsContent.split('\n').forEach(line => {
+    const [key, value] = line.split('=').map(item => item.trim());
+    if (key && value) {
+        if (value.startsWith('[') && value.endsWith(']')) {
+            // Parse array-like structure
+            settings[key] = value.slice(1, -1).split(',').map(item => item.trim());
+        } else if (value === 'true' || value === 'false') {
+            settings[key] = value === 'true';
+        } else if (!isNaN(value)) {
+            settings[key] = Number(value);
+        } else {
+            settings[key] = value.replace(/"/g, '');
+        }
+    }
+});
+
+// Assign parsed values to variables
+const device = settings.device;
+const onNasOrDevice = settings.environment;
+
 
 // in finalContext we will add all that needs to change
 const finalContext = {};
-
-
-const device = 'LS001';
-const onNasOrDevice = 'production'; // production || development
-
 
 // Preprocess DEVICENAME and DEVICEICON separately
 var configDisplayDevices = {
@@ -74,17 +97,17 @@ context[device].forEach(key => {
 
 
 // Preprocess HTML file
-const htmlInput = fs.readFileSync('index.html', 'utf8');
-const htmlOutput = preprocess.preprocess(htmlInput, finalContext, { type: 'html' });
+const htmlInput = readFileSync('index.html', 'utf8');
+const htmlOutput = _preprocess(htmlInput, finalContext, { type: 'html' });
 
 // Preprocess the JavaScript inside <script> tags separately
 const scriptRegex = /<script>([\s\S]*?)<\/script>/g;
 const processedOutput = htmlOutput.replace(scriptRegex, (match, p1) => {
-    const processedScript = preprocess.preprocess(p1, finalContext, { type: 'js' });
+    const processedScript = _preprocess(p1, finalContext, { type: 'js' });
     return `<script>${processedScript}</script>`;
 });
 
-fs.writeFileSync('dist/index.html', processedOutput);
+writeFileSync('dist/index.html', processedOutput);
 
 /* IF USING Node ZLIB
 // Compress the HTML file to .gz using zlib with ultra compression
@@ -99,8 +122,8 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 
 // Check if the .gz file exists and remove it
 const gzFilePath = 'dist/data/index.html.gz';
-if (fs.existsSync(gzFilePath)) {
-    fs.unlinkSync(gzFilePath);
+if (existsSync(gzFilePath)) {
+    unlinkSync(gzFilePath);
     //console.log('Existing .gz file removed');
     finalBuildMessage += 'index.html : Existing .gz file removed\n';
 }
@@ -124,16 +147,16 @@ exec(command, (err, stdout, stderr) => {
 finalBuildMessage += 'index.html : Build complete!\n\n';
 
 // Preprocess HTML file
-const htmlInput2 = fs.readFileSync('captive.html', 'utf8');
-const htmlOutput2 = preprocess.preprocess(htmlInput2, finalContext, { type: 'html' });
+const htmlInput2 = readFileSync('captive.html', 'utf8');
+const htmlOutput2 = _preprocess(htmlInput2, finalContext, { type: 'html' });
 
 // Preprocess the JavaScript inside <script> tags separately
 const processedOutput2 = htmlOutput2.replace(scriptRegex, (match, p1) => {
-    const processedScript = preprocess.preprocess(p1, finalContext, { type: 'js' });
+    const processedScript = _preprocess(p1, finalContext, { type: 'js' });
     return `<script>${processedScript}</script>`;
 });
 
-fs.writeFileSync('dist/captive.html', processedOutput2);
+writeFileSync('dist/captive.html', processedOutput2);
 
 /* IF USING Node ZLIB
 // Compress the HTML file to .gz using zlib with ultra compression
@@ -148,8 +171,8 @@ input.pipe(gzip).pipe(output).on('finish', () => {
 
 // Check if the .gz file exists and remove it
 const gzFilePath2 = 'dist/data/captive.html.gz';
-if (fs.existsSync(gzFilePath2)) {
-    fs.unlinkSync(gzFilePath2);
+if (existsSync(gzFilePath2)) {
+    unlinkSync(gzFilePath2);
     //console.log('Existing .gz file removed');
     finalBuildMessage += 'captive.html : Existing .gz file removed\n';
 }
