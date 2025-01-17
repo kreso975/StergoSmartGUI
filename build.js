@@ -194,5 +194,55 @@ exec(command2, (err, stdout, stderr) => {
 //console.log('Captive.html Build complete!');
 //console.log('Build complete!');
 finalBuildMessage += 'captive.html : Build complete!\n\n';
+
+
+
+// Function to recursively resolve arrays
+function resolveArray(array) {
+    return array.flatMap(item => {
+        if (Array.isArray(settings[item])) {
+            return resolveArray(settings[item]);
+        }
+        return item;
+    });
+}
+
+// Check if insertENVvalues is true
+let envSettings = {};
+if (settings.insertENVvalues === true) {
+    // Read .env file
+    const envContent = readFileSync('.env', 'utf-8');
+
+    envContent.split('\n').forEach(line => {
+        const [key, value] = line.split('=').map(item => item.trim());
+        if (key && value) {
+            envSettings[key] = value.replace(/"/g, '');
+        }
+    });
+}
+
+// Check if generateConfigJSON is true
+if (settings.generateConfigJSON === true) {
+    const device = settings.device;
+    const configJSON = settings[`configJSON_${device}`] || settings.configJSON_SC001;
+
+    // Resolve the configJSON array
+    const resolvedConfigJSON = resolveArray(configJSON);
+
+    // Generate JSON object
+    const config = {};
+    resolvedConfigJSON.forEach(key => {
+        config[key] = envSettings[key] || settings[key];
+    });
+
+    // Save JSON object to config.json
+    writeFileSync('./dist/data/config.json', JSON.stringify(config, null, 2), 'utf-8');
+    
+    finalBuildMessage += 'config.json has been generated!\n\n';
+}
+
 finalBuildMessage += 'Build complete!\n';
 console.log(finalBuildMessage);
+
+
+
