@@ -137,7 +137,8 @@ const gzFilePath = 'dist/data/index.html.gz';
 if (existsSync(gzFilePath)) {
     unlinkSync(gzFilePath);
     //console.log('Existing .gz file removed');
-    finalBuildMessage += 'index.html : Existing .gz file removed\n';
+    
+    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : Existing .gz file removed\n';
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
@@ -146,17 +147,17 @@ const command = `${sevenZipPath} a -tgzip -mx=9 dist/data/index.html.gz dist/ind
 
 exec(command, (err, stdout, stderr) => {
     if (err) {
-        console.error(`Error compressing file: ${err.message}`);
+        finalBuildMessage +=`\x1b[31mError: \x1b[0m compressing file: ${err.message}`;
         console.error(stderr);
         return;
     }
     //console.log('File compressed successfully with ultra compression');
     //console.log(stdout);
-    finalBuildMessage += 'index.html : File compressed successfully with ultra compression\n';
+    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : File compressed successfully with ultra compression\n';
 });
 
 //console.log('Index.html Build complete!');
-finalBuildMessage += 'index.html : Build complete!\n\n';
+finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : Build complete!\n';
 
 // Preprocess HTML file
 const htmlInput2 = readFileSync('captive.html', 'utf8');
@@ -186,7 +187,7 @@ const gzFilePath2 = 'dist/data/captive.html.gz';
 if (existsSync(gzFilePath2)) {
     unlinkSync(gzFilePath2);
     //console.log('Existing .gz file removed');
-    finalBuildMessage += 'captive.html : Existing .gz file removed\n';
+    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : Existing .gz file removed\n';
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
@@ -194,18 +195,18 @@ const command2 = `${sevenZipPath} a -tgzip -mx=9 dist/data/captive.html.gz dist/
 
 exec(command2, (err, stdout, stderr) => {
     if (err) {
-        console.error(`Error compressing file: ${err.message}`);
+        finalBuildMessage += `\x1b[31mError: \x1b[0m compressing file: ${err.message}`;
         console.error(stderr);
         return;
     }
     //console.log('File compressed successfully with ultra compression');
     //console.log(stdout);
-    finalBuildMessage += 'captive.html : File compressed successfully with ultra compression\n';
+    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : File compressed successfully with ultra compression\n';
 });
 
 //console.log('Captive.html Build complete!');
 //console.log('Build complete!');
-finalBuildMessage += 'captive.html : Build complete!\n\n';
+finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : Build complete!\n';
 
 
 
@@ -265,11 +266,12 @@ if (settings.generateConfigJSON === true) {
     // Save JSON object to config.json
     writeFileSync('./dist/data/config.json', JSON.stringify(config, null, 2), 'utf-8');
     
-    finalBuildMessage += 'config.json has been generated!\n\n';
+    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mconfig.json has been generated!\n';
 }
 
-// Log the parsed settings to check if insertEmptyHistoryJSON is being read correctly 
-console.log('Parsed settings:', settings);
+// Log the parsed settings to check if read correctly 
+//console.log('Parsed settings:', settings);
+
 //
 // Check for insertEmptyHistiryJSON and create history.json if true
 //
@@ -277,12 +279,12 @@ if (settings.insertEmptyHistoryJSON) {
     try {
         const historyJSON = settings.historyJSON;
         writeFileSync('./dist/data/history.json', JSON.stringify(historyJSON, null, 2));
-        finalBuildMessage += 'history.json file has been created.\n\n';
+        finalBuildMessage += '\x1b[32mSuccess: \x1b[0mhistory.json file has been created.\n';
     } catch (error) {
-        finalBuildMessage += 'Error writing historyJSON: ' + error.message + '\n\n';
+        finalBuildMessage += '\x1b[31mError: \x1b[0m writing historyJSON: ' + error.message + '\n';
     }
 } else {
-    finalBuildMessage += 'insertEmptyHistoryJSON is set to false. No file created.\n\n';
+    finalBuildMessage += '\x1b[33mInfo: \x1b[0minsertEmptyHistoryJSON is set to false. No file created.\n';
 }
 //
 // Check for insertEmptyLogJSON and create log.json if true
@@ -291,15 +293,15 @@ if (settings.insertEmptyLogJSON) {
     try {
         const logJSON = settings.logJSON;
         writeFileSync('./dist/data/log.json', JSON.stringify(logJSON, null, 2));
-        finalBuildMessage += 'log.json file has been created.\n\n';
+        finalBuildMessage += '\x1b[32mSuccess: \x1b[0mlog.json file has been created.\n\n';
     } catch (error) {
-        finalBuildMessage += 'Error writing logJSON: ' + error.message + '\n\n';
+        finalBuildMessage += '\x1b[31mError: \x1b[0m writing logJSON: ' + error.message + '\n';
     }    
 } else {
-    finalBuildMessage += 'insertEmptyLogJSON is set to false. No file created.\n\n';
+    finalBuildMessage += '\x1b[33mInfo: \x1b[0minsertEmptyLogJSON is set to false. No file created.\n';
 }
 
-finalBuildMessage += 'Build complete!\n';
+finalBuildMessage += '\x1b[32mSuccess: \x1b[0mBuild complete!\n';
 console.log(finalBuildMessage);
 
 

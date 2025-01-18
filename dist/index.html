@@ -158,7 +158,7 @@
                                 $(document).ready(function() {
 
                                     let url;
-                                    url = fwdJsonRequest( 'WS011v02-898235', 1 );
+                                    url = 'measures.json';
 
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
@@ -209,7 +209,7 @@
                                         $(document).ready(function() { 
                                             
                                             let url;
-                                            url = fwdJsonRequest( 'WS014v01-2430370', 2 );
+                                            url = 'history.json';
 
                                             $.getJSON(url, function(jsonData) {
                                                 // Extract data for the chart
@@ -1009,7 +1009,7 @@
 
     <script>
         // Replace with a unique identifier for each site - for themes
-        var themeStorageName = 'WS001-71230896';
+        var themeStorageName = 'WS001-21626022';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
@@ -1023,7 +1023,7 @@
         var hostname = window.location.hostname;
 
         
-        var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        var serverAddress = protocol + "//" + hostname + "/";
 
         var tableDeviceLog;
         var deviceInfo;
@@ -1271,8 +1271,7 @@
             listOfspecialButtons.push( "pa_unit", "p_measure" );
             
             let data;
-            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
-            data = await loadJSON(configOnDeviceJSON);
+            data = await loadJSON('/config.json');
 
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global
@@ -1303,7 +1302,7 @@
             // Load Device Info Card	
             
             let jsonInfoData;
-            jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
+            jsonInfoData = await loadJSON('/deviceinfo.json');
             
             // Make Global
             deviceInfo = jsonInfoData.result;
@@ -1350,8 +1349,7 @@
             }
 
             let jsonLogData;
-            const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
-            jsonLogData = await loadJSON(jsonLogDataFile);
+            jsonLogData = await loadJSON('/log.json');
             var tableBody = $('#deviceLogCard tbody');
 
             const reversedData = jsonLogData.log.reverse();
@@ -1414,7 +1412,7 @@
             const linkTargetValue = $('#updateDevice').attr('link-target');
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
             let url;
-            url = serverAddress+'/include/fwdJsonRequest.php';
+            url = '/gpio?id=updateDevice';
 
             // IF we have changes
             if ( Object.keys(comparedDiff).length > 0 )
@@ -1483,7 +1481,7 @@
         function checkServerStatus()
         {
             let url;
-            urltmp = fwdJsonRequest( 'WS011v02', 4 );
+            urltmp = '/deviceinfo.json';
 
             $.ajax(
                 { url: urltmp, // Replace with your remote server URL
@@ -1514,7 +1512,7 @@
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
 
             let url;
-            url = serverAddress+'/include/fwdJsonRequest.php';
+            url = '/gpio?id='+what;
 
             try {
                 const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
@@ -1760,7 +1758,7 @@
                     form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
                     
                 let url;
-                url = serverAddress+'/include/fwdJsonRequest.php';
+                url = '/upload';
 
                 $.ajax({
                     url: url, // Upload Script
@@ -1826,7 +1824,7 @@
 
         async function scanWifi() { 
             let jsonData6;
-            jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
+            jsonData6 = '/wifiscan.json';
             
             // For Reloading WiFi files
             // Destroy previous DataTable
