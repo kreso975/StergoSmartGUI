@@ -33,6 +33,9 @@ Everything is setup in settings.ini
 > in build.js there is a setup for creating .gz, default for windows is 7zip external,  
 > but there is a code to use node library for creating .gz  
 > check the source code.  
+>  
+> For upload use SPIFFS or LittleFS  
+> Copy data folder to your Arduino project  
 
 > [!TIP]
 > In file settings.ini Change:  
