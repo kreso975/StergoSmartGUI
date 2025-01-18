@@ -1,6 +1,6 @@
 <p align="center">
 
-<img src="https://github.com/kreso975/StergoSmartGUI/blob/main/img/StergoLogo.svg" width="150">
+<img src="https://github.com/kreso975/StergoSmartGUI/blob/main/dist/img/StergoLogo.svg" width="150">
 
 </p>
 
