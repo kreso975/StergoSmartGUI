@@ -43,7 +43,10 @@ Everything is setup in settings.ini
 > [!IMPORTANT]
 > Build Captive and index:  
 > command: node build  
-> 
+>  
+> rename .env_Template to .env  
+> .env is ignored for commit so you can put sensitive data there. Use same variable names that needs to be changed  
+>  
   
   
 ## Screenshots of GUI  
