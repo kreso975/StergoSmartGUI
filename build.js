@@ -23,17 +23,26 @@ import { exec } from 'child_process';
 
 var finalBuildMessage = '';
 
+//
 // Read settings.inc file
+//
 const settingsContent = readFileSync('settings.ini', 'utf-8');
 
-// Parse settings.inc content [String, number, boolean, array like]
+// Parse settings.ini content [String, number, boolean, array like]
 const settings = {};
 settingsContent.split('\n').forEach(line => {
     const [key, value] = line.split('=').map(item => item.trim());
     if (key && value) {
         if (value.startsWith('[') && value.endsWith(']')) {
             // Parse array-like structure
-            settings[key] = value.slice(1, -1).split(',').map(item => item.trim());
+            try {
+                settings[key] = JSON.parse(value);
+            } catch (error) {
+                settings[key] = value.slice(1, -1).split(',').map(item => item.trim());
+            }
+        } else if (value.startsWith('{') && value.endsWith('}')) {
+            // Parse object-like structure
+            settings[key] = JSON.parse(value);
         } else if (value === 'true' || value === 'false') {
             settings[key] = value === 'true';
         } else if (!isNaN(value)) {
@@ -44,7 +53,10 @@ settingsContent.split('\n').forEach(line => {
     }
 });
 
+
+//
 // Assign parsed values to variables
+//
 const device = settings.device;
 const onNasOrDevice = settings.environment;
 
@@ -197,6 +209,10 @@ finalBuildMessage += 'captive.html : Build complete!\n\n';
 
 
 
+//
+// .ENV ^ Config.json
+//
+
 // Function to recursively resolve arrays
 function resolveArray(array) {
     return array.flatMap(item => {
@@ -230,7 +246,9 @@ if (settings.insertENVvalues === true) {
     });
 }
 
+//
 // Check if generateConfigJSON is true
+//
 if (settings.generateConfigJSON === true) {
     const device = settings.device;
     const configJSON = settings[`configJSON_${device}`] || settings.configJSON_SC001;
@@ -248,6 +266,37 @@ if (settings.generateConfigJSON === true) {
     writeFileSync('./dist/data/config.json', JSON.stringify(config, null, 2), 'utf-8');
     
     finalBuildMessage += 'config.json has been generated!\n\n';
+}
+
+// Log the parsed settings to check if insertEmptyHistoryJSON is being read correctly 
+console.log('Parsed settings:', settings);
+//
+// Check for insertEmptyHistiryJSON and create history.json if true
+//
+if (settings.insertEmptyHistoryJSON) {
+    try {
+        const historyJSON = settings.historyJSON;
+        writeFileSync('./dist/data/history.json', JSON.stringify(historyJSON, null, 2));
+        finalBuildMessage += 'history.json file has been created.\n\n';
+    } catch (error) {
+        finalBuildMessage += 'Error writing historyJSON: ' + error.message + '\n\n';
+    }
+} else {
+    finalBuildMessage += 'insertEmptyHistoryJSON is set to false. No file created.\n\n';
+}
+//
+// Check for insertEmptyLogJSON and create log.json if true
+//
+if (settings.insertEmptyLogJSON) {
+    try {
+        const logJSON = settings.logJSON;
+        writeFileSync('./dist/data/log.json', JSON.stringify(logJSON, null, 2));
+        finalBuildMessage += 'log.json file has been created.\n\n';
+    } catch (error) {
+        finalBuildMessage += 'Error writing logJSON: ' + error.message + '\n\n';
+    }    
+} else {
+    finalBuildMessage += 'insertEmptyLogJSON is set to false. No file created.\n\n';
 }
 
 finalBuildMessage += 'Build complete!\n';
