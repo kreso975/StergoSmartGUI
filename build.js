@@ -16,42 +16,16 @@
 */
 
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
-
 //const zlib = require('zlib'); //If using node zlib not 7-zip | npm install zlib
 import { preprocess as _preprocess } from 'preprocess';
 import { exec } from 'child_process';
+import SettingsParser from './lib/SettingsParser.js';
 
 var finalBuildMessage = '';
 
-//
-// Read settings.inc file
-//
-const settingsContent = readFileSync('settings.ini', 'utf-8');
-
-// Parse settings.ini content [String, number, boolean, array like]
-const settings = {};
-settingsContent.split('\n').forEach(line => {
-    const [key, value] = line.split('=').map(item => item.trim());
-    if (key && value) {
-        if (value.startsWith('[') && value.endsWith(']')) {
-            // Parse array-like structure
-            try {
-                settings[key] = JSON.parse(value);
-            } catch (error) {
-                settings[key] = value.slice(1, -1).split(',').map(item => item.trim());
-            }
-        } else if (value.startsWith('{') && value.endsWith('}')) {
-            // Parse object-like structure
-            settings[key] = JSON.parse(value);
-        } else if (value === 'true' || value === 'false') {
-            settings[key] = value === 'true';
-        } else if (!isNaN(value)) {
-            settings[key] = Number(value);
-        } else {
-            settings[key] = value.replace(/"/g, '');
-        }
-    }
-});
+// Initialize settings parser
+const settingsParser = new SettingsParser('settings.ini');
+const settings = settingsParser.getSettings();
 
 
 //
@@ -169,9 +143,8 @@ settings.inputFiles.forEach(inputFile => {
 
 
 //
-// .ENV ^ Config.json
+// .ENV & Config.json
 //
-
 // Function to recursively resolve arrays
 function resolveArray(array) {
     return array.flatMap(item => {
@@ -186,27 +159,12 @@ function resolveArray(array) {
 let envSettings = {};
 if (settings.insertENVvalues === true) {
     // Read .env file
-    const envContent = readFileSync('.env', 'utf-8');
-
-    envContent.split('\n').forEach(line => {
-        const [key, value] = line.split('=').map(item => item.trim());
-        if (key && value) {
-            if (value.startsWith('[') && value.endsWith(']')) {
-                // Parse array-like structure
-                envSettings[key] = value.slice(1, -1).split(',').map(item => item.trim());
-            } else if (value === 'true' || value === 'false') {
-                envSettings[key] = value === 'true';
-            } else if (!isNaN(value)) {
-                envSettings[key] = Number(value);
-            } else {
-                envSettings[key] = value.replace(/"/g, '');
-            }
-        }
-    });
+    const envParser = new SettingsParser('.env');
+    envSettings = envParser.getSettings();
 } else {
     finalBuildMessage += '\x1b[33m   Info: \x1b[0m.env SET to false!\n';
 }
-
+console.log('Parsed settings:', envSettings);
 //
 // Check if generateConfigJSON is true
 //
