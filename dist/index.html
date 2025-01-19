@@ -144,13 +144,6 @@
                                             </div> <!-- /.info-box-content -->
                                         </div> <!-- /.info-box -->
                                     </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                                    <div class="col-12 col-sm-6 col-md-4">
-                                        <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-file-zip"></i> </span>
-                                            <div class="info-box-content"> <span class="info-box-text">Current Air Pressure</span> <span class="info-box-number">
-                                                <label id='currentPressure'>-</label></span>
-                                            </div> <!-- /.info-box-content -->
-                                        </div> <!-- /.info-box -->
-                                    </div> <!-- /.col -->
                                 </div> <!-- /.row -->
                                 <script>
                                 var tUnit = " &#8451;"; // &#8457; F 
@@ -158,12 +151,11 @@
                                 $(document).ready(function() {
 
                                     let url;
-                                    url = 'measures.json';
+                                    url = fwdJsonRequest( 'WS011v02-898235', 1 );
 
                                     $.getJSON(url, function(jsonCurrentData) {
                                         $('#currentTemperature').html(jsonCurrentData.t + tUnit);
                                         $('#currentHumidity').html(jsonCurrentData.h + ' %');
-                                        $('#currentPressure').html(jsonCurrentData.p + pUnit);
                                     });
                                 });
                                 </script>
@@ -186,30 +178,14 @@
                                         </div> <!-- /.card -->
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-md-6">
-                                        <div mobile-colapsed="true" class="card mb-6">
-                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h5 class="card-title">24h Air Pressure</h5>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button>
-                                                </div>
-                                            </div> <!-- /.card-header -->
-                                            <div class="card-body"> <!--begin::Row-->
-                                                <div class="row">
-                                                    <div id="weatherPressureChart"></div>
-                                                </div> <!--end::Row-->
-                                            </div> <!-- ./card-body -->
-                                        </div> <!-- /.card -->
-                                    </div>
                                     <!-- /.col -->
                                     <!-- apexcharts -->
                                     <script>
                                         var chart;
-                                        var chartPressure;
                                         $(document).ready(function() { 
                                             
                                             let url;
-                                            url = 'history.json';
+                                            url = fwdJsonRequest( 'WS014v01-2430370', 2 );
 
                                             $.getJSON(url, function(jsonData) {
                                                 // Extract data for the chart
@@ -218,12 +194,9 @@
                                                 });
                                                 let temperatures = jsonData.sensor.map(item => item[1]);
                                                 let humidities = jsonData.sensor.map(item => item[2]);
-                                                let pressures = jsonData.sensor.map(item => item[3]);
                                                 chart = new ApexCharts(document.querySelector("#weatherChart"), chartOptions(temperatures,humidities, 0, timestamps, 1 ));
                                                 chart.render();
                                                 
-                                                chartPressure = new ApexCharts(document.querySelector("#weatherPressureChart"), chartOptions(temperatures,humidities,pressures,timestamps, 2 ));
-                                                chartPressure.render();
                                             });  
 
 
@@ -238,7 +211,6 @@
 
                                                     // functions are in headStergoMainJS
                                                     chart.updateOptions(chartsThemeChange(newThemeFromEvent));
-                                                    chartPressure.updateOptions(chartsThemeChange(newThemeFromEvent));
                                                     //console.log('The value of yourKey has changed to', event.detail.value);
                                                     // Add your custom logic here
                                                 }
@@ -249,6 +221,133 @@
                                         }); 
                                         
                                     </script> <!--end::Script-->
+                                    <!-- Start Display Card -->
+                                    <div class="col-md-6 mb-2" id="DisplaySetupModule">
+                                        <div mobile-colapsed='true' class="card card-success">
+                                            <div class="card-header hover-hand" data-lte-toggle="card-collapse">
+                                                <h3 class="card-title"><i class="bi bi-tv"></i> Display</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="displayON">Display status:</label>
+                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
+                                                            <input class="form-check-input large-switch" type="checkbox" id="displayON" value="1">
+                                                    </div>
+                                                    <script>
+                                                        
+                                                        $('#displayON').on('change', function() {
+                                                            if ( $(this).is(':checked') )
+                                                                $('#displayON').val(1);
+                                                            else
+                                                                $('#displayON').val(0);
+
+                                                            saveConfigChanges();
+                                                        });
+                                                            
+                                                    </script>
+                                                </div>
+                                                <!-- Brightness Slider -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-7" for="maxBrightness">Brightness:</label>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <input type="range" class="form-range" id="maxBrightness" name="maxBrightness" min="0" max="255" value="128">
+                                                        <span id="brightnessValue" class="ms-2">128</span>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#maxBrightness').on('input', function() {
+                                                        $('#brightnessValue').text($(this).val());
+                                                    });
+
+                                                    $('#maxBrightness').on('mouseup touchend', function() {
+                                                        //alert('Done 1');
+                                                        // here i need to send new value to Device
+                                                        updateDeviceDisplay('brightness',$(this).val());
+                                                    });
+
+                                                </script>
+                                                <!-- Timezone Setup -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-7 col-md-6" for="timeZone">Timezone:</label>
+                                                    <div class="col-5 col-md-6 d-flex justify-content-end">
+                                                        <select class="form-select" id="timeZone" name="timeZone">
+                                                            <option value="-12">(GMT -12) Baker Island</option>
+                                                                <option value="-11">(GMT -11) Pago Pago</option>
+                                                                <option value="-10">(GMT -10) Honolulu</option>
+                                                                <option value="-9">(GMT -9) Anchorage</option>
+                                                                <option value="-8">(GMT -8) Los Angeles</option>
+                                                                <option value="-7">(GMT -7) Denver</option>
+                                                                <option value="-6">(GMT -6) Chicago</option>
+                                                                <option value="-5">(GMT -5) New York</option>
+                                                                <option value="-4">(GMT -4) Caracas</option>
+                                                                <option value="-3">(GMT -3) Buenos Aires</option>
+                                                                <option value="-2">(GMT -2) South Georgia</option>
+                                                                <option value="-1">(GMT -1) Azores</option>
+                                                                <option value="0">(GMT 0) London</option>
+                                                                <option value="1">(GMT +1) Zagreb</option>
+                                                                <option value="2">(GMT +2) Cairo</option>
+                                                                <option value="3">(GMT +3) Moscow</option>
+                                                                <option value="4">(GMT +4) Dubai</option>
+                                                                <option value="5">(GMT +5) Karachi</option>
+                                                                <option value="6">(GMT +6) Dhaka</option>
+                                                                <option value="7">(GMT +7) Bangkok</option>
+                                                                <option value="8">(GMT +8) Beijing</option>
+                                                                <option value="9">(GMT +9) Tokyo</option>
+                                                                <option value="10">(GMT +10) Sydney</option>
+                                                                <option value="11">(GMT +11) Noumea</option>
+                                                                <option value="12">(GMT +12) Auckland</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Color Picker -->
+                                                <div class="row d-flex align-items-center mb-3">
+                                                    <label class="input-group-text-sm col-9" for="displayColor">Color Picker:</label>
+                                                    <div class="col-3 d-flex justify-content-end">
+                                                        <input type="color" class="form-control form-control-color" id="displayColor" name="displayColor" value="#ff0000">
+                                                    </div>
+                                                </div>
+                                                <!-- Simple Text Input -->
+                                                <div class="row d-flex align-items-center mb-4">
+                                                    <label class="input-group-text-sm col-4" for="messageDisplay">Text:</label>
+                                                    <div class="d-flex align-items-center justify-content-ends col-8">
+                                                        <input type="text" class="form-control form-control-sm text-center" id="messageDisplay" name="messageDisplay" value="" placeholder="Message to Display">
+                                                        <button class="btn btn-sm btn-outline-success" type="button" id="btn_messageDisplay" onClick="updateDeviceDisplay('messageDisplay', $('#messageDisplay').val());">&nbsp;<i class="bi bi-wifi"></i></button>										
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#displayColor').on('input', function() {	
+                                                        updateDeviceDisplay('color', $(this).val());
+                                                    });
+                                                    
+                                                    // Detect Enter/Return key press
+                                                    $('#messageDisplay').on('keypress', function(event) {
+                                                        if (event.which === 13)
+                                                            updateDeviceDisplay('messageDisplay', $(this).val());
+                                                    });
+                                                    // Detect focus change (blur event)
+                                                    /*
+                                                    $('#messageDisplay').on('blur', function() {
+                                                        updateDeviceDisplay('messageDisplay', $(this).val()); // Perform your action here
+                                                    });
+                                                    */
+                                                    
+                                                </script>
+                                                <div class="row d-flex align-items-center mb-1">
+                                                    <label class="input-group-text-sm col-7" for="messageDisplay"></label>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger" id="saveDisplayChanges" name="saveDisplayChanges">Permanent Save</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Display Card -->
                                 </div>  
                             </div>  
                         </div>
@@ -372,10 +471,22 @@
                                                     <input type="text" class="form-control form-control-sm" id="mqtt_Humidity" name="mqtt_Humidity" maxlength="120" value="" placeholder="Humidity">
                                                 </div>
                                             </div>
-                                            <div class="row d-flex justify-content-end" id="MQTT_Pressure">
-                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Pressure</label>
+                                            <div class="row d-flex justify-content-end" id="MQTT_DisplayON">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Display ON/OFF</label>
                                                 <div class="col-sm-9 col-md-12 col-xxl-9">
-                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Pressure" name="mqtt_Pressure" maxlength="120" value="" placeholder="Pressure">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_displayON" name="mqtt_displayON" maxlength="120" value="" placeholder="Display On/Off">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Brightness">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Brightness</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Brightness" name="mqtt_Brightness" maxlength="120" value="" placeholder="Display Brightness">
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end" id="MQTT_Color">
+                                                <label class="col-sm-3 col-md-12 col-xxl-3 col-form-label">Color</label>
+                                                <div class="col-sm-9 col-md-12 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="mqtt_Color" name="mqtt_Color" maxlength="120" value="" placeholder="Display Color">
                                                 </div>
                                             </div>
                                         </div>
@@ -486,7 +597,7 @@
                                     <div class="col-md-12 mb-2" id="WeatherSetupModule">
                                         <div mobile-colapsed='true' class="card card-success">
                                             <div class="card-header hover-hand" data-lte-toggle="card-collapse">
-                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-question-circle"></i> Weather Module</h3>
+                                                <h3 class="card-title" id="WeatherModuleTitle"><i class="bi bi-alarm"></i> Weather Stand Clock</h3>
                                                 <div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> </div>
                                             </div>
                                             <div class="card-body">
@@ -525,99 +636,9 @@
                                                     }
                                                 </script>
                                                 <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Pressure</span>
-                                                    <input type="hidden" id="p_measure" value="">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group btn-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_p_measure(0);" id="p_measure0" value="0">hPa</label>
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_p_measure(1);" id="p_measure1" value="1">in</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_p_measure(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#p_measure').val(0);
-                                                            $('#p_measure1').removeClass('btn-success disabled active');
-                                                            $('#p_measure1').addClass('btn-secondary');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-secondary');
-                                                            $('#p_measure0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#p_measure').val(1);
-                                                            $('#p_measure1').removeClass('btn-secondary');
-                                                            $('#p_measure1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#p_measure0').removeClass('btn-success disabled active');
-                                                            $('#p_measure0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
                                                     <span class="input-group-text-sm col-5">Device Name</span>
                                                     <div class="form-check form-switch col-7 d-flex justify-content-end">
                                                         <input type="text" class="form-control form-control-sm" id="deviceName" name="deviceName" maxlength="32" value="" placeholder="Device Name">
-                                                    </div>
-                                                </div>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <label class="input-group-text-sm col-9" for="p_adjust">Adjust pressure</label>
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <input class="form-check-input large-switch" type="checkbox" id="p_adjust" name="p_adjust" value="">
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#p_adjust').on('change', function() {
-                                                        if ( $(this).is(':checked') )
-                                                            $('#p_adjust').val(1);
-                                                        else
-                                                            $('#p_adjust').val(0);
-                                                    });
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-9">Elevation unit</span>
-                                                    <input type="hidden" id="pa_unit" value="">
-                                                    <div class="form-check form-switch col-3 d-flex justify-content-end">
-                                                        <div class="btn-group" role="group" data-toggle="buttons">
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_pa_unit(1);" aria-pressed="true" id="pa_unit1">Feet</label>
-                                                            <label class="btn btn-sm btn-secondary" onClick="set_pa_unit(0);" aria-pressed="true" id="pa_unit0">Meter</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    function set_pa_unit(a){
-
-                                                        if ( a == 0 )
-                                                        {
-                                                            $('#pa_unit').val(0);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-success disabled active');
-                                                            $('#pa_unit1').addClass('btn-secondary');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-secondary');
-                                                            $('#pa_unit0').addClass('btn-success disabled  active');
-                                                        }
-                                                        if ( a == 1 )
-                                                        {
-                                                            $('#pa_unit').val(1);
-                                                            
-                                                            $('#pa_unit1').removeClass('btn-secondary');
-                                                            $('#pa_unit1').addClass('btn-success disabled active');
-                                                            
-                                                            $('#pa_unit0').removeClass('btn-success disabled active');
-                                                            $('#pa_unit0').addClass('btn-secondary');
-                                                        }
-                                                        
-                                                    }
-                                                </script>
-                                                <div class="row d-flex align-items-center mb-3">
-                                                    <span class="input-group-text-sm col-8">Elevation</span>
-                                                    <div class="form-check form-switch col-4 d-flex justify-content-end">
-                                                        <input type="text" class="form-control form-control-sm text-end" id="pl_adj" name="pl_adj" maxlength="12" value="" placeholder="Local elevation">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1009,7 +1030,7 @@
 
     <script>
         // Replace with a unique identifier for each site - for themes
-        var themeStorageName = 'WS001-62782015';
+        var themeStorageName = 'WS014-26532584';
         var adminAddress = 'http://192.168.1.101/StergoWeather';
         
         var ourDevice = "Weather Attic|WS011v02-898235|192.168.1.74";
@@ -1023,7 +1044,7 @@
         var hostname = window.location.hostname;
 
         
-        var serverAddress = protocol + "//" + hostname + "/";
+        var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
 
         var tableDeviceLog;
         var deviceInfo;
@@ -1043,7 +1064,7 @@
         
         var configJSONAttNumbers =  ["wifi_runAS", "wifi_hideAP", "wifi_static", "mqtt_start", "mqtt_interval", "webLoc_start", "webLoc_interval", "tictac_start", "tictac_interval", "tictac_webhook", "tictac_discord"];
         configJSONAttNumbers.push( "t_measure" );
-        configJSONAttNumbers.push( "p_measure", "p_adjust", "pa_unit" );
+        configJSONAttNumbers.push( "maxBrightness", "timeZone", "displayON" );
 
         // Handling Theme
         var storedTheme = localStorage.getItem(`${themeStorageName}_theme`);
@@ -1093,25 +1114,6 @@
                 }
             }
 
-            var optionsPressure = {
-                colors: ["#C5E1A5"],
-                series: []
-            };
-
-            if (pressure !== 0) {
-                optionsPressure.series.push({
-                    name: 'Air Pressure',
-                    data: pressure.map((pres, index) => { return { x: timestamp[index], y: pres }; })
-                });
-            }
-
-            optionsPressure.yaxis = {
-                floating: false,
-                decimalsInFloat: 0,
-                labels: {
-                    offsetX: -15,
-                }
-            };
 
             var options = {
                 theme: { 
@@ -1238,6 +1240,9 @@
                 }
             });
 
+            setInterval(() => { 
+                loadDeviceDisplayData().then(result => { if (result === true) { $("#moreDetailsRow .loading-mask").toggleClass("d-none"); } });
+            }, 20000);
         }
 
         function RSSIFormatter( rssi )
@@ -1267,11 +1272,11 @@
             let listOfspecialsChecked = [ 'wifi_static', 'mqtt_start', 'webLoc_start', 'tictac_start', 'tictac_webhook', 'tictac_discord', 'webLoc_server'];
             let listOfspecialButtons = [ 'wifi_static' ];
             listOfspecialButtons.push( "t_measure" );
-            listOfspecialsChecked.push( "p_adjust" );
-            listOfspecialButtons.push( "pa_unit", "p_measure" );
+            listOfspecialsChecked.push( "timeZone", "displayON" );
             
             let data;
-            data = await loadJSON('/config.json');
+            let configOnDeviceJSON = fwdJsonRequest( deviceModelSerial, 5 );
+            data = await loadJSON(configOnDeviceJSON);
 
             $('#data-container').html(JSON.stringify(data, null, 2));
             // Make it Global
@@ -1290,6 +1295,8 @@
                 if ( listOfspecialButtons.includes(key) )
                     window['set_'+key](value);
 
+                if ( key === "maxBrightness")
+                    $('#brightnessValue').text(value);
 
                 $('#' + key).val(value);
             });
@@ -1297,12 +1304,29 @@
             return true;
         }
 
+        async function loadDeviceDisplayData() {
+            // Load Device Info Card	
+            
+            let jsonDisplayData;
+            jsonDisplayData = await loadJSON('http://192.168.1.74/display.json');
+            
+            $('#brightnessValue').text(jsonDisplayData['Brightness']);
+            $('#maxBrightness').val(jsonDisplayData['Brightness']);
+            $('#displayColor').val(jsonDisplayData['displayColor']);
+
+            if ( jsonDisplayData['displayON'] == 1 )
+                $('#displayON').prop('checked', true);
+            else
+                $('#displayON').prop('checked', false)
+            
+            return true;
+        }
 
         async function loadDeviceInfoTable() {
             // Load Device Info Card	
             
             let jsonInfoData;
-            jsonInfoData = await loadJSON('/deviceinfo.json');
+            jsonInfoData = await loadJSON('http://192.168.1.74/deviceinfo.json');
             
             // Make Global
             deviceInfo = jsonInfoData.result;
@@ -1349,7 +1373,8 @@
             }
 
             let jsonLogData;
-            jsonLogData = await loadJSON('/log.json');
+            const jsonLogDataFile = fwdJsonRequest( deviceModelSerial, 3 );
+            jsonLogData = await loadJSON(jsonLogDataFile);
             var tableBody = $('#deviceLogCard tbody');
 
             const reversedData = jsonLogData.log.reverse();
@@ -1412,7 +1437,7 @@
             const linkTargetValue = $('#updateDevice').attr('link-target');
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id=updateDevice';
             let url;
-            url = '/gpio?id=updateDevice';
+            url = serverAddress+'/include/fwdJsonRequest.php';
 
             // IF we have changes
             if ( Object.keys(comparedDiff).length > 0 )
@@ -1481,7 +1506,7 @@
         function checkServerStatus()
         {
             let url;
-            urltmp = '/deviceinfo.json';
+            urltmp = fwdJsonRequest( 'WS011v02', 4 );
 
             $.ajax(
                 { url: urltmp, // Replace with your remote server URL
@@ -1512,7 +1537,7 @@
             const prepTargetURL = 'http://'+linkTargetValue+'/gpio?id='+what;
 
             let url;
-            url = '/gpio?id='+what;
+            url = serverAddress+'/include/fwdJsonRequest.php';
 
             try {
                 const result = await showConfirmDialogToast( 'Light', idOptions[what][0], idOptions[what][2], idOptions[what][4] );
@@ -1566,6 +1591,33 @@
 
         }
     
+        async function updateDeviceDisplay( what, value )
+        {
+            let payloadDisplay = {};
+            let tmpurl = '/display';
+            payloadDisplay['target'] = 'http://192.168.1.74/display';
+            tmpurl = serverAddress+'/include/fwdJsonRequest.php'; // forward Script
+            payloadDisplay[what] = value;
+            $.ajax({
+                url: tmpurl,
+                type: 'POST',
+                data: payloadDisplay,
+                dataType: 'json',
+                success: function(response) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    //type, toastID, title, message, titleText = ''
+                    // This is success of PHP, we need to check Device response
+                    if ( response.hasOwnProperty("success") )
+                        showToast('Success', 'saveConfigID', 'Save Config Changes', response['success'] );
+                    else if (response.hasOwnProperty('Error') )
+                        showToast('Error', 'saveConfigID', 'Save Config Changes', response['Error'] );
+                },
+                error: function(error) {
+                    document.getElementById('backdrop').style.display = 'none';
+                    showToast('Error', 'saveConfigID', 'Save Config Changes', JSON.stringify(error) );
+                }
+            });
+        }
         // Nav Sidebar and Bottom TAB control
         document.addEventListener('DOMContentLoaded', function() {
             var sidebarNavLinks = document.querySelectorAll('.sidebar-menu .nav-link');
@@ -1758,7 +1810,7 @@
                     form_data.append("prefix", selectedValue); // if we have prefix send to proxy to handle
                     
                 let url;
-                url = '/upload';
+                url = serverAddress+'/include/fwdJsonRequest.php';
 
                 $.ajax({
                     url: url, // Upload Script
@@ -1824,7 +1876,7 @@
 
         async function scanWifi() { 
             let jsonData6;
-            jsonData6 = '/wifiscan.json';
+            jsonData6 = fwdJsonRequest( deviceModelSerial, 6 );
             
             // For Reloading WiFi files
             // Destroy previous DataTable
@@ -1913,6 +1965,10 @@
                 saveConfigChanges();
             });
 
+            // Save changes then reload config.json
+            $('#saveDisplayChanges').on('click', function() {
+                saveConfigChanges();
+            });
         });
 
         // Color Mode Toggler

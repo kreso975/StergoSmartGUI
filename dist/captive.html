@@ -323,32 +323,6 @@
 						<br />
 					</div>
 				</div>
-				<div class='section'>Pressure</div>
-				<div class='inner-wrap'>
-					<div>
-						<div style="float:left;"><label>in&nbsp;&nbsp;&nbsp;</label></div>
-						<div style="float:left;"><input type="checkbox" name="p_measure" id="p_measure" value="0" checked></div>
-						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;hPa</label></div>
-						<br />
-					</div>
-				</div>
-				<div class='section'>Adjust pressure</div>
-				<div class='inner-wrap'>
-					<div>
-						<div style="float:left;"><label>No&nbsp;&nbsp;&nbsp;</label></div>
-						<div style="float:left;"><input type="checkbox" name="p_adjust" id="p_adjust" value="1"></div>
-						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;Yes</label></div>
-					</div>
-					<br />
-					<div style="clear: both;">
-						<div style="float:left;"><label>Feet&nbsp;&nbsp;&nbsp;</label></div>
-						<div style="float:left;"><input type="checkbox" name="pa_unit" id="pa_unit" value="0" checked></div>
-						<div style="float:left;"><label>&nbsp;&nbsp;&nbsp;Meter</label></div>
-						<br />
-					</div>
-					<br />
-					<label style="clear: both;">Elevation<input type='text' placeholder='Altitude' name='pl_adj' /></label>
-				</div>
 				<div class='button-section'>
 					<button style="float:left;" type='button' onclick="toggleTabs(1)">Previous</button>
 					<button style="float:right;" type='button' onclick="toggleTabs(3)">Next</button>
@@ -373,9 +347,6 @@
 	document.addEventListener("DOMContentLoaded", function() {
 		toggleSwitch(document.getElementById('t_measure'));
 		
-		toggleSwitch(document.getElementById('p_measure'));
-		toggleSwitch(document.getElementById('p_adjust'));
-		toggleSwitch(document.getElementById('pa_unit'));
 	});
 
 	function toggleSwitch(element) {
@@ -479,6 +450,13 @@
 
 	document.addEventListener("DOMContentLoaded", function() { loadWiFi(); });
 
+	var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        
+	function fwdJsonRequest( serial, type )
+	{
+		var link = serverAddress+'/include/fwdJsonRequest.php?serial='+serial+'&type='+type;
+		return link;
+	}
 	var isWiFiRotating = false;
 	async function loadWiFi() {
 		if ( !isWiFiRotating )
@@ -496,7 +474,7 @@
 			isWiFiRotating = true;
 
 			let jsonData6;
-			jsonData6 = '/wifiscan.json';
+			jsonData6 = fwdJsonRequest( 'WS011v02-898235', 6 );
 			fetch(jsonData6)
 				.then(response => response.json())
 				.then(data => {

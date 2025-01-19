@@ -108,106 +108,64 @@ context[device].forEach(key => {
 });
 
 
-// Preprocess HTML file
-const htmlInput = readFileSync('index.html', 'utf8');
-const htmlOutput = _preprocess(htmlInput, finalContext, { type: 'html' });
+//
+// Render index.html and captive.html
+//
+const sevenZipPath = settings.sevenZipPath; // Adjusted in Settings.ini
 
-// Preprocess the JavaScript inside <script> tags separately
-const scriptRegex = /<script>([\s\S]*?)<\/script>/g;
-const processedOutput = htmlOutput.replace(scriptRegex, (match, p1) => {
-    const processedScript = _preprocess(p1, finalContext, { type: 'js' });
-    return `<script>${processedScript}</script>`;
-});
+function preprocessAndCompress(inputFile, outputFile, gzFilePath) {
+    // Read and preprocess HTML file
+    const htmlInput = readFileSync(inputFile, 'utf8');
+    const htmlOutput = _preprocess(htmlInput, finalContext, { type: 'html' });
 
-writeFileSync('dist/index.html', processedOutput);
+    // Preprocess the JavaScript inside <script> tags separately
+    const scriptRegex = /<script>([\s\S]*?)<\/script>/g;
+    const processedOutput = htmlOutput.replace(scriptRegex, (match, p1) => {
+        const processedScript = _preprocess(p1, finalContext, { type: 'js' });
+        return `<script>${processedScript}</script>`;
+    });
 
-/* IF USING Node ZLIB
-// Compress the HTML file to .gz using zlib with ultra compression
-const gzip = zlib.createGzip({ level: 9 });
-const input = fs.createReadStream('dist/index.html');
-const output = fs.createWriteStream('dist/index.html.gz');
+    writeFileSync(outputFile, processedOutput);
+    /* IF USING Node ZLIB
+    // Compress the HTML file to .gz using zlib with ultra compression
+    const gzip = zlib.createGzip({ level: 9 });
+    const input = fs.createReadStream('dist/index.html');
+    const output = fs.createWriteStream('dist/index.html.gz');
 
-input.pipe(gzip).pipe(output).on('finish', () => {
-    console.log('File compressed successfully with ultra compression');
-});
-*/
+    input.pipe(gzip).pipe(output).on('finish', () => {
+        console.log('File compressed successfully with ultra compression');
+    });
+    */
 
-// Check if the .gz file exists and remove it
-const gzFilePath = 'dist/data/index.html.gz';
-if (existsSync(gzFilePath)) {
-    unlinkSync(gzFilePath);
-    //console.log('Existing .gz file removed');
-    
-    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : Existing .gz file removed\n';
+    // Check if the .gz file exists and remove it
+    if (existsSync(gzFilePath)) {
+        unlinkSync(gzFilePath);
+        //console.log('Existing .gz file removed');
+        finalBuildMessage += `\x1b[32mSuccess: \x1b[0m${inputFile} : Existing .gz file removed\n`;
+    }
+
+    // Compress the HTML file to .gz using 7z with ultra compression
+    const command = `"${sevenZipPath}" a -tgzip -mx=9 ${gzFilePath} ${outputFile}`;
+    exec(command, (err, stdout, stderr) => {
+        if (err) {
+            finalBuildMessage +=`\x1b[31mError: \x1b[0m compressing file: ${err.message}`;
+            console.error(stderr);
+            return;
+        }
+        //console.log('File compressed successfully with ultra compression');
+        //console.log(stdout);
+        finalBuildMessage += `\x1b[32mSuccess: \x1b[0m${inputFile} : File compressed successfully with ultra compression\n`;
+    });
+
+    //console.log('Index.html Build complete!');
+    finalBuildMessage += `\x1b[32mSuccess: \x1b[0m${inputFile} : Build complete!\n`;
 }
 
-// Compress the HTML file to .gz using 7z with ultra compression
-const sevenZipPath = settings.sevenZipPath; // Adjust this path if necessary
-const command = `"${sevenZipPath}" a -tgzip -mx=9 dist/data/index.html.gz dist/index.html`;
-
-exec(command, (err, stdout, stderr) => {
-    if (err) {
-        finalBuildMessage +=`\x1b[31mError: \x1b[0m compressing file: ${err.message}`;
-        console.error(stderr);
-        return;
-    }
-    //console.log('File compressed successfully with ultra compression');
-    //console.log(stdout);
-    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : File compressed successfully with ultra compression\n';
+settings.inputFiles.forEach(inputFile => {
+    const outputFile = `${settings.pathToRender}/${inputFile}`;
+    const gzFilePath = `${settings.pathToRender}/data/${inputFile}.gz`;
+    preprocessAndCompress(inputFile, outputFile, gzFilePath);
 });
-
-//console.log('Index.html Build complete!');
-finalBuildMessage += '\x1b[32mSuccess: \x1b[0mindex.html : Build complete!\n';
-
-// Preprocess HTML file
-const htmlInput2 = readFileSync('captive.html', 'utf8');
-const htmlOutput2 = _preprocess(htmlInput2, finalContext, { type: 'html' });
-
-// Preprocess the JavaScript inside <script> tags separately
-const processedOutput2 = htmlOutput2.replace(scriptRegex, (match, p1) => {
-    const processedScript = _preprocess(p1, finalContext, { type: 'js' });
-    return `<script>${processedScript}</script>`;
-});
-
-writeFileSync('dist/captive.html', processedOutput2);
-
-/* IF USING Node ZLIB
-// Compress the HTML file to .gz using zlib with ultra compression
-const gzip = zlib.createGzip({ level: 9 });
-const input = fs.createReadStream('dist/index.html');
-const output = fs.createWriteStream('dist/index.html.gz');
-
-input.pipe(gzip).pipe(output).on('finish', () => {
-    console.log('File compressed successfully with ultra compression');
-});
-*/
-
-// Check if the .gz file exists and remove it
-const gzFilePath2 = 'dist/data/captive.html.gz';
-if (existsSync(gzFilePath2)) {
-    unlinkSync(gzFilePath2);
-    //console.log('Existing .gz file removed');
-    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : Existing .gz file removed\n';
-}
-
-// Compress the HTML file to .gz using 7z with ultra compression
-const command2 = `"${sevenZipPath}" a -tgzip -mx=9 dist/data/captive.html.gz dist/captive.html`;
-
-exec(command2, (err, stdout, stderr) => {
-    if (err) {
-        finalBuildMessage += `\x1b[31mError: \x1b[0m compressing file: ${err.message}`;
-        console.error(stderr);
-        return;
-    }
-    //console.log('File compressed successfully with ultra compression');
-    //console.log(stdout);
-    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : File compressed successfully with ultra compression\n';
-});
-
-//console.log('Captive.html Build complete!');
-//console.log('Build complete!');
-finalBuildMessage += '\x1b[32mSuccess: \x1b[0mcaptive.html : Build complete!\n';
-
 
 
 //
@@ -290,6 +248,7 @@ if (settings.insertEmptyHistoryJSON) {
 } else {
     finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty History JSON is SET to false. No file created.\n';
 }
+
 //
 // Check for insertEmptyLogJSON and create log.json if true
 //

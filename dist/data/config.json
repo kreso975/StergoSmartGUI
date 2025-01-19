@@ -34,5 +34,12 @@
   "discord_avatar": "",
   "mqtt_Humidity": "iot/things/AtticESP32/Humidity",
   "mqtt_Temperature": "iot/things/AtticESP32/Temperature",
-  "mqtt_Pressure": ""
+  "mqtt_Pressure": "",
+  "mqtt_displayON": "iot/things/AtticESP32/displayON",
+  "mqtt_Brightness": "iot/things/AtticESP32/Brightness",
+  "mqtt_Color": "iot/things/AtticESP32/Color",
+  "displayON": 1,
+  "maxBrightness": 30,
+  "displayColor": "#0000FF",
+  "timeZone": 1
 }
