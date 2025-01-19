@@ -142,8 +142,8 @@ if (existsSync(gzFilePath)) {
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
-const sevenZipPath = '"C:\\Program Files\\7-Zip\\7z.exe"'; // Adjust this path if necessary
-const command = `${sevenZipPath} a -tgzip -mx=9 dist/data/index.html.gz dist/index.html`;
+const sevenZipPath = settings.sevenZipPath; // Adjust this path if necessary
+const command = `"${sevenZipPath}" a -tgzip -mx=9 dist/data/index.html.gz dist/index.html`;
 
 exec(command, (err, stdout, stderr) => {
     if (err) {
@@ -191,7 +191,7 @@ if (existsSync(gzFilePath2)) {
 }
 
 // Compress the HTML file to .gz using 7z with ultra compression
-const command2 = `${sevenZipPath} a -tgzip -mx=9 dist/data/captive.html.gz dist/captive.html`;
+const command2 = `"${sevenZipPath}" a -tgzip -mx=9 dist/data/captive.html.gz dist/captive.html`;
 
 exec(command2, (err, stdout, stderr) => {
     if (err) {
@@ -270,7 +270,7 @@ if (settings.generateConfigJSON === true) {
 }
 
 // Log the parsed settings to check if read correctly 
-//console.log('Parsed settings:', settings);
+console.log('Parsed settings:', settings);
 
 //
 // Check for insertEmptyHistiryJSON and create history.json if true
