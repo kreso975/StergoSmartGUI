@@ -27,13 +27,21 @@ var finalBuildMessage = '';
 const settingsParser = new SettingsParser('settings.ini');
 const settings = settingsParser.getSettings();
 
+// Check if insertENVvalues is true
+let envSettings = {};
+if ( settings.insertENVvalues === true ) {
+    // Initialize .env parser
+    const envParser = new SettingsParser('.env');
+    envSettings = envParser.getSettings();
+} else {
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0m.env SET to false!\n';
+}
 
 //
 // Assign parsed values to variables
-//
 const device = settings.device;
 const onNasOrDevice = settings.environment;
-
+const sevenZipPath = settings.sevenZipPath;
 
 // in finalContext we will add all that needs to change
 const finalContext = {};
@@ -81,12 +89,8 @@ context[device].forEach(key => {
     finalContext[key] = true;
 });
 
-
 //
 // Render index.html and captive.html
-//
-const sevenZipPath = settings.sevenZipPath; // Adjusted in Settings.ini
-
 function preprocessAndCompress(inputFile, outputFile, gzFilePath) {
     // Read and preprocess HTML file
     const htmlInput = readFileSync(inputFile, 'utf8');
@@ -142,9 +146,6 @@ settings.inputFiles.forEach(inputFile => {
 });
 
 
-//
-// .ENV & Config.json
-//
 // Function to recursively resolve arrays
 function resolveArray(array) {
     return array.flatMap(item => {
@@ -155,19 +156,8 @@ function resolveArray(array) {
     });
 }
 
-// Check if insertENVvalues is true
-let envSettings = {};
-if (settings.insertENVvalues === true) {
-    // Read .env file
-    const envParser = new SettingsParser('.env');
-    envSettings = envParser.getSettings();
-} else {
-    finalBuildMessage += '\x1b[33m   Info: \x1b[0m.env SET to false!\n';
-}
-console.log('Parsed settings:', envSettings);
 //
 // Check if generateConfigJSON is true
-//
 if (settings.generateConfigJSON === true) {
     const device = settings.device;
     const configJSON = settings[`configJSON_${device}`] || settings.configJSON_SC001;
@@ -182,48 +172,36 @@ if (settings.generateConfigJSON === true) {
     });
 
     // Save JSON object to config.json
-    writeFileSync('./dist/data/config.json', JSON.stringify(config, null, 2), 'utf-8');
-    
-    finalBuildMessage += '\x1b[32mSuccess: \x1b[0mconfig.json has been generated!\n';
+    writeFileSync(`${settings.pathToRender}/data/${settings.configFile}`, JSON.stringify(config, null, 2), 'utf-8');
+    finalBuildMessage += `\x1b[32mSuccess: \x1b[0m${settings.configFile} has been generated!\n`;
 } else {
-    finalBuildMessage += '\x1b[33m   Info: \x1b[0mGenerate Config set to false!\n';
+    finalBuildMessage += `\x1b[33m   Info: \x1b[0mGenerate Config SET to false!\n`;
 }
 
 // Log the parsed settings to check if read correctly 
 // console.log('Parsed settings:', settings);
 
-//
-// Check for insertEmptyHistiryJSON and create history.json if true
-//
-if (settings.insertEmptyHistoryJSON) {
+// fileName == filename, emptyJSON == content from settings.ini 
+function insertEmptyJSONFile( fileName, emptyJSON ) {
     try {
-        const historyJSON = settings.historyJSON;
-        writeFileSync('./dist/data/history.json', JSON.stringify(historyJSON, null, 2));
-        finalBuildMessage += '\x1b[32mSuccess: \x1b[0mhistory.json file has been created.\n';
+        writeFileSync(`${settings.pathToRender}/data/${fileName}`, JSON.stringify(emptyJSON, null, 2));
+        finalBuildMessage += `\x1b[32mSuccess: \x1b[0m${fileName} file has been created.\n`;
     } catch (error) {
-        finalBuildMessage += '\x1b[31mError: \x1b[0m writing historyJSON: ' + error.message + '\n';
+        finalBuildMessage += `\x1b[31mError: \x1b[0m writing ${fileName}: ` + error.message + `\n`;
     }
-} else {
-    finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty History JSON is SET to false. No file created.\n';
 }
 
-//
+// Check for insertEmptyHistiryJSON and create history.json if true
+if (settings.insertEmptyHistoryJSON)
+    insertEmptyJSONFile(settings.historyFile, settings.historyJSON);
+else
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty History JSON is SET to false. No file created.\n';
+
 // Check for insertEmptyLogJSON and create log.json if true
-//
-if (settings.insertEmptyLogJSON) {
-    try {
-        const logJSON = settings.logJSON;
-        writeFileSync('./dist/data/log.json', JSON.stringify(logJSON, null, 2));
-        finalBuildMessage += '\x1b[32mSuccess: \x1b[0mlog.json file has been created.\n\n';
-    } catch (error) {
-        finalBuildMessage += '\x1b[31mError: \x1b[0m writing logJSON: ' + error.message + '\n';
-    }    
-} else {
+if (settings.insertEmptyLogJSON)
+    insertEmptyJSONFile(settings.logFile, settings.logJSON);
+else
     finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty Log JSON is SET to false. No file created.\n';
-}
 
 finalBuildMessage += '\x1b[32mSuccess: \x1b[0mBuild complete!\n';
 console.log(finalBuildMessage);
-
-
-
