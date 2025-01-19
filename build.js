@@ -270,7 +270,7 @@ if (settings.generateConfigJSON === true) {
 }
 
 // Log the parsed settings to check if read correctly 
-console.log('Parsed settings:', settings);
+// console.log('Parsed settings:', settings);
 
 //
 // Check for insertEmptyHistiryJSON and create history.json if true
