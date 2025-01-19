@@ -245,6 +245,8 @@ if (settings.insertENVvalues === true) {
             }
         }
     });
+} else {
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0m.env SET to false!\n';
 }
 
 //
@@ -267,6 +269,8 @@ if (settings.generateConfigJSON === true) {
     writeFileSync('./dist/data/config.json', JSON.stringify(config, null, 2), 'utf-8');
     
     finalBuildMessage += '\x1b[32mSuccess: \x1b[0mconfig.json has been generated!\n';
+} else {
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0mGenerate Config set to false!\n';
 }
 
 // Log the parsed settings to check if read correctly 
@@ -284,7 +288,7 @@ if (settings.insertEmptyHistoryJSON) {
         finalBuildMessage += '\x1b[31mError: \x1b[0m writing historyJSON: ' + error.message + '\n';
     }
 } else {
-    finalBuildMessage += '\x1b[33mInfo: \x1b[0minsertEmptyHistoryJSON is set to false. No file created.\n';
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty History JSON is SET to false. No file created.\n';
 }
 //
 // Check for insertEmptyLogJSON and create log.json if true
@@ -298,7 +302,7 @@ if (settings.insertEmptyLogJSON) {
         finalBuildMessage += '\x1b[31mError: \x1b[0m writing logJSON: ' + error.message + '\n';
     }    
 } else {
-    finalBuildMessage += '\x1b[33mInfo: \x1b[0minsertEmptyLogJSON is set to false. No file created.\n';
+    finalBuildMessage += '\x1b[33m   Info: \x1b[0minsert Empty Log JSON is SET to false. No file created.\n';
 }
 
 finalBuildMessage += '\x1b[32mSuccess: \x1b[0mBuild complete!\n';
