@@ -447,7 +447,7 @@
                                                     $('#maxBrightness').on('mouseup touchend', function() {
                                                         //alert('Done 1');
                                                         // here i need to send new value to Device
-                                                        updateDeviceDisplay('brightness',$(this).val());
+                                                        updateDeviceDisplay('Brightness',$(this).val());
                                                     });
 
                                                     // @if exclude
@@ -536,7 +536,7 @@
                                                 </div>
                                                 <script>
                                                     $('#displayColor').on('input', function() {	
-                                                        updateDeviceDisplay('color', $(this).val());
+                                                        updateDeviceDisplay('RGB', $(this).val());
                                                     });
                                                     
                                                     // Detect Enter/Return key press
@@ -1661,6 +1661,13 @@
             });
 
             // @if DISPLAY
+            // Call loadDeviceDisplayData immediately on load
+            loadDeviceDisplayData().then(result => { 
+                if (result === true) { 
+                    $("#moreDetailsRow .loading-mask").toggleClass("d-none"); 
+                } 
+            });
+            
             setInterval(() => { 
                 loadDeviceDisplayData().then(result => { if (result === true) { $("#moreDetailsRow .loading-mask").toggleClass("d-none"); } });
             }, 20000);
@@ -1755,7 +1762,13 @@
             
             $('#brightnessValue').text(jsonDisplayData['Brightness']);
             $('#maxBrightness').val(jsonDisplayData['Brightness']);
-            $('#displayColor').val(jsonDisplayData['displayColor']);
+
+            let hexColor = jsonDisplayData['RGB'];
+            // Ensure the value includes the '#' character
+            if (!hexColor.startsWith('#')) {
+                hexColor = '#' + hexColor;
+            }
+            $('#displayColor').val(hexColor);
 
             if ( jsonDisplayData['displayON'] == 1 )
                 $('#displayON').prop('checked', true);
