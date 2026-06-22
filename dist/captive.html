@@ -450,6 +450,13 @@
 
 	document.addEventListener("DOMContentLoaded", function() { loadWiFi(); });
 
+	var serverAddress = 'http://192.168.1.101/StergoWeather'; // When testing on server
+        
+	function fwdJsonRequest( serial, type )
+	{
+		var link = serverAddress+'/include/fwdJsonRequest.php?serial='+serial+'&type='+type;
+		return link;
+	}
 	var isWiFiRotating = false;
 	async function loadWiFi() {
 		if ( !isWiFiRotating )
@@ -467,7 +474,7 @@
 			isWiFiRotating = true;
 
 			let jsonData6;
-			jsonData6 = '/wifiscan.json';
+			jsonData6 = fwdJsonRequest( 'WS011v02-898235', 6 );
 			fetch(jsonData6)
 				.then(response => response.json())
 				.then(data => {

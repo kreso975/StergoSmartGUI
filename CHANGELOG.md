@@ -5,6 +5,7 @@
    - apexcharts@5.15.0
    - bootstrap-icons@1.13.1
    - bootstrap@5.3.8
+- Added COPYRIGHT_FOOTER in footer 
 
 
 ***v1.0***

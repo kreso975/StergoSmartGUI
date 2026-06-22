@@ -62,6 +62,7 @@ const randomNumber = Math.floor(10000000 + Math.random() * 90000000);
 
 finalContext['DEVICENAME'] = `<i class="bi ${deviceIcon}"></i> ${deviceName}`;
 finalContext['THEME_STORAGE_NAME'] = `var themeStorageName = '${device}-${randomNumber}';`;
+finalContext['COPYRIGHT_FOOTER'] = `<strong>Copyright &copy; 2014-${new Date().getFullYear()}&nbsp;Stergo Smart.</strong> All rights reserved.`;
 
 const context = {
     SC001: [onNasOrDevice, 'STERGO_CORE'],
